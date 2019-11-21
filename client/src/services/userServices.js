@@ -1,25 +1,27 @@
 import axios from 'axios';
+const { address} = require("../configs/routeConfig");
 
-var address = 'http://localhost:3000';
-
-export function loginUser(loginData) {
-  return axios.post(address + '/users/login',loginData);
+export default class userServices{
+  loginUser(loginData) {
+    return axios.post(address + '/user/login',loginData);
+  }
+  
+  registerUser(userData) {
+    return axios.post(address + '/user/register',userData);
+  }
+  
+  forgotUser(userEmail) {
+    return axios.post(address + '/users/forgotPassword',userEmail);
+  }
+  
+  resetUser(userPass, token) {
+    return axios.post(address + '/users/resetPassword', userPass,
+    {
+      headers: {
+        token: token
+      }
+    });
+  }
 }
 
-export function registerUser(userData) {
-  return axios.post(address + '/users/register',userData);
-}
-
-export function forgotUser(userEmail) {
-  return axios.post(address + '/users/forgotPassword',userEmail);
-}
-
-export function resetUser(userPass, token) {
-  return axios.post(address + '/users/resetPassword', userPass,
-  {
-    headers: {
-      token: token
-    }
-  });
-}
 

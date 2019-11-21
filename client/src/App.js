@@ -5,7 +5,7 @@ import "./App.css";
 
 function App() {
 	return (
-		<div className="App">
+		<div>
 			<BrowserRouter>
 				<Switch>
 					<Route path="/" exact component={Login}></Route>
