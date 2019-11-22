@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700')
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap')
 @import "./variables.scss"
 
 *
@@ -11,12 +12,14 @@
   height: 100vh
   margin: 0
   padding: 0
-  overflow: auto
+  overflow: scroll
 
 .LoginCard
   display: flex
   flex-direction: column
-  width: 33%
+  width: 100%
+  @media only screen and (min-width: 600px)
+    width: 33%
   // height: 90%
   align-self: center
   align-items: center
@@ -27,7 +30,6 @@
   width: 100%  
   align-self: center
   align-items: center
-
 
 %Login-Field
   display: flex
@@ -69,6 +71,83 @@
   flex-direction: row
   justify-content: space-between
 
+.regPaper
+  display: flex
+  flex-direction: column
+  width: 65%  
+  align-self: auto
+  align-items: center
+  // background-color: #5ed4cb
+
+@mixin image()
+  display: flex
+  align-self: center
+  margin: 2%
+  filter: opacity(100%)
+
+.logo
+  @include image()
+  flex-direction: column
+  width: 35%  
+  align-self: auto
+  align-items: center
+  // background-color: #019687
+  
+.regContainer 
+  display: flex
+  flex-direction: column
+  width: 100%
+  @media only screen and (min-width: 600px)
+    width: 56.5%
+  // height: 90%
+  align-self: center
+  align-items: center		
+
+.regFieldLogo
+  @extend %Login-Field
+  flex-direction: row
+  width:100%
+  padding-left: 12%
+  align-items: flex-start
+  padding-top:6%
+  // padding-bottom: 2%
+  // padding-left: 2%  
+  // background-color: #5ed4cb
 
 
-			
+.regFieldText
+  @extend %Login-Field
+  font-family:'Open Sans', sans-serif
+  flex-direction: row
+  width: 92%
+  padding-top: 2%
+  padding-bottom: 2%
+  // background-color: #424242
+
+
+.regFieldInput
+  @extend %Login-Field
+
+.regFieldInputfn
+  @extend %Login-Field
+  padding-top: 3%
+  flex-direction: row
+
+.fnc
+  @extend %Login-Field
+  // padding-top: 0%
+  width:50%
+
+.fncl
+  @extend %Login-Field
+  padding-left: 3%
+  width:50%
+
+.regFieldLast
+  @extend %Login-Field
+  width: 100%
+  padding-top: 8%
+  padding-bottom: 8%
+  flex-direction: row
+  justify-content: space-between
+

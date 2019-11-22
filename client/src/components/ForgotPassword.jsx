@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-let path = "/";
+let path = "/dashboard";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -22,17 +22,15 @@ export default class Login extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: "",
-			password: ""
+			email: ""
 		};
 	}
 
 	handleSubmit = () => {
-		let loginData = {};
-		loginData.email = this.state.email;
-		loginData.password = this.state.password;
+		let forgotData = {};
+		forgotData.email = this.state.email;
 
-		userServices.loginUser(loginData)
+		userServices.forgotUser(forgotData)
 			.then(response => {
 				console.log("data in req", response.data);
 				console.log("login successful", response.data.token);
@@ -51,24 +49,12 @@ export default class Login extends React.Component {
 			});
 	};
 
-	handleForgot = () => {
-		const path = "/forgotPassword";
-		this.props.history.push(path);
-	};
-	handleRegister = () => {
-		const path = "/register";
-		this.props.history.push(path);
-	};
 
 	handleEmail = event => {
 		console.log("value of email in login", event.currentTarget.value);
 		this.setState({ email: event.currentTarget.value });
 	};
-	handlePassword = event => {
-		console.log("value of password", event.currentTarget.value);
-		this.setState({ password: event.currentTarget.value });
-	};
-
+	
 	render() {
 		const classes = {
 			button: {
@@ -135,20 +121,6 @@ export default class Login extends React.Component {
 										<label style={{ color: "#ea4335" }}>o</label>
 									</Typography>
 								</div>
-								<div className="LoginFieldText">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										Sign In
-									</Typography>
-								</div>
-								<div className="LoginFieldText">
-									<Typography component="p" style={classes.textField}>
-										Use your Fundoo Account
-									</Typography>
-								</div>
 								<div className="LoginFieldInput">
 									<TextField
 										id="outlined-basic"
@@ -159,19 +131,6 @@ export default class Login extends React.Component {
 										style={classes.emailField}
 										value={this.state.email}
 										onChange={event => this.handleEmail(event)}
-									/>
-								</div>
-								<div className="LoginFieldInput">
-									<TextField
-										id="outlined-password-input"
-										label="Password"
-										style={classes.emailField}
-										type="password"
-										autoComplete="current-password"
-										margin="normal"
-										variant="outlined"
-										value={this.state.password}
-										onChange={event => this.handlePassword(event)}
 									/>
 								</div>
 								<div className="LoginFieldForgot">
