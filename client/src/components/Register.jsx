@@ -2,12 +2,17 @@ import React from "react";
 import userServices from "../services/userServices";
 import "../sass/styles.sass";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+const userve = new userServices();
 let path = "/";
-
+let err = {
+	error: {
+		display: "none"
+	}
+};
 const theme = createMuiTheme({
 	overrides: {
 		MuiPaper: {
@@ -26,33 +31,58 @@ export default class Register extends React.Component {
 			lastName: "",
 			email: "",
 			password: "",
-			service: ""
+			repeatPassword: "",
+			service: "",
+			flag: false,
+			message: ""
 		};
 	}
 
-	handleSubmit = () => {
-		let userData = {};
-		userData.email = this.state.email;
-		userData.password = this.state.password;
+	componentDidMount() {
+		// custom rule will have name 'isPasswordMatch'
+		ValidatorForm.addValidationRule("isPasswordMatch", value => {
+			if (value !== this.state.password) {
+				console.log("passwords not matched");
 
-		userServices
-			.registerUser(userData)
-			.then(response => {
-				console.log("data in req", response.data);
-				console.log("login successful", response.data.token);
-				window.localStorage.setItem("token", response.data.token);
-				window.localStorage.setItem("loggedUser", response.data.result);
-				window.localStorage.setItem("senderId", response.data.senderId);
-				if (response.data.status) {
-					this.props.history.push(path);
-				} else {
-					path = "/";
-					this.props.history.push(path);
-				}
-			})
-			.catch(err => {
-				console.log("unsuccessful", err);
-			});
+				return false;
+			}
+			console.log("passwords matched");
+
+			return true;
+		});
+	}
+
+	componentWillUnmount() {
+		// remove rule when it is not needed
+		ValidatorForm.removeValidationRule("isPasswordMatch");
+	}
+
+	handleSubmit = () => {
+		if (this.state.flag === true) {
+			let userData = {};
+			userData.firstName = this.state.firstName;
+			userData.lastName = this.state.lastName;
+			userData.service = this.state.service;
+			userData.email = this.state.email;
+			userData.password = this.state.password;
+
+			userve
+				.registerUser(userData)
+				.then(response => {
+					console.log("data in req", response);
+					console.log("registered successfully", response.status);
+
+					if (response.data.status) {
+						this.props.history.push(path);
+					} else {
+						path = "/register";
+						this.props.history.push(path);
+					}
+				})
+				.catch(err => {
+					console.log("unsuccessful", err);
+				});
+		}
 	};
 
 	handleForgot = () => {
@@ -80,6 +110,56 @@ export default class Register extends React.Component {
 		console.log("value of password", event.currentTarget.value);
 		this.setState({ password: event.currentTarget.value });
 	};
+	handleRPassword = event => {
+		console.log("value of password", event.currentTarget.value);
+		this.setState({ repeatPassword: event.currentTarget.value });
+	};
+
+	handleBasic = () => {
+		console.log("-------------basic package-------------");
+		this.setState({ service: "basic" });
+		this.setState({ flag: true });
+		console.log("value of service", this.state.service);
+		console.log("value of flag", this.state.flag);
+		err = {
+			error: {
+				display: "none"
+			}
+		};
+	};
+	handleAdvance = () => {
+		console.log("----------advance package----------");
+		this.setState({ service: "advance" });
+		this.setState({ flag: true });
+		console.log("value of service", this.state.service);
+		console.log("value of flag", this.state.flag);
+		err = {
+			error: {
+				display: "none"
+			}
+		};
+	};
+	checkFlag = () => {
+		console.log("---------------in check service---------");
+		if (this.state.flag === false) {
+			this.setState({ message: "please choose a Package" });
+			err = {
+				error: {
+					display: "block",
+					color: "red",
+					fontSize: "12px",	
+					textAlign: "center"
+				}
+			};
+		} else {
+			this.setState({ message: "" });
+			err = {
+				error: {
+					display: "none"
+				}
+			};
+		}
+	};
 
 	render() {
 		const classes = {
@@ -93,9 +173,9 @@ export default class Register extends React.Component {
 			},
 			tittleField: {
 				alignSelf: "left",
-				marginLeft: theme.spacing(3),
+				marginLeft: theme.spacing(1),
 				marginRight: theme.spacing(1),
-				width: "10%",
+				width: "100%",
 				textAlign: "center"
 			},
 			textField: {
@@ -108,7 +188,7 @@ export default class Register extends React.Component {
 			},
 			textFieldetc: {
 				fontSize: "12px",
-				marginLeft: "3%",
+				marginLeft: "2%",
 				color: "#000",
 				alignSelf: "center",
 				width: "100%",
@@ -116,8 +196,8 @@ export default class Register extends React.Component {
 			},
 			emailField: {
 				alignSelf: "left",
-				marginLeft: theme.spacing(3),
-				marginRight: theme.spacing(1),
+				marginLeft: "5.5%",
+				marginRight: "2.2%",
 				width: "100%",
 				textAlign: "center"
 			},
@@ -148,149 +228,181 @@ export default class Register extends React.Component {
 				color: "#1a73e8",
 				textTransform: "none"
 			}
+			
 		};
 		return (
 			<div className="MainApp">
 				<div className="regContainer">
 					<MuiThemeProvider theme={theme}>
 						<Paper style={classes.container}>
-							<div className="regPaper">
-								<div className="regFieldLogo">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.titleField}
-									>
-										<label style={{ color: "#4285F4" }}>F</label>
-										<label style={{ color: "#ea4335" }}>u</label>
-										<label style={{ color: "#fbbc05" }}>n</label>
-										<label style={{ color: "#4285F4" }}>d</label>
-										<label style={{ color: "#34a853" }}>o</label>
-										<label style={{ color: "#ea4335" }}>o</label>
-									</Typography>
-								</div>
-								<div className="regFieldText">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										Create your Fundoo Account
-									</Typography>
-								</div>
-								<div className="regFieldInputfn">
-									<div className="fncl">
-										<TextField
-											id="textF"
-											type="text"
-											label="First name"
+							<ValidatorForm
+								className="form"
+								ref="form"
+								onSubmit={this.handleSubmit}
+								onError={errors => console.log(errors)}
+							>
+								<div className="regPaper">
+									<div className="regFieldLogo">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.titleField}
+										>
+											<label style={{ color: "#4285F4" }}>F</label>
+											<label style={{ color: "#ea4335" }}>u</label>
+											<label style={{ color: "#fbbc05" }}>n</label>
+											<label style={{ color: "#4285F4" }}>d</label>
+											<label style={{ color: "#34a853" }}>o</label>
+											<label style={{ color: "#ea4335" }}>o</label>
+										</Typography>
+									</div>
+									<div className="regFieldText">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.textField}
+										>
+											Create your Fundoo Account
+										</Typography>
+									</div>
+									<div className="regFieldInputfn">
+										<div className="fncl">
+											<TextValidator
+												id="texsdftF"
+												type="text"
+												label="First name"
+												margin="dense"
+												variant="outlined"
+												style={classes.nameField}
+												value={this.state.firstName}
+												onChange={event => this.handleFirstName(event)}
+												validators={["required"]}
+												errorMessages={["this field is required"]}
+											/>
+										</div>
+										<div className="fnc">
+											<TextValidator
+												id="teasdfxtF"
+												type="text"
+												label="Last name"
+												margin="dense"
+												variant="outlined"
+												style={classes.nameField}
+												value={this.state.lastName}
+												onChange={event => this.handleLastName(event)}
+												validators={["required"]}
+												errorMessages={["this field is required"]}
+											/>
+										</div>
+									</div>
+									<div className="regFieldInputfn">
+										<TextValidator
+											helperText="You can use letter, numbers and periods"
+											id="teasdxtasdF"
+											type="email"
+											label="Username"
 											margin="dense"
 											variant="outlined"
-											style={classes.nameField}
-											value={this.state.firstName}
-											onChange={event => this.handleFirstName(event)}
+											style={classes.emailField}
+											value={this.state.email}
+											onChange={event => this.handleEmail(event)}
+											validators={["required", "isEmail"]}
+											errorMessages={[
+												"this field is required",
+												"email is not valid"
+											]}
 										/>
 									</div>
-									<div className="fnc">
-										<TextField
-											id="textF"
-											type="text"
-											label="Last name"
-											margin="dense"
-											variant="outlined"
-											style={classes.nameField}
-											value={this.state.lastName}
-											onChange={event => this.handleLastName(event)}
-										/>
+									<div className="regFieldInputfn">
+										<div className="fncl">
+											<TextValidator
+												// id="textF"
+												label="Password"
+												style={classes.nameField}
+												type="password"
+												// autoComplete="current-password"
+												margin="dense"
+												variant="outlined"
+												onChange={event => this.handlePassword(event)}
+												value={this.state.password}
+												validators={["required"]}
+												errorMessages={["this field is required"]}
+											/>
+										</div>
+										<div className="fnc">
+											<TextValidator
+												// id="textF"
+												label="Confirm"
+												style={classes.nameField}
+												type="password"
+												// autoComplete="current-password"
+												margin="dense"
+												variant="outlined"
+												onChange={event => this.handleRPassword(event)}
+												value={this.state.repeatPassword}
+												validators={["isPasswordMatch", "required"]}
+												errorMessages={[
+													"password mismatch",
+													"this field is required"
+												]}
+											/>
+										</div>
+									</div>
+									<div className="regFieldText">
+										<Typography component="p" style={classes.textFieldetc}>
+											Use 8 or more characters with a mix of letters, numbers &
+											symbols
+										</Typography>
+									</div>
+									<div></div>
+									<div style={err}>{this.state.message}</div>
+									<div className="regFieldInputfn">
+										<Button
+											variant="contained"
+											style={classes.buttonsale}
+											onClick={this.handleAdvance}
+										>
+											Advance
+										</Button>
+										<Button
+											variant="contained"
+											style={classes.buttonsale}
+											onClick={this.handleBasic}
+										>
+											Basic
+										</Button>
+									</div>
+									<div className="regFieldLast">
+										<Button style={classes.button} onClick={this.handleLogin}>
+											Sign in instead
+										</Button>
+										<Button
+											variant="contained"
+											style={classes.buttonS}
+											type="submit"
+											onClick={this.checkFlag}
+										>
+											Next
+										</Button>
+										
 									</div>
 								</div>
-								<div className="regFieldInputfn">
-									<TextField
-										helperText="You can use letter, numbers and periods"
-										id="textF"
-										type="email"
-										label="Username"
-										margin="dense"
-										variant="outlined"
-										style={classes.emailField}
-										value={this.state.email}
-										onChange={event => this.handleEmail(event)}
-									/>
-								</div>
-								<div className="regFieldInputfn">
-									<div className="fncl">
-										<TextField
-											id="textF"
-											label="Password"
-											style={classes.nameField}
-											type="password"
-											autoComplete="current-password"
-											margin="dense"
-											variant="outlined"
-											value={this.state.password}
-											onChange={event => this.handlePassword(event)}
-										/>
-									</div>
-									<div className="fnc">
-										<TextField
-											id="textF"
-											label="Confirm"
-											style={classes.nameField}
-											type="password"
-											autoComplete="current-password"
-											margin="dense"
-											variant="outlined"
-											value={this.state.password}
-											onChange={event => this.handlePassword(event)}
-										/>
+								<div id="imgs" className="logo">
+									<img
+										src={require("../assets/account.svg")}
+										width="100%"
+										height="70%"
+										alt="flowers are blue too"
+									></img>
+									<div className="regFieldText">
+										<Typography
+											style={{ color: "#424242", textAlign: "center" }}
+										>
+											One account. All of Bridgelabz working for you.
+										</Typography>
 									</div>
 								</div>
-								<div className="regFieldText">
-									<Typography component="p" style={classes.textFieldetc}>
-										Use 8 or more characters with a mix of letters, numbers &
-										symbols
-									</Typography>
-								</div>
-								<div className="regFieldInputfn">
-									<Button
-										variant="contained"
-										style={classes.buttonsale}
-										onClick={this.handleSubmit}
-									>
-										Advance
-									</Button>
-									<Button
-										variant="contained"
-										style={classes.buttonsale}
-										onClick={this.handleSubmit}
-									>
-										Basic
-									</Button>
-								</div>
-								<div className="regFieldLast">
-									<Button style={classes.button} onClick={this.handleLogin}>Sign in instead</Button>
-									<Button
-										variant="contained"
-										style={classes.buttonS}
-										onClick={this.handleSubmit}
-									>
-										Next
-									</Button>
-								</div>
-							</div>
-							<div className="logo">
-								<img
-									src={require("../assets/account.svg")}
-									width="244"
-									height="244"
-									alt="flowers are blue too"
-								></img>
-								<div className="regFieldText">
-									<Typography component="h7" variant="h7" style={{color:"#424242",textAlign:"center"}}>
-										One account. All of Bridgelabz working for you.
-									</Typography>
-								</div>
-							</div>
+							</ValidatorForm>
 						</Paper>
 					</MuiThemeProvider>
 				</div>

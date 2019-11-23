@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700')
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap')
-@import "./variables.scss"
 
 *
   font-family: "Roboto", sans-serif
@@ -30,6 +29,10 @@
   width: 100%  
   align-self: center
   align-items: center
+  
+.form
+  display: flex
+  width: 100%
 
 %Login-Field
   display: flex
@@ -73,10 +76,12 @@
 
 .FgFieldLast
   @extend %Login-Field
-  padding-top: 40%
-  flex-direction: row
-  align-self: center
-  .regPaper
+  padding-top: 5%
+  padding-right: 21%
+  // flex-direction: row
+  align-items: flex-end
+
+.regPaper
   display: flex
   flex-direction: column
   width: 65%  
@@ -96,8 +101,15 @@
   width: 35%  
   align-self: auto
   align-items: center
+  padding: 10% 0%
   // background-color: #019687
-  
+
+@media only screen and (max-width: 600px) 
+  #imgs
+    display: none
+  .regPaper
+    width: 100%
+
 .regContainer 
   display: flex
   flex-direction: column
@@ -112,7 +124,7 @@
   @extend %Login-Field
   flex-direction: row
   width:100%
-  padding-left: 12%
+  padding-left: 11%
   align-items: flex-start
   padding-top:6%
   // padding-bottom: 2%

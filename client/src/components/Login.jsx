@@ -2,12 +2,13 @@ import React from "react";
 import userServices from "../services/userServices";
 import "../sass/styles.sass";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-let path = "/";
-
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+let path = "/dashboard";
+const userve = new userServices();
 const theme = createMuiTheme({
 	overrides: {
 		MuiPaper: {
@@ -32,14 +33,13 @@ export default class Login extends React.Component {
 		loginData.email = this.state.email;
 		loginData.password = this.state.password;
 
-		userServices.loginUser(loginData)
+		userve
+			.loginUser(loginData)
 			.then(response => {
-				console.log("data in req", response.data);
-				console.log("login successful", response.data.token);
-				window.localStorage.setItem("token", response.data.token);
-				window.localStorage.setItem("loggedUser", response.data.result);
-				window.localStorage.setItem("senderId", response.data.senderId);
-				if (response.data.status) {
+				console.log("data in req", response);
+				console.log("login successful", response.data.id);
+				localStorage.setItem("token", response.data.id);
+				if (response.status) {
 					this.props.history.push(path);
 				} else {
 					path = "/";
@@ -120,70 +120,95 @@ export default class Login extends React.Component {
 				<div className="LoginCard">
 					<MuiThemeProvider theme={theme}>
 						<Paper style={classes.container}>
-							<div className="Paper">
-								<div className="LoginFieldLogo">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										<label style={{ color: "#4285F4" }}>F</label>
-										<label style={{ color: "#ea4335" }}>u</label>
-										<label style={{ color: "#fbbc05" }}>n</label>
-										<label style={{ color: "#4285F4" }}>d</label>
-										<label style={{ color: "#34a853" }}>o</label>
-										<label style={{ color: "#ea4335" }}>o</label>
-									</Typography>
+							<ValidatorForm
+								className="form"
+								ref="form"
+								onSubmit={this.handleSubmit}
+								onError={errors => console.log("errors in form submission",errors)}
+							>
+								<div className="Paper">
+									<div className="LoginFieldLogo">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.textField}
+										>
+											<label style={{ color: "#4285F4" }}>F</label>
+											<label style={{ color: "#ea4335" }}>u</label>
+											<label style={{ color: "#fbbc05" }}>n</label>
+											<label style={{ color: "#4285F4" }}>d</label>
+											<label style={{ color: "#34a853" }}>o</label>
+											<label style={{ color: "#ea4335" }}>o</label>
+										</Typography>
+									</div>
+									<div className="LoginFieldText">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.textField}
+										>
+											Sign In
+										</Typography>
+									</div>
+									<div className="LoginFieldText">
+										<Typography component="p" style={classes.textField}>
+											Use your Fundoo Account
+										</Typography>
+									</div>
+									<div className="LoginFieldInput">
+										<TextValidator
+											id="outlined-basic"
+											type="email"
+											label="Email"
+											margin="normal"
+											variant="outlined"
+											style={classes.emailField}
+											value={this.state.email}
+											onChange={event => this.handleEmail(event)}
+											validators={["required", "isEmail"]}
+											errorMessages={[
+												"this field is required",
+												"email is not valid"
+											]}
+										/>
+									</div>
+									<div className="LoginFieldInput">
+										<TextValidator
+											id="outlined-password-input"
+											label="Password"
+											style={classes.emailField}
+											type="password"
+											autoComplete="current-password"
+											margin="normal"
+											variant="outlined"
+											onChange={event => this.handlePassword(event)}
+											validators={["required"]}
+											errorMessages={["this field is required"]}
+											value={this.state.password}
+										/>
+									</div>
+									<div className="LoginFieldForgot">
+										<Button style={classes.button} onClick={this.handleForgot}>
+											Forgot Password
+										</Button>
+									</div>
+									<div className="LoginFieldLast">
+										<Button
+											style={classes.button}
+											onClick={this.handleRegister}
+										>
+											Register
+										</Button>
+										<Button
+											variant="contained"
+											style={classes.buttonS}
+											type="submit"
+										>
+											Login
+										</Button>
+									</div>
 								</div>
-								<div className="LoginFieldText">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										Sign In
-									</Typography>
-								</div>
-								<div className="LoginFieldText">
-									<Typography component="p" style={classes.textField}>
-										Use your Fundoo Account
-									</Typography>
-								</div>
-								<div className="LoginFieldInput">
-									<TextField
-										id="outlined-basic"
-										type="email"
-										label="Email"
-										margin="normal"
-										variant="outlined"
-										style={classes.emailField}
-										value={this.state.email}
-										onChange={event => this.handleEmail(event)}
-									/>
-								</div>
-								<div className="LoginFieldInput">
-									<TextField
-										id="outlined-password-input"
-										label="Password"
-										style={classes.emailField}
-										type="password"
-										autoComplete="current-password"
-										margin="normal"
-										variant="outlined"
-										value={this.state.password}
-										onChange={event => this.handlePassword(event)}
-									/>
-								</div>
-								<div className="LoginFieldForgot">
-									<Button style={classes.button} onClick={this.handleForgot}>Forgot Password</Button>
-								</div>
-								<div className="LoginFieldLast">
-									<Button style={classes.button} onClick={this.handleRegister}>Register</Button>
-									<Button variant="contained" style={classes.buttonS} onClick={this.handleSubmit}>
-										Login
-									</Button>
-								</div>
-							</div>
+							</ValidatorForm>
 						</Paper>
 					</MuiThemeProvider>
 				</div>

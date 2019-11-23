@@ -1,8 +1,11 @@
 import axios from 'axios';
-const { address} = require("../configs/routeConfig");
+// const {address} = require("../configs/routeConfig");
+const address = 'http://fundoonotes.incubation.bridgelabz.com/api';
 
 class userServices{
   loginUser(loginData) {
+    console.log(address);
+    
     return axios.post(address + '/user/login',loginData);
   }
   
@@ -24,4 +27,4 @@ class userServices{
   }
 }
 
-export default new userServices();
+export default userServices;
