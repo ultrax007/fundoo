@@ -72,9 +72,11 @@ export default class Register extends React.Component {
 					console.log("data in req", response);
 					console.log("registered successfully", response.status);
 
-					if (response.data.status) {
+					if (response.status) {
+						alert("registration successful");
 						this.props.history.push(path);
 					} else {
+						alert("pls try again");
 						path = "/register";
 						this.props.history.push(path);
 					}

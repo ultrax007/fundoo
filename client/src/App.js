@@ -5,6 +5,7 @@ import Register from "./components/Register";
 import "./App.css";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import Dashboard from "./components/Dashboard";
 
 function App() {
 	return (
@@ -15,7 +16,7 @@ function App() {
 					<Route path="/register" component={Register}></Route>
 					<Route path="/forgotPassword" component={ForgotPassword}></Route>
 					<Route path="/resetPassword" component={ResetPassword}></Route>
-
+					<Route path="/dashboard" component={Dashboard}></Route>
 				</Switch>
 			</BrowserRouter>
 		</div>
