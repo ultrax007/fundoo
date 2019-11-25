@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 const userve = new userServices();
-let path = "/dashboard";
+let path = "/resetPassword";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -35,10 +35,11 @@ export default class ForgotPassword extends React.Component {
 			.forgotUser(forgotData)
 			.then(response => {
 				console.log("data in req", response.data);
-				console.log("login successful", response.data.token);
-				if (response.data.status) {
+				if (response.status) {
+					alert("mail sent please click the link in mail")
 					this.props.history.push(path);
 				} else {
+					alert("error while verifying email")
 					path = "/forgotPassword";
 					this.props.history.push(path);
 				}
@@ -117,12 +118,12 @@ export default class ForgotPassword extends React.Component {
 											component="h5"
 											style={classes.textField}
 										>
-											<label style={{ color: "#4285F4" }}>F</label>
-											<label style={{ color: "#ea4335" }}>u</label>
-											<label style={{ color: "#fbbc05" }}>n</label>
-											<label style={{ color: "#4285F4" }}>d</label>
-											<label style={{ color: "#34a853" }}>o</label>
-											<label style={{ color: "#ea4335" }}>o</label>
+											<label id="bl">F</label>
+											<label id="rd">u</label>
+											<label id="yl">n</label>
+											<label id="bl">d</label>
+											<label id="gn">o</label>
+											<label id="rd">o</label>
 										</Typography>
 									</div>
 									<div className="LoginFieldText">

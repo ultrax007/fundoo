@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import CircularProgress from "@material-ui/core/CircularProgress";
 let path = "/dashboard";
 const userve = new userServices();
 const theme = createMuiTheme({
@@ -24,9 +25,14 @@ export default class Login extends React.Component {
 		super(props);
 		this.state = {
 			email: "",
-			password: ""
+			password: "",
+			progress: false
 		};
 	}
+
+	changeProgress = () => {
+		this.setState({ proress: false });
+	};
 
 	handleSubmit = () => {
 		let loginData = {};
@@ -36,12 +42,16 @@ export default class Login extends React.Component {
 		userve
 			.loginUser(loginData)
 			.then(response => {
+				this.setState({ progress: true });
+				this.timer = setTimeout((this.changeProgress, 700));
 				console.log("data in req", response);
 				console.log("login successful", response.data.id);
 				localStorage.setItem("token", response.data.id);
 				if (response.status) {
+					alert("Login successful");
 					this.props.history.push(path);
 				} else {
+					alert("unsuccessful login attempt");
 					path = "/";
 					this.props.history.push(path);
 				}
@@ -124,7 +134,9 @@ export default class Login extends React.Component {
 								className="form"
 								ref="form"
 								onSubmit={this.handleSubmit}
-								onError={errors => console.log("errors in form submission",errors)}
+								onError={errors =>
+									console.log("errors in form submission", errors)
+								}
 							>
 								<div className="Paper">
 									<div className="LoginFieldLogo">
@@ -172,6 +184,7 @@ export default class Login extends React.Component {
 											]}
 										/>
 									</div>
+									
 									<div className="LoginFieldInput">
 										<TextValidator
 											id="outlined-password-input"
@@ -199,6 +212,9 @@ export default class Login extends React.Component {
 										>
 											Register
 										</Button>
+										{this.state.progress ? (
+										<CircularProgress id="loading" />
+									) : null}
 										<Button
 											variant="contained"
 											style={classes.buttonS}

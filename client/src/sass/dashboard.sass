@@ -5,6 +5,7 @@ $grey-color: #424242
 *
   font-family: "Roboto", sans-serif
 
+
 %rField
   display: flex
   width: 100%
@@ -25,23 +26,45 @@ $grey-color: #424242
 .header
   display: flex
   width: 100%
+  z-index: 1301
 
 .container
   display: flex
   width: 100%
 
 .flogotext
-  display: flex
+  display: block
+  flex-direction: column
   align-items: center
   color: $grey-color
   padding-left: 5%
+  padding-top: 10px
   font-size: 24px
+  flex-shrink: 1
 
 .flogo
-  display: flex
+  display: block
+  flex-direction: column
+  padding-top: 5px
   align-items: center
   justify-content: space-around
 
+@media only screen and (max-width: 1100px) 
+  .flogo
+    display: none
+  
+  .flogotext
+    padding-top: 5%
+
+@media only screen and (max-width: 675px) 
+  .searchBlock
+    visibility: hidden
+  
+  #rightPanelLogo
+    width: 15%
+  
+  #avatar
+    width: 0%
 
 #logo
   display: flex
@@ -55,14 +78,15 @@ $grey-color: #424242
 
 #rightPanelLogo
   @extend %rField
-  margin-left: 20%
-  width: 5%
-  justify-content: space-between
+  // margin-left: 20%
+  
+  width: 30%
+  justify-content: center
 
 #avatar
   @extend %rField
-  margin-left: 8%
-  width: 3%
-  justify-content: space-between
+  margin-left: 4%
+  width: fit-content
+  // justify-content: space-between
 
   

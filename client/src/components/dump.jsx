@@ -14,3 +14,19 @@
 // import FormControl from '@material-ui/core/FormControl';
 // import Visibility from '@material-ui/icons/Visibility';
 // import VisibilityOff from '@material-ui/icons/VisibilityOff';
+{/* <TextField
+										id="searchtext"
+										margin="dense"
+										width="50%"
+										height="90%"
+										placeholder="search"
+										variant="filled"
+										// style={classes.search}
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">
+													<SearchIcon />
+												</InputAdornment>
+											)
+										}}
+									/> */}

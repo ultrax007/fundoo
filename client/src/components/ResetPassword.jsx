@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 const userve = new userServices();
-let path = "/dashboard";
+let path = "/";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -28,18 +28,17 @@ export default class ResetPassword extends React.Component {
 	}
 
 	handleSubmit = () => {
-		let resetData = {};
-		resetData.email = this.state.email;
-
+		let url = window.location.pathname;
+		let token = url.substring(15);//29 to directly start at token value
+		console.log("data in token",token);		
+		var formData = new FormData();
+		formData.append('newPassword',this.state.password)
 		userve
-			.resetUser(resetData)
+			.resetUser(formData, token)
 			.then(response => {
-				console.log("data in req", response.data);
-				console.log("login successful", response.data.token);
-				window.localStorage.setItem("token", response.data.token);
-				window.localStorage.setItem("loggedUser", response.data.result);
-				window.localStorage.setItem("senderId", response.data.senderId);
-				if (response.data.status) {
+				console.log("data in response", response);
+				if (response.status) {
+					alert("password resetted successfully")
 					this.props.history.push(path);
 				} else {
 					path = "/";
@@ -52,7 +51,7 @@ export default class ResetPassword extends React.Component {
 	};
 
 	handlePass = event => {
-		console.log("value of email in login", event.currentTarget.value);
+		console.log("value of password ", event.currentTarget.value);
 		this.setState({ password: event.currentTarget.value });
 	};
 
@@ -94,7 +93,7 @@ export default class ResetPassword extends React.Component {
 				width: "80%",
 				textAlign: "left"
 			},
-			emailField: {
+			passField: {
 				alignSelf: "center",
 				marginLeft: theme.spacing(1),
 				marginRight: theme.spacing(1),
@@ -149,7 +148,7 @@ export default class ResetPassword extends React.Component {
 											label="new password"
 											margin="normal"
 											variant="outlined"
-											style={classes.emailField}
+											style={classes.passField}
 											value={this.state.password}
 											onChange={event => this.handlePass(event)}
 											validators={["required"]}

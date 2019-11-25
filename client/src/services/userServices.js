@@ -18,10 +18,14 @@ class userServices{
   }
   
   resetUser(userPass, token) {
+    
+    console.log("password is "+userPass+" \ntoken is==>  "+token);
+    
     return axios.post(address + '/user/reset-password', userPass,
     {
       headers: {
-        token: token
+        'Authorization': token,
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
   }
