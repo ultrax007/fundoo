@@ -37,7 +37,7 @@ export default class ForgotPassword extends React.Component {
 				console.log("data in req", response.data);
 				if (response.status) {
 					alert("mail sent please click the link in mail")
-					this.props.history.push(path);
+					// this.props.history.push(path);
 				} else {
 					alert("error while verifying email")
 					path = "/forgotPassword";

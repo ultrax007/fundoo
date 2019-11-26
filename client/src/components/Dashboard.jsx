@@ -6,7 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import flogo from "../assets/favicon.ico";
 import SearchIcon from "@material-ui/icons/Search";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ViewAgendaOutlinedIcon from "@material-ui/icons/ViewAgendaOutlined";
@@ -14,6 +14,7 @@ import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Drawer from "@material-ui/core/Drawer";
+import Popover from "@material-ui/core/Popover";
 const theme = createMuiTheme({
 	overrides: {
 		MuiAppBar: {
@@ -38,7 +39,7 @@ const theme = createMuiTheme({
 				top: "65px",
 				width: "250px",
 				height: "95vh",
-				overflowY: "scroll",
+				overflowY: "scroll"
 			}
 		}
 	}
@@ -47,8 +48,22 @@ export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			open: false
+			open: false,
+			pop_open: false
 		};
+	}
+	handleProfileDropDown(e) {
+		e.preventDefault();
+		this.setState({
+			pop_open: !this.state.pop_open,
+			anchorEl: e.currentTarget
+		});
+	}
+
+	handleRequestClose() {
+		this.setState({
+			pop_open: false
+		});
 	}
 	handleDrawer = () => {
 		this.setState({ open: !this.state.open });
@@ -111,13 +126,27 @@ export default class Dashboard extends React.Component {
 									<Avatar>
 										<AccountCircleOutlinedIcon />
 									</Avatar>
+									<Popover
+										open={this.state.pop_open}
+										anchorEl={this.state.anchorEl}
+										onRequestClose={this.handleRequestClose.bind(this)}
+										anchorOrigin={{
+											vertical: "bottom",
+											horizontal: "center"
+										}}
+										transformOrigin={{
+											vertical: "top",
+											horizontal: "right"
+										}}
+									>
+										<Button variant="outlined">logout</Button>
+									</Popover>
 								</div>
 							</Toolbar>
 							<Drawer open={this.state.open} varient="persistent" anchor="left">
-							abc
-						</Drawer>
+								abc
+							</Drawer>
 						</AppBar>
-						
 					</div>
 					<div className="container"></div>
 				</MuiThemeProvider>

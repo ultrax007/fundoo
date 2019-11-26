@@ -250,12 +250,12 @@ export default class Register extends React.Component {
 											component="h5"
 											style={classes.titleField}
 										>
-											<label style={{ color: "#4285F4" }}>F</label>
-											<label style={{ color: "#ea4335" }}>u</label>
-											<label style={{ color: "#fbbc05" }}>n</label>
-											<label style={{ color: "#4285F4" }}>d</label>
-											<label style={{ color: "#34a853" }}>o</label>
-											<label style={{ color: "#ea4335" }}>o</label>
+											<label id="bl">F</label>
+											<label id="rd">u</label>
+											<label id="yl">n</label>
+											<label id="bl">d</label>
+											<label id="gn">o</label>
+											<label id="rd">o</label>
 										</Typography>
 									</div>
 									<div className="regFieldText">
