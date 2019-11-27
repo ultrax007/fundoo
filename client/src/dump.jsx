@@ -30,3 +30,18 @@
 											)
 										}}
 									/> */}
+
+									<div>
+										{/* <Snackbar
+											anchorOrigin={{
+												vertical: "bottom",
+												horizontal: "center"
+											}}
+											// style={snackStyle}
+											open={this.state.sOpen}
+											autoHideDuration={6000}
+											onClose={this.handleCloseSnackbar}
+											message={<label id="notify">{this.state.message}</label>}
+										/> */}
+										
+									</div>

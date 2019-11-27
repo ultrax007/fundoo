@@ -4,6 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import Drawer from "@material-ui/core/Drawer";
 import flogo from "../assets/favicon.ico";
 import SearchIcon from "@material-ui/icons/Search";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
@@ -13,8 +14,9 @@ import ViewAgendaOutlinedIcon from "@material-ui/icons/ViewAgendaOutlined";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-import Drawer from "@material-ui/core/Drawer";
 import Popover from "@material-ui/core/Popover";
+import Drawerlist from "./DrawerList";
+
 const theme = createMuiTheme({
 	overrides: {
 		MuiAppBar: {
@@ -25,7 +27,7 @@ const theme = createMuiTheme({
 		},
 		MuiFormControl: {
 			root: {
-				minWidth: "60%"
+				minWidth: "85%"
 			}
 		},
 		MuiInputBase: {
@@ -39,11 +41,15 @@ const theme = createMuiTheme({
 				top: "65px",
 				width: "250px",
 				height: "95vh",
-				overflowY: "scroll"
+				overflowY: "auto"
+			},
+			paperAnchorDockedLeft: {
+				borderRight: "none"
 			}
 		}
 	}
 });
+
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
@@ -60,17 +66,18 @@ export default class Dashboard extends React.Component {
 		});
 	}
 
-	handleRequestClose() {
+	handleClose = () => {
 		this.setState({
-			pop_open: false
+			pop_open: !this.state.pop_open,
+			anchorEl: null
 		});
-	}
+	};
+
 	handleDrawer = () => {
 		this.setState({ open: !this.state.open });
 	};
-	render() {
-		// const classes = {};
 
+	render() {
 		return (
 			<div className="main">
 				<MuiThemeProvider theme={theme}>
@@ -100,7 +107,7 @@ export default class Dashboard extends React.Component {
 									<TextField
 										id="searchtext"
 										margin="dense"
-										width="50%"
+										width="60%"
 										height="90%"
 										placeholder="search"
 										variant="outlined"
@@ -123,13 +130,13 @@ export default class Dashboard extends React.Component {
 									</IconButton>
 								</div>
 								<div id="avatar">
-									<Avatar>
+									<Avatar onClick={event => this.handleProfileDropDown(event)}>
 										<AccountCircleOutlinedIcon />
 									</Avatar>
 									<Popover
 										open={this.state.pop_open}
 										anchorEl={this.state.anchorEl}
-										onRequestClose={this.handleRequestClose.bind(this)}
+										onClick={this.handleClose}
 										anchorOrigin={{
 											vertical: "bottom",
 											horizontal: "center"
@@ -143,10 +150,12 @@ export default class Dashboard extends React.Component {
 									</Popover>
 								</div>
 							</Toolbar>
-							<Drawer open={this.state.open} varient="persistent" anchor="left">
-								abc
-							</Drawer>
 						</AppBar>
+					</div>
+					<div>
+						<Drawer open={this.state.open} variant="persistent">
+							<Drawerlist />
+						</Drawer>
 					</div>
 					<div className="container"></div>
 				</MuiThemeProvider>
