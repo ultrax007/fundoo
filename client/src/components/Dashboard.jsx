@@ -1,3 +1,4 @@
+//Default imports for designing
 import React from "react";
 import "../sass/dashboard.sass";
 import AppBar from "@material-ui/core/AppBar";
@@ -16,6 +17,9 @@ import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
+
+//component imports
+import TakeNote from "./TakeNote";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -39,7 +43,7 @@ const theme = createMuiTheme({
 		MuiDrawer: {
 			paper: {
 				top: "65px",
-				width: "250px",
+				width: "270px",
 				height: "95vh",
 				overflowY: "auto"
 			},
@@ -78,6 +82,9 @@ export default class Dashboard extends React.Component {
 	};
 
 	render() {
+		var style;
+		style = this.state.open ? "containerSM" : "container";
+		
 		return (
 			<div className="main">
 				<MuiThemeProvider theme={theme}>
@@ -146,7 +153,7 @@ export default class Dashboard extends React.Component {
 											horizontal: "right"
 										}}
 									>
-										<Button variant="outlined">logout</Button>
+										<Button variant="outlined" margin="dense">logout</Button>
 									</Popover>
 								</div>
 							</Toolbar>
@@ -157,7 +164,10 @@ export default class Dashboard extends React.Component {
 							<Drawerlist />
 						</Drawer>
 					</div>
-					<div className="container"></div>
+					{/* everything below will show in container area */}
+					<div id={style}>
+						<TakeNote/>
+					</div>
 				</MuiThemeProvider>
 			</div>
 		);

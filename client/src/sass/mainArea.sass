@@ -1,0 +1,41 @@
+%disflex
+  display: flex
+  width: 100%
+  flex-direction: column
+
+#takeNoteContainer
+  @extend %disflex
+  // width:50%
+  height: fit-content
+  padding: 25px 0 25px 0
+  align-items: center
+  
+#noteInactive
+  display: flex
+  flex-direction: row
+  width: 45%
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.2), 1px 1px 3px 0 rgba(0, 0, 0, 0.19)
+
+#noteActive
+  display: flex
+  flex-direction: column
+  width: 45%
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.2), 1px 1px 3px 0 rgba(0, 0, 0, 0.19)
+
+#iconbar
+  @extend %disflex
+  width: 100%
+  flex-direction: row
+  align-content: flex-start
+  justify-content: space-between
+
+#button
+  @extend %disflex
+  margin-right: 2%
+  flex-direction: row
+  width: 10%
+
+@media only screen and ( max-width:800px)
+  #iconbar
+    flex-direction: column
+  

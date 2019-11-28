@@ -12,47 +12,124 @@ import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import Typography from "@material-ui/core/Typography";
 export default class DrawerList extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			notes: false,
+			reminder: false,
+			editL: false,
+			archive: false,
+			trash: false
+		};
+	}
+	componentDidMount() {
+		this.setState({
+			notes: true,
+			reminder: false,
+			editL: false,
+			archive: false,
+			trash: false
+		});
+	}
+
+	handleNotes = () => {
+		this.setState({
+			notes: true,
+			reminder: false,
+			editL: false,
+			archive: false,
+			trash: false
+		});
+	}
+
+	handleReminder = () => {
+		this.setState({
+			notes: false,
+			reminder: true,
+			editL: false,
+			archive: false,
+			trash: false
+		});
+	}
+
+	handleELable = () => {
+		this.setState({
+			notes: false,
+			reminder: false,
+			editL: true,
+			archive: false,
+			trash: false
+		});
+	}
+
+	handleArchive = () => {
+		this.setState({
+			notes: false,
+			reminder: false,
+			editL: false,
+			archive: true,
+			trash: false
+		});
+	}
+
+	handleTrash = () => {
+		this.setState({
+			notes: false,
+			reminder: false,
+			editL: false,
+			archive: false,
+			trash: true
+		});
+	}
+
 	render() {
+		var style = this.state.notes ? "hNote" : null;
+		var style1 = this.state.reminder ? "hNote" : null;
+		var style2 = this.state.editL ? "hNote" : null;
+		var style3 = this.state.archive ? "hNote" : null;
+		var style4 = this.state.trash ? "hNote" : null;
+		// var style5 = this.state.labels ? "hNote" : null;
+
 		return (
 			<Fragment>
-				<List component="nav" aria-label="main mailbox folders">
-					<ListItem button>
+				<List component="nav">
+					<ListItem button id={style} onClick={this.handleNotes}>
 						<ListItemIcon>
 							<EmojiObjectsOutlinedIcon />
 						</ListItemIcon>
 						<ListItemText primary="Notes" />
 					</ListItem>
-					<ListItem button>
+
+					<ListItem button id={style1} onClick={this.handleReminder}>
 						<ListItemIcon>
 							<NotificationsNoneOutlinedIcon />
 						</ListItemIcon>
-						<ListItemText primary="Drafts" />
+						<ListItemText primary="Reminder" />
 					</ListItem>
-				</List>
-				<Divider />
-				<List component="nav" aria-label="labels">
-					<ListItem>
-						<Typography id="labels" component="p">
-							LABELS
-						</Typography>
-					</ListItem>
-					<ListItem>
+
+					<Divider />
+
+					<Typography id="labels" component="p">
+						LABELS
+					</Typography>
+
+					<ListItem button id={style2} onClick={this.handleELable}>
 						<ListItemIcon>
 							<CreateOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Edit labels" />
+						</ListItemIcon>
+						<ListItemText primary="Edit labels" />
 					</ListItem>
-				</List>
 
-				<Divider />
-				<List component="nav" aria-label="secondary mailbox folders">
-					<ListItem button>
+					<Divider />
+
+					<ListItem button id={style3} onClick={this.handleArchive}>
 						<ListItemIcon>
 							<ArchiveOutlinedIcon />
 						</ListItemIcon>
 						<ListItemText primary="Archive" />
 					</ListItem>
-					<ListItem button>
+
+					<ListItem button id={style4} onClick={this.handleTrash}>
 						<ListItemIcon>
 							<DeleteOutlineOutlinedIcon />
 						</ListItemIcon>
