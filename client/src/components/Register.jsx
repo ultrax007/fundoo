@@ -65,9 +65,9 @@ export default class Register extends React.Component {
 			userData.service = this.state.service;
 			userData.email = this.state.email;
 			userData.password = this.state.password;
-
+			let target = "/user/userSignUp";
 			userve
-				.registerUser(userData)
+				.postMethod(userData,target)
 				.then(response => {
 					console.log("data in req", response);
 					console.log("registered successfully", response.status);

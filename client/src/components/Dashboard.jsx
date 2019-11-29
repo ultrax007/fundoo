@@ -143,7 +143,7 @@ export default class Dashboard extends React.Component {
 									<Popover
 										open={this.state.pop_open}
 										anchorEl={this.state.anchorEl}
-										onClick={this.handleClose}
+										onClose={this.handleClose}
 										anchorOrigin={{
 											vertical: "bottom",
 											horizontal: "center"

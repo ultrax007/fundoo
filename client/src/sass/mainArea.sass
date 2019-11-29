@@ -11,31 +11,58 @@
   align-items: center
   
 #noteInactive
-  display: flex
+  display: block
   flex-direction: row
-  width: 45%
+  width: 587px
   box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.2), 1px 1px 3px 0 rgba(0, 0, 0, 0.19)
 
 #noteActive
-  display: flex
+  display: block
   flex-direction: column
-  width: 45%
+  width: 587px
   box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.2), 1px 1px 3px 0 rgba(0, 0, 0, 0.19)
 
-#iconbar
+#functions
   @extend %disflex
   width: 100%
   flex-direction: row
   align-content: flex-start
-  justify-content: space-between
+  // justify-content: space-between
 
+  
+#iconBar
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  width: 88%
+
+  
 #button
   @extend %disflex
-  margin-right: 2%
-  flex-direction: row
+  padding-right: 8px
+  flex-direction: column
   width: 10%
+  justify-content: center
 
-@media only screen and ( max-width:800px)
-  #iconbar
-    flex-direction: column
+@media only screen and ( max-width:600px)
+  #noteActive
+    display: flex
+    width: 98%
+  #noteInactive
+    display: flex
+    width: 98%
+  #iconBar
+    width: 80%
   
+#titleN
+  @extend %disflex
+  flex-direction: row
+
+#pin
+  display: block
+  width: 115
+
+#colorpalette
+  display: block
+  width: 120px
+  height: 90px

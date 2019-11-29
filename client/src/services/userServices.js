@@ -13,18 +13,8 @@ class userServices {
 		return formBody.join("&");
 	}
 
-	loginUser(loginData) {
-		console.log(address);
-
-		return axios.post(address + "/user/login", loginData);
-	}
-
-	registerUser(userData) {
-		return axios.post(address + "/user/userSignUp", userData);
-	}
-
-	forgotUser(userEmail) {
-		return axios.post(address + "/user/reset", userEmail);
+	postMethod(data, target) {
+		return axios.post(address + target, data);
 	}
 
   resetUser(userPass, token) {
