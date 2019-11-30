@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import "../sass/mainArea.sass";
+import "../sass/TakeNote.sass";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";

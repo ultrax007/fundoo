@@ -30,9 +30,8 @@ export default class ForgotPassword extends React.Component {
 	handleSubmit = () => {
 		let forgotData = {};
 		forgotData.email = this.state.email;
-		let target = "/user/reset";
 		userve
-			.postMethod(forgotData,target)
+			.forget(forgotData)
 			.then(response => {
 				console.log("data in req", response.data);
 				if (response.status) {

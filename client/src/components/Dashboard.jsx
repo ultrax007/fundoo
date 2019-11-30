@@ -20,6 +20,12 @@ import Drawerlist from "./DrawerList";
 
 //component imports
 import TakeNote from "./TakeNote";
+import NoteCard from "./NoteCard";
+// const scroll = createMuiTheme({
+// 	overrides: {
+
+// 	}
+// });
 
 const theme = createMuiTheme({
 	overrides: {
@@ -42,6 +48,7 @@ const theme = createMuiTheme({
 		},
 		MuiDrawer: {
 			paper: {
+				position:"absolute",
 				top: "65px",
 				width: "270px",
 				height: "95vh",
@@ -50,6 +57,18 @@ const theme = createMuiTheme({
 			paperAnchorDockedLeft: {
 				borderRight: "none"
 			}
+			// "@global": {
+			// 	"*::-webkit-scrollbar": {
+			// 		width: "0.4em"
+			// 	},
+			// 	"*::-webkit-scrollbar-track": {
+			// 		"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
+			// 	},
+			// 	"*::-webkit-scrollbar-thumb": {
+			// 		backgroundColor: "rgba(0,0,0,.1)",
+			// 		outline: "1px solid slategrey"
+			// 	}
+			// }
 		}
 	}
 });
@@ -59,7 +78,8 @@ export default class Dashboard extends React.Component {
 		super(props);
 		this.state = {
 			open: false,
-			pop_open: false
+			pop_open: false,
+			takeNoteToggle: "true"
 		};
 	}
 	handleProfileDropDown(e) {
@@ -81,10 +101,14 @@ export default class Dashboard extends React.Component {
 		this.setState({ open: !this.state.open });
 	};
 
+	handleToggleTakeNote = async tnvalue => {
+		await this.setState({ takeNoteToggle: tnvalue });
+	};
+
 	render() {
 		var style;
 		style = this.state.open ? "containerSM" : "container";
-		
+
 		return (
 			<div className="main">
 				<MuiThemeProvider theme={theme}>
@@ -153,7 +177,9 @@ export default class Dashboard extends React.Component {
 											horizontal: "right"
 										}}
 									>
-										<Button variant="outlined" margin="dense">logout</Button>
+										<Button variant="outlined" margin="dense">
+											logout
+										</Button>
 									</Popover>
 								</div>
 							</Toolbar>
@@ -161,14 +187,21 @@ export default class Dashboard extends React.Component {
 					</div>
 					<div>
 						<Drawer open={this.state.open} variant="persistent">
-							<Drawerlist />
+							<Drawerlist toggleState={this.handleToggleTakeNote} />
 						</Drawer>
 					</div>
-					{/* everything below will show in container area */}
-					<div id={style}>
-						<TakeNote/>
-					</div>
 				</MuiThemeProvider>
+				{/* everything below will show in container area and is div CONTAINER OR CONTAINERSM */}
+				<div id={style}>
+					{this.state.takeNoteToggle ? (
+						<div id="takeNoteContainer">
+							<TakeNote />
+						</div>
+					) : null}
+					<div id="allNotesContainer">
+						<NoteCard/>
+					</div>
+				</div>
 			</div>
 		);
 	}

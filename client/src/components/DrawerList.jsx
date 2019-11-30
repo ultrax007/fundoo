@@ -40,6 +40,7 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: false
 		});
+		this.props.toggleState(true);
 	}
 
 	handleReminder = () => {
@@ -50,6 +51,7 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: false
 		});
+		this.props.toggleState(true);
 	}
 
 	handleELable = () => {
@@ -70,6 +72,7 @@ export default class DrawerList extends React.Component {
 			archive: true,
 			trash: false
 		});
+		this.props.toggleState(false);
 	}
 
 	handleTrash = () => {
@@ -80,6 +83,7 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: true
 		});
+		this.props.toggleState(false);
 	}
 
 	render() {

@@ -1,33 +1,21 @@
-import axios from "axios";
-// const {address} = require("../configs/routeConfig");
-const address = "http://fundoonotes.incubation.bridgelabz.com/api";
+import axiosServices from "./axiosServices.js";
+const obj = new axiosServices();
+export default class userServices {
 
-class userServices {
-	getEncodData(toConvert) {
-		const formBody = [];
-		for (const property in toConvert) {
-			const encodedKey = encodeURIComponent(property);
-			const encodedValue = encodeURIComponent(toConvert[property]);
-			formBody.push(encodedKey + "=" + encodedValue);
-		}
-		return formBody.join("&");
-	}
+  login(data) {
+    return obj.postMethod(data, "/user/login", false);
+  }
 
-	postMethod(data, target) {
-		return axios.post(address + target, data);
-	}
+  forget(data) {
+    return obj.postMethod(data, "/user/reset", false);
+  }
 
-  resetUser(userPass, token) {
-    var formData = this.getEncodData(userPass)
-		console.log("password is " + userPass + " \ntoken is==>  " + token);
-
-		return axios.post(address + "/user/reset-password", formData, {
-			headers: {
-				Authorization: token,
-				"Content-Type": "application/x-www-form-urlencoded"
-			}
-		});
-	}
+  
+  register(data) {
+    return obj.postMethod(data,"/user/userSignUp", false);
+  }
+  
+  reset(data,token) {
+    return obj.resetUser(data, token);
+  }
 }
-
-export default userServices;

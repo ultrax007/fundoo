@@ -66,9 +66,9 @@ export default class Login extends React.Component {
 		let loginData = {};
 		loginData.email = this.state.email;
 		loginData.password = this.state.password;
-		let target = "/user/login"
+		
 		userve
-			.postMethod(loginData,target)
+			.login(loginData)
 			.then(response => {
 				if (response.status === 200) {
 					this.setState({ progress: true });

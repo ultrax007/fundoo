@@ -36,7 +36,7 @@ export default class ResetPassword extends React.Component {
 		// var formData = new FormData();
 		// formData.append('newPassword',this.state.password)
 		userve
-			.resetUser(resetData, token)
+			.reset(resetData, token)
 			.then(response => {
 				console.log("data in response", response);
 				if (response.status) {
