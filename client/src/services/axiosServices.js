@@ -15,15 +15,29 @@ export default class axiosServices {
 	}
 
 	postMethod(data, target, isTokenReq) {
-		return axios.post(address + target, data, isTokenReq && token);
+		return axios.post(address + target, data, isTokenReq && {
+			headers: {
+				'Content-type': 'application/json; charset=utf-8',
+				'Authorization': token
+			}
+		});
 	}
 
 	getMethod(target) {
-		return axios.get(address + target);
+		return axios.get(address + target, {
+			headers: {
+				'Authorization':token
+			}
+		});
 	}
 
-	putMethod(data, target) {
-		return axios.put(address+target,data,token)
+	putMethod(data, target,isTokenReq) {
+		return axios.put(address + target, data, isTokenReq && {
+			headers: {
+				'Content-type': 'application/json; charset=utf-8',
+				'Authorization': token
+			}
+		});
 	}
 
 	deleteMethod(target) {

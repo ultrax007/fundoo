@@ -18,4 +18,11 @@ export default class userServices {
   reset(data,token) {
     return obj.resetUser(data, token);
   }
+
+  /**
+   * operation methods
+   */
+  getAllNotes() {
+    return obj.getMethod("/notes/getNotesList", true);
+  }
 }

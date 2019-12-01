@@ -20,7 +20,8 @@ import Drawerlist from "./DrawerList";
 
 //component imports
 import TakeNote from "./TakeNote";
-import NoteCard from "./NoteCard";
+// import NoteCard from "./NoteCard";
+import DisplayAllNotes from "./DisplayAllNotes";
 // const scroll = createMuiTheme({
 // 	overrides: {
 
@@ -104,6 +105,9 @@ export default class Dashboard extends React.Component {
 	handleToggleTakeNote = async tnvalue => {
 		await this.setState({ takeNoteToggle: tnvalue });
 	};
+	setFocusToTextBox=()=> {
+    document.getElementById("inputInactive").focus();
+}
 
 	render() {
 		var style;
@@ -130,9 +134,10 @@ export default class Dashboard extends React.Component {
 											alt="Fundoo"
 											height="90%"
 											width="80%"
+											onClick={this.setFocusToTextBox}
 										></img>
 									</div>
-									<div className="flogotext">Fundoo</div>
+									<div className="flogotext" onClick={this.setFocusToTextBox}>Fundoo</div>
 								</div>
 								<div className="searchBlock">
 									<TextField
@@ -199,7 +204,7 @@ export default class Dashboard extends React.Component {
 						</div>
 					) : null}
 					<div id="allNotesContainer">
-						<NoteCard/>
+						<DisplayAllNotes/>
 					</div>
 				</div>
 			</div>
