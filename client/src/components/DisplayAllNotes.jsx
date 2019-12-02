@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
-import userServices from "../services/userServices";
+import noteServices from "../services/noteServices";
 import NoteCard from "./NoteCard";
-const userve = new userServices();
+const nServe = new noteServices();
 
 export default class DisplayAllNotes extends React.Component {
 	constructor(props) {
@@ -16,7 +16,7 @@ export default class DisplayAllNotes extends React.Component {
 	}
 
 	getAllNotes = () => {
-		userve
+		nServe
 			.getAllNotes()
 			.then(response => {
 				console.log("information in response", response.data.data.data);

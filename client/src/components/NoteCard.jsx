@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
-import TakeNoteDialog from "./TakeNoteDialog";
+import NoteDialog from "./NoteDialog";
 // import "../sass/TakeNote.sass";
 import Dialog from "@material-ui/core/Dialog";
 import Card from "@material-ui/core/Card";
@@ -172,7 +172,7 @@ export default class NoteCard extends React.Component {
 					this.state.dialogOpen
 						?
 						<Dialog onClose={this.handleClick} open={this.handleClick}>
-							<TakeNoteDialog diaData={this.state}/>
+							<NoteDialog diaData={this.state}/>
 						</Dialog>
 						:
 						null

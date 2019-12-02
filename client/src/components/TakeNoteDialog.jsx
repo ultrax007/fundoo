@@ -5,7 +5,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import userServices from "../services/userServices";
+import noteServices from "../services/noteServices";
 
 // import Popover from "@material-ui/core/Popover";
 
@@ -18,7 +18,7 @@ import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import ColorPalette from "./ColorPalette";
-const userve = new userServices();
+const nServe = new noteServices();
 
 const button = createMuiTheme({
 	overrides: {
@@ -60,19 +60,7 @@ export default class TakeNote extends React.Component {
 		};
 		this.handleColor = this.handleColor.bind(this);
 	}
-	componentWillMount() {
-		this.setState({
-			title: this.props.diaData.title,
-			description: this.props.diaData.description,
-			// labelIdList: "",
-			// checklist: "",
-			isPined: this.props.diaData.isPined,
-			isArchived: this.props.diaData.isArchived,
-			color: this.props.diaData.color,
-			// reminder: "",
-			// collaborators: ""
-		});
-	}
+	
 
 	handleNoteState = () => {
 		this.props.noteState();
@@ -93,7 +81,7 @@ export default class TakeNote extends React.Component {
 			// note.collaborators = "";
 			// hit create node api
 			console.log("data in note", note);
-			userve
+			nServe
 				.createNote(note)
 				.then(response => {
 					if (response.status === 200) {

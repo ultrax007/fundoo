@@ -1,5 +1,5 @@
 import React from "react";
-import "../sass/TakeDialog.sass";
+import "../sass/NoteDialog.sass";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
@@ -90,9 +90,9 @@ export default class TakeNote extends React.Component {
 		this.props.noteState();
 	};
 
-	handleCreateNote = () => {
+	handleUpdateNote = () => {
 		if (this.state.title !== "") {
-			console.log("note created");
+			console.log("note updating");
 			let note = {};
 			note.title = this.state.title;
 			note.description = this.state.description;
@@ -158,7 +158,7 @@ export default class TakeNote extends React.Component {
 
 	render() {
 		return (
-			<Paper id="noteActive" style={{ backgroundColor: this.state.color }}>
+			<Paper id="noteDialog" style={{ backgroundColor: this.state.color }}>
 				<div id="titleN">
 					<InputBase
 						style={{ marginLeft: "2%", width: "89%", color: "#202124" }}
