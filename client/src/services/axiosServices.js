@@ -1,7 +1,7 @@
 import axios from "axios";
 // const {address} = require("../configs/routeConfig");
 const address = "http://fundoonotes.incubation.bridgelabz.com/api";
-const token = localStorage.getItem("token");
+var token = localStorage.getItem("token");
 export default class axiosServices {
 	// constructor() {}
 	getEncodData(toConvert) {
@@ -15,6 +15,8 @@ export default class axiosServices {
 	}
 
 	postMethod(data, target, isTokenReq) {
+		 token = localStorage.getItem("token");
+
 		return axios.post(address + target, data, isTokenReq && {
 			headers: {
 				'Content-type': 'application/json; charset=utf-8',
@@ -24,6 +26,8 @@ export default class axiosServices {
 	}
 
 	getMethod(target) {
+		token = localStorage.getItem("token");
+
 		return axios.get(address + target, {
 			headers: {
 				'Authorization':token
@@ -31,7 +35,9 @@ export default class axiosServices {
 		});
 	}
 
-	putMethod(data, target,isTokenReq) {
+	putMethod(data, target, isTokenReq) {
+		token = localStorage.getItem("token");
+		
 		return axios.put(address + target, data, isTokenReq && {
 			headers: {
 				'Content-type': 'application/json; charset=utf-8',
@@ -45,6 +51,8 @@ export default class axiosServices {
 	}
 
 	resetUser(userPass, tok) {
+		token = localStorage.getItem("token");
+
 		var formData = this.getEncodData(userPass);
 		console.log("password is " + userPass + " \ntoken is==>  " + tok);
 

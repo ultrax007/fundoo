@@ -1,5 +1,5 @@
 import React from "react";
-import "../sass/TakeNote.sass";
+import "../sass/TakeDialog.sass";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
@@ -47,7 +47,6 @@ export default class TakeNote extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-
 			title: "",
 			description: "",
 			// labelIdList: "",
@@ -60,6 +59,19 @@ export default class TakeNote extends React.Component {
 		};
 		this.handleColor = this.handleColor.bind(this);
 	}
+	// static getDerivedStateFromProps(props, state) {
+	// 	return {
+	// 		title: "",
+	// 		description: "",
+	// 		// labelIdList: "",
+	// 		// checklist: "",
+	// 		isPined: false,
+	// 		isArchived: false,
+	// 		color: ""
+	// 		// reminder: "",
+	// 		// collaborators: ""
+	// 	};
+	// }
 	componentWillMount() {
 		this.setState({
 			title: this.props.diaData.title,
@@ -76,16 +88,16 @@ export default class TakeNote extends React.Component {
 
 	handleNoteState = () => {
 		this.props.noteState();
-	}
+	};
 
 	handleCreateNote = () => {
-    if (this.state.title !== "") {
+		if (this.state.title !== "") {
 			console.log("note created");
 			let note = {};
 			note.title = this.state.title;
 			note.description = this.state.description;
 			note.isPined = this.state.isPined;
-			note.color = this.state.color;
+			// note.color = this.state.color;
 			note.isArchived = this.state.isArchived;
 			// note.labelIdList = "";
 			// note.checklist = "";
@@ -221,7 +233,7 @@ export default class TakeNote extends React.Component {
 					<div id="button">
 						<MuiThemeProvider theme={button}>
 							<Tooltip title="close">
-								<Button varient="secondary" onClick={this.handleCreateNote}>
+								<Button varient="secondary">
 									close
 								</Button>
 							</Tooltip>

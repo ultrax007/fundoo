@@ -22,6 +22,11 @@ export default class userServices {
   /**
    * operation methods
    */
+  createNote(data) {
+    console.log("data in userservices",data);
+    return obj.postMethod(data, "/notes/addNotes", true)
+  }
+  
   getAllNotes() {
     return obj.getMethod("/notes/getNotesList", true);
   }

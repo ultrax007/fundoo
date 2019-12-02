@@ -75,7 +75,10 @@ export default class Login extends React.Component {
 					this.timer = setTimeout((this.changeProgress, 700));
 					console.log("data in req", response);
 					console.log("login successful", response.data.id);
+					localStorage.removeItem("token");
 					localStorage.setItem("token", response.data.id);
+					console.log('token changed');
+					
 					snackStyle = {
 						color: "white",
 						height: "fitContent",
@@ -83,8 +86,10 @@ export default class Login extends React.Component {
 						borderRadius: "15px"
 					};
 					this.setState({ sOpen: true, message: "successful login" });
-
+					setTimeout(() => {
 					this.props.history.push(path);
+					}, 1000);
+
 				}
 			})
 			.catch(err => {

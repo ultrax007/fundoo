@@ -105,9 +105,15 @@ export default class Dashboard extends React.Component {
 	handleToggleTakeNote = async tnvalue => {
 		await this.setState({ takeNoteToggle: tnvalue });
 	};
-	setFocusToTextBox=()=> {
-    document.getElementById("inputInactive").focus();
-}
+	setFocusToTextBox = () => {
+		document.getElementById("inputInactive").focus();
+	};
+	handleLogout = () => {
+		localStorage.clear();
+		const path = '/';
+		this.props.history.push(path);
+	}
+
 
 	render() {
 		var style;
@@ -182,7 +188,7 @@ export default class Dashboard extends React.Component {
 											horizontal: "right"
 										}}
 									>
-										<Button variant="outlined" margin="dense">
+										<Button variant="outlined" margin="dense" onClick={this.handleLogout}>
 											logout
 										</Button>
 									</Popover>
@@ -203,7 +209,7 @@ export default class Dashboard extends React.Component {
 							<TakeNote />
 						</div>
 					) : null}
-					<div id="allNotesContainer">
+					<div className="allNotesContainer">
 						<DisplayAllNotes/>
 					</div>
 				</div>
