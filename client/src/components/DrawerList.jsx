@@ -24,13 +24,7 @@ export default class DrawerList extends React.Component {
 		};
 	}
 	componentDidMount() {
-		this.setState({
-			notes: true,
-			reminder: false,
-			editL: false,
-			archive: false,
-			trash: false
-		});
+		this.handleNotes();
 	}
 
 	handleNotes = () => {
@@ -41,9 +35,9 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: false
 		});
-		this.props.toggleState(true);
+		this.props.notes();
 	}
-
+	
 	handleReminder = () => {
 		this.setState({
 			notes: false,
@@ -52,7 +46,7 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: false
 		});
-		this.props.toggleState(true);
+		this.props.reminder();
 	}
 
 	handleELable = () => {
@@ -73,7 +67,7 @@ export default class DrawerList extends React.Component {
 			archive: true,
 			trash: false
 		});
-		this.props.toggleState(false);
+		this.props.archived();
 	}
 
 	handleTrash = () => {
@@ -84,7 +78,7 @@ export default class DrawerList extends React.Component {
 			archive: false,
 			trash: true
 		});
-		this.props.toggleState(false);
+		this.props.trash();
 	}
 
 	render() {

@@ -5,7 +5,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import userServices from "../services/userServices";
+import noteServices from "../services/noteServices";
 
 // import Popover from "@material-ui/core/Popover";
 
@@ -13,19 +13,19 @@ import userServices from "../services/userServices";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import ColorPalette from "./ColorPalette";
-const userve = new userServices();
+import ArchiveIcon from "./ArchiveIcon";
+const nServe = new noteServices();
 
 const button = createMuiTheme({
 	overrides: {
 		MuiButton: {
 			root: {
 				padding: "0",
-				color: "#757575",
+				color: "#202124",
 				"&:hover": {
 					backgroundColor: "none"
 				}
@@ -33,6 +33,7 @@ const button = createMuiTheme({
 		}
 	}
 });
+
 const iconmod = createMuiTheme({
 	overrides: {
 		MuiIconButton: {
@@ -47,6 +48,7 @@ export default class TakeNote extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			id:"",
 			title: "",
 			description: "",
 			// labelIdList: "",
@@ -74,11 +76,12 @@ export default class TakeNote extends React.Component {
 	// }
 	componentWillMount() {
 		this.setState({
+			id:this.props.diaData.id,
 			title: this.props.diaData.title,
 			description: this.props.diaData.description,
 			// labelIdList: "",
 			// checklist: "",
-			isPined: this.props.diaData.isPined,
+			// isPined: this.props.diaData.isPined,
 			isArchived: this.props.diaData.isArchived,
 			color: this.props.diaData.color,
 			// reminder: "",
@@ -87,26 +90,27 @@ export default class TakeNote extends React.Component {
 	}
 
 	handleNoteState = () => {
-		this.props.noteState();
+		this.props.handleDialog();
 	};
 
 	handleUpdateNote = () => {
 		if (this.state.title !== "") {
 			console.log("note updating");
 			let note = {};
+			note.noteId = this.state.id;
 			note.title = this.state.title;
 			note.description = this.state.description;
-			note.isPined = this.state.isPined;
+			// note.isPined = this.state.isPined;
 			// note.color = this.state.color;
-			note.isArchived = this.state.isArchived;
+			// note.isArchived = this.state.isArchived;
 			// note.labelIdList = "";
 			// note.checklist = "";
 			// note.reminder = "";
 			// note.collaborators = "";
 			// hit create node api
 			console.log("data in note", note);
-			userve
-				.createNote(note)
+			nServe
+				.updateNote(note)
 				.then(response => {
 					if (response.status === 200) {
 						console.log("note created successfully", response);
@@ -142,14 +146,14 @@ export default class TakeNote extends React.Component {
 	// 	console.log("checklist:=>", event.currentTarget.value);
 	// 	this.setState({ checklist: event.currentTarget.value });
 	// };
-	handleIsPined = async () => {
-		await this.setState({ isPined: !this.state.isPined });
-		console.log("isPined:=>", this.state.isPined);
-	};
-	handleIsArchived = async event => {
-		event.preventDefault();
-		console.log("isArchived:=>", this.state.isArchived);
+	// handleIsPined = async () => {
+	// 	await this.setState({ isPined: !this.state.isPined });
+	// 	console.log("isPined:=>", this.state.isPined);
+	// };
+	handleIsArchived = async () => {
+		// event.preventDefault();
 		await this.setState({ isArchived: !this.state.isArchived });
+		console.log("isArchived:=>", this.state.isArchived);
 	};
 	handleColor = color => {
 		console.log("color:=>", color);
@@ -217,11 +221,7 @@ export default class TakeNote extends React.Component {
 								</IconButton>
 							</Tooltip>
 							<ColorPalette selectColor={this.handleColor} />
-							<Tooltip title="Archive">
-								<IconButton size="small">
-									<ArchiveOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip>
+							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
 
 							<Tooltip title="more">
 								<IconButton size="small">
@@ -233,7 +233,7 @@ export default class TakeNote extends React.Component {
 					<div id="button">
 						<MuiThemeProvider theme={button}>
 							<Tooltip title="close">
-								<Button varient="secondary">
+								<Button varient="secondary" onClick={this.handleUpdateNote}>
 									close
 								</Button>
 							</Tooltip>

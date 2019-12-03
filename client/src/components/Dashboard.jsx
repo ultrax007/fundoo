@@ -19,9 +19,9 @@ import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
 
 //component imports
-import TakeNote from "./TakeNote";
+// import TakeNote from "./TakeNote";
 // import NoteCard from "./NoteCard";
-import DisplayAllNotes from "./DisplayAllNotes";
+// import DisplayAllNotes from "./DisplayAllNotes";
 // const scroll = createMuiTheme({
 // 	overrides: {
 
@@ -80,7 +80,6 @@ export default class Dashboard extends React.Component {
 		this.state = {
 			open: false,
 			pop_open: false,
-			takeNoteToggle: "true"
 		};
 	}
 	handleProfileDropDown(e) {
@@ -113,11 +112,23 @@ export default class Dashboard extends React.Component {
 		const path = '/';
 		this.props.history.push(path);
 	}
-
+	getNotes = () => {
+		this.props.history.push("/dashboard/notes");
+	}
+	getReminder = () => {
+		this.props.history.push("/dashboard/reminder");
+	}
+	getArchived = () => {
+		this.props.history.push("/dashboard/archived");
+	}
+	getTrash = () => {
+		this.props.history.push("/dashboard/trash");
+	}
+	
 
 	render() {
-		var style;
-		style = this.state.open ? "containerSM" : "container";
+		// var style;
+		// style = this.state.open ? "containerSM" : "container";
 
 		return (
 			<div className="main">
@@ -198,12 +209,12 @@ export default class Dashboard extends React.Component {
 					</div>
 					<div>
 						<Drawer open={this.state.open} variant="persistent">
-							<Drawerlist toggleState={this.handleToggleTakeNote} />
+							<Drawerlist notes={this.getNotes} reminder={this.getReminder} archived={this.getArchived} trash={this.getTrash}/>
 						</Drawer>
 					</div>
 				</MuiThemeProvider>
 				{/* everything below will show in container area and is div CONTAINER OR CONTAINERSM */}
-				<div id={style}>
+				{/* <div id={style}>
 					{this.state.takeNoteToggle ? (
 						<div id="takeNoteContainer">
 							<TakeNote />
@@ -212,7 +223,7 @@ export default class Dashboard extends React.Component {
 					<div className="allNotesContainer">
 						<DisplayAllNotes/>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		);
 	}

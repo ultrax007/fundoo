@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
 import NoteDialog from "./NoteDialog";
-// import "../sass/TakeNote.sass";
 import Dialog from "@material-ui/core/Dialog";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -14,11 +13,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import ColorPalette from "./ColorPalette";
+import ArchiveIcon from "./ArchiveIcon";
 
 const cardAction = createMuiTheme({
 	overrides: {
@@ -34,11 +33,21 @@ const cardAction = createMuiTheme({
 		}
 	}
 });
+const dialog = createMuiTheme({
+	overrides: {
+		MuiPaper: {
+			rounded: {
+				borderRadius: "10px",
+			}
+		}
+	}
+});
 
 export default class NoteCard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			id:"",
 			title: "",
 			description: "",
 			// labelIdList: "",
@@ -67,15 +76,16 @@ export default class NoteCard extends React.Component {
 	// 		// collaborators: ""
 	// 	}
 	// }
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
+			id:this.props.dataFromDisplay.id,
 			title: this.props.dataFromDisplay.title,
 			description: this.props.dataFromDisplay.description,
 			// labelIdList: "",
 			// checklist: "",
 			isPined: this.props.dataFromDisplay.isPined,
 			isArchived: this.props.dataFromDisplay.isArchived,
-			color: this.props.dataFromDisplay.color,
+			color: this.props.dataFromDisplay.color
 			// reminder: "",
 			// collaborators: ""
 		});
@@ -90,15 +100,15 @@ export default class NoteCard extends React.Component {
 		console.log("isPined:=>", this.state.isPined);
 	};
 
-	handleIsArchived = async event => {
-		event.preventDefault();
-		console.log("isArchived:=>", this.state.isArchived);
+	handleIsArchived = async () => {
+		// event.preventDefault();
 		await this.setState({ isArchived: !this.state.isArchived });
+		console.log("isArchived:=>", this.state.isArchived);
 	};
 
 	handleColor = color => {
 		console.log("color:=>", color);
-		this.setState({ color:color });
+		this.setState({ color: color });
 	};
 
 	render() {
@@ -154,11 +164,7 @@ export default class NoteCard extends React.Component {
 								</IconButton>
 							</Tooltip>
 							<ColorPalette selectColor={this.handleColor} />
-							<Tooltip title="Archive">
-								<IconButton size="small">
-									<ArchiveOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip>
+							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
 
 							<Tooltip title="more">
 								<IconButton size="small">
@@ -168,16 +174,13 @@ export default class NoteCard extends React.Component {
 						</CardActions>
 					</MuiThemeProvider>
 				</Card>
-				{
-					this.state.dialogOpen
-						?
+				{this.state.dialogOpen ? (
+					<MuiThemeProvider theme={dialog}>
 						<Dialog onClose={this.handleClick} open={this.handleClick}>
-							<NoteDialog diaData={this.state}/>
+							<NoteDialog diaData={this.state} handleDialog={this.handleClick}/>
 						</Dialog>
-						:
-						null
-				}
-				
+					</MuiThemeProvider>
+				) : null}
 			</Fragment>
 		);
 	}

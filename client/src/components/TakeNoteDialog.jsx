@@ -13,11 +13,11 @@ import noteServices from "../services/noteServices";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import ColorPalette from "./ColorPalette";
+import ArchiveIcon from "./ArchiveIcon";
 const nServe = new noteServices();
 
 const button = createMuiTheme({
@@ -122,10 +122,10 @@ export default class TakeNote extends React.Component {
 		await this.setState({ isPined: !this.state.isPined });
 		console.log("isPined:=>", this.state.isPined);
 	};
-	handleIsArchived = async event => {
-		event.preventDefault();
-		console.log("isArchived:=>", this.state.isArchived);
+	handleIsArchived = async () => {
+		// event.preventDefault();
 		await this.setState({ isArchived: !this.state.isArchived });
+		console.log("isArchived:=>", this.state.isArchived);
 	};
 	handleColor = color => {
 		console.log("color:=>", color);
@@ -193,11 +193,12 @@ export default class TakeNote extends React.Component {
 								</IconButton>
 							</Tooltip>
 							<ColorPalette selectColor={this.handleColor} />
-							<Tooltip title="Archive">
+							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
+							{/* <Tooltip title="Archive">
 								<IconButton size="small">
 									<ArchiveOutlinedIcon fontSize="inherit" />
 								</IconButton>
-							</Tooltip>
+							</Tooltip> */}
 
 							<Tooltip title="more">
 								<IconButton size="small">
