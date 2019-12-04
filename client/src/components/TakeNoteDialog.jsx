@@ -47,7 +47,7 @@ export default class TakeNote extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-
+			id:"",
 			title: "",
 			description: "",
 			// labelIdList: "",
@@ -192,14 +192,8 @@ export default class TakeNote extends React.Component {
 									<InsertPhotoOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
-							<ColorPalette selectColor={this.handleColor} />
+							<ColorPalette selectColor={this.handleColor} dataOfNote={this.state} />
 							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
-							{/* <Tooltip title="Archive">
-								<IconButton size="small">
-									<ArchiveOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip> */}
-
 							<Tooltip title="more">
 								<IconButton size="small">
 									<MoreVertOutlinedIcon fontSize="inherit" />

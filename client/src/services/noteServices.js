@@ -8,6 +8,22 @@ export default class noteServices {
   updateNote(data) {
     return obj.postMethod(data, "/notes/updateNotes", true);
   }
+
+  changeNoteColor(data) {
+    return obj.postMethod(data, "/notes/changesColorNotes", true);
+  }
+
+  changeNoteArchive(data) {
+    return obj.postMethod(data, "/notes/archiveNotes", true);
+  }
+
+  deleteNote(data) {
+    return obj.postMethod(data, "/notes/trashNotes", true);
+  }
+
+  deleteForeverNote(data) {
+    return obj.postMethod(data, "/notes/deleteForeverNotes", true);
+  }
   
   getAllNotes() {
     return obj.getMethod("/notes/getNotesList", true);

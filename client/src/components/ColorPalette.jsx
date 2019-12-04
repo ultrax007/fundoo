@@ -5,16 +5,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Popover from "@material-ui/core/Popover";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
+import noteServices from "../services/noteServices";
+const nServe = new noteServices();
 
 export default class ColorPalette extends React.Component {
 	constructor(props) {
-    super(props);
-    this.state = {
-      pop_open: false,
-    }
-  }
-  
-  handleColorPalette(e) {
+		super(props);
+		this.state = {
+			pop_open: false,
+			anchorEl: null
+		};
+	}
+
+	handleColorPalette(e) {
 		e.preventDefault();
 		this.setState({
 			pop_open: !this.state.pop_open,
@@ -27,14 +30,28 @@ export default class ColorPalette extends React.Component {
 			pop_open: !this.state.pop_open,
 			anchorEl: null
 		});
-  };
-  
-  refreshColor = (event, colorCode) => {
-    event.preventDefault();
-    this.handleClose();
-    console.log("color code is:=>", colorCode);
-    this.props.selectColor(colorCode);
-  }
+	};
+
+	refreshColor = (event, colorCode) => {
+		event.preventDefault();
+		this.handleClose();
+		console.log("color code is:=>", colorCode);
+		this.props.selectColor(colorCode);
+		if (this.props.dataOfNote.id !== "") {
+			let updatedColor = {};
+			updatedColor.noteIdList = [this.props.dataOfNote.id];
+			updatedColor.color = colorCode;
+			nServe
+				.changeNoteColor(updatedColor)
+				.then(response => {
+					
+					console.log("information in colorpalette response",response.data);
+				})
+				.catch(err => {
+					console.log("error occured while fetching data", err);
+				});
+		}
+	};
 	render() {
 		const colorsPallete = [
 			{
@@ -90,7 +107,10 @@ export default class ColorPalette extends React.Component {
 			<Fragment>
 				<Tooltip title="Change color">
 					<IconButton size="small">
-						<ColorLensOutlinedIcon fontSize="inherit" onMouseOver={event => this.handleColorPalette(event)}/>
+						<ColorLensOutlinedIcon
+							fontSize="inherit"
+							onMouseOver={event => this.handleColorPalette(event)}
+						/>
 					</IconButton>
 				</Tooltip>
 				<Popover
@@ -117,7 +137,7 @@ export default class ColorPalette extends React.Component {
 										height: "26px",
 										width: "26px"
 									}}
-									onClick={event=>this.refreshColor(event,color.colorCode)}
+									onClick={event => this.refreshColor(event, color.colorCode)}
 								></IconButton>
 							</Tooltip>
 						))}

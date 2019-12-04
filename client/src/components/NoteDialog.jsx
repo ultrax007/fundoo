@@ -1,11 +1,9 @@
 import React from "react";
 import "../sass/NoteDialog.sass";
-import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
+
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import noteServices from "../services/noteServices";
 
 // import Popover from "@material-ui/core/Popover";
 
@@ -13,36 +11,13 @@ import noteServices from "../services/noteServices";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
+
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import ColorPalette from "./ColorPalette";
 import ArchiveIcon from "./ArchiveIcon";
-const nServe = new noteServices();
 
-const button = createMuiTheme({
-	overrides: {
-		MuiButton: {
-			root: {
-				padding: "0",
-				color: "#202124",
-				"&:hover": {
-					backgroundColor: "none"
-				}
-			}
-		}
-	}
-});
 
-const iconmod = createMuiTheme({
-	overrides: {
-		MuiIconButton: {
-			sizeSmall: {
-				padding: "2%"
-			}
-		}
-	}
-});
 
 export default class TakeNote extends React.Component {
 	constructor(props) {
@@ -93,49 +68,9 @@ export default class TakeNote extends React.Component {
 		this.props.handleDialog();
 	};
 
-	handleUpdateNote = () => {
-		if (this.state.title !== "") {
-			console.log("note updating");
-			let note = {};
-			note.noteId = this.state.id;
-			note.title = this.state.title;
-			note.description = this.state.description;
-			// note.isPined = this.state.isPined;
-			// note.color = this.state.color;
-			// note.isArchived = this.state.isArchived;
-			// note.labelIdList = "";
-			// note.checklist = "";
-			// note.reminder = "";
-			// note.collaborators = "";
-			// hit create node api
-			console.log("data in note", note);
-			nServe
-				.updateNote(note)
-				.then(response => {
-					if (response.status === 200) {
-						console.log("note created successfully", response);
-					}
-				})
-				.catch(error => {
-					console.log("note not created error occurred", error);
-				});
-		} else {
-			console.log("title is compulsory for note creation");
-		}
-		this.handleNoteState();
-		this.setState({ color: "" });
-	};
+	
 
-	handleTitle = event => {
-		event.preventDefault();
-		console.log("title:=>", event.currentTarget.value);
-		this.setState({ title: event.currentTarget.value });
-	};
-	handleDescription = event => {
-		event.preventDefault();
-		console.log("description:=>", event.currentTarget.value);
-		this.setState({ description: event.currentTarget.value });
-	};
+	
 	// handleLabelIdList = event => {
 	// 	event.preventDefault();
 	// 	console.log("labelIdList;=>", event.currentTarget.value);
@@ -150,15 +85,7 @@ export default class TakeNote extends React.Component {
 	// 	await this.setState({ isPined: !this.state.isPined });
 	// 	console.log("isPined:=>", this.state.isPined);
 	// };
-	handleIsArchived = async () => {
-		// event.preventDefault();
-		await this.setState({ isArchived: !this.state.isArchived });
-		console.log("isArchived:=>", this.state.isArchived);
-	};
-	handleColor = color => {
-		console.log("color:=>", color);
-		this.setState({ color });
-	};
+	
 
 	render() {
 		return (
@@ -220,8 +147,8 @@ export default class TakeNote extends React.Component {
 									<InsertPhotoOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
-							<ColorPalette selectColor={this.handleColor} />
-							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
+							<ColorPalette selectColor={this.handleColor} dataOfNote={this.state}/>
+							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state}/>
 
 							<Tooltip title="more">
 								<IconButton size="small">
