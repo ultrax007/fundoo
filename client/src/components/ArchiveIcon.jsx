@@ -6,7 +6,8 @@ import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 export default class ArchiveIcon extends React.Component {
-  refreshArchive = () => {
+	refreshArchive = () => {
+		this.handleUpdation();
 		// event.preventDefault();
 		if (this.props.archiveState.id !== "") {
 			let updatedArchive = {};
@@ -15,29 +16,31 @@ export default class ArchiveIcon extends React.Component {
 			nServe
 				.changeNoteArchive(updatedArchive)
 				.then(response => {
-					
-					console.log("information in Archive response",response.data);
+					console.log("information in Archive response", response.data);
 				})
 				.catch(err => {
 					console.log("error occured while fetching data", err);
 				});
 		}
-    this.props.archiveAction();
-  };
+		this.props.archiveAction();
+	};
+	handleUpdation = () => {
+		this.props.onUpdate();
+	}
 	render() {
 		return (
 			<Fragment>
-					<IconButton size="small" onClick={this.refreshArchive}>
-						{this.props.archiveState.isArchived ? (
-				<Tooltip title="UnArchive">
+				<IconButton size="small" onClick={this.refreshArchive}>
+					{this.props.archiveState.isArchived ? (
+						<Tooltip title="UnArchive">
 							<UnarchiveOutlinedIcon fontSize="inherit" />
-				</Tooltip>
-						) : (
-				<Tooltip title="Archive">
+						</Tooltip>
+					) : (
+						<Tooltip title="Archive">
 							<ArchiveOutlinedIcon fontSize="inherit" />
-				</Tooltip>
-						)}
-					</IconButton>
+						</Tooltip>
+					)}
+				</IconButton>
 			</Fragment>
 		);
 	}

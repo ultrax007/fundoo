@@ -87,8 +87,10 @@ export default class NoteCard extends React.Component {
 			dialogOpen: false
 		};
 	}
-
-	UNSAFE_componentWillMount() {
+	componentWillUnmount() {
+		console.log("this component will unmount", this.state);
+	}
+	componentDidMount() {
 		this.setState({
 			id: this.props.dataFromDisplay.id,
 			title: this.props.dataFromDisplay.title,
@@ -103,7 +105,23 @@ export default class NoteCard extends React.Component {
 			// collaborators: ""
 		});
 	}
-
+	UNSAFE_componentWillReceiveProps(nextProps) {
+		if (this.props.dataFromDisplay !== nextProps.dataFromDisplay)
+		this.setState({
+			id: this.props.dataFromDisplay.id,
+			title: this.props.dataFromDisplay.title,
+			description: this.props.dataFromDisplay.description,
+			// labelIdList: "",
+			// checklist: "",
+			isPined: this.props.dataFromDisplay.isPined,
+			isArchived: this.props.dataFromDisplay.isArchived,
+			isDeleted: this.props.dataFromDisplay.isDeleted,
+			color: this.props.dataFromDisplay.color
+			// reminder: "",
+			// collaborators: ""
+		});
+		console.log("value in next props",nextProps);
+	}
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
 	};
@@ -141,6 +159,12 @@ export default class NoteCard extends React.Component {
 		console.log("value of isDeleted", this.state.isDeleted);
 	};
 
+	handleUpdation = async () => {
+		console.log("updation clicked");
+		// event.preventDefault();
+		await this.props.operation();
+	};
+
 	handleUpdateNote = () => {
 		if (this.state.title !== "") {
 			console.log("note updating");
@@ -173,6 +197,8 @@ export default class NoteCard extends React.Component {
 	};
 
 	render() {
+		console.log("render works in card component" );
+
 		return (
 			<Fragment>
 				{!this.state.dialogOpen ? (
@@ -233,6 +259,7 @@ export default class NoteCard extends React.Component {
 									<ArchiveIcon
 										archiveAction={this.handleIsArchived}
 										archiveState={this.state}
+										onUpdate={this.handleUpdation}
 									/>
 									<MoreMenu
 										deleteAction={this.handleDeleteRestore}

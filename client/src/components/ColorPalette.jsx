@@ -106,10 +106,10 @@ export default class ColorPalette extends React.Component {
 		return (
 			<Fragment>
 				<Tooltip title="Change color">
-					<IconButton size="small">
+					<IconButton size="small" onClick={event => this.handleColorPalette(event)}>
 						<ColorLensOutlinedIcon
 							fontSize="inherit"
-							onMouseOver={event => this.handleColorPalette(event)}
+							
 						/>
 					</IconButton>
 				</Tooltip>
