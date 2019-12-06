@@ -1,7 +1,7 @@
 import React from "react";
 import "../sass/playground.sass"
-import TakeNote from "./TakeNote";
-import DisplayAllNotes from "./DisplayAllNotes";
+// import TakeNote from "./TakeNote";
+import NoteCard from "./NoteCard";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 export default class Notes extends React.Component {
@@ -23,20 +23,27 @@ export default class Notes extends React.Component {
 				console.log("information in response", response.data.data.data);
 				this.setState({ allNotes:response.data.data.data});
 				// const usersAvailabe = this.state.users.filter(user => user._id !== this.state.loggedUserId);reverse()
-				console.log(this.state.allNotes);
+				console.log("value of allnotes in archived",this.state.allNotes);
 			})
 			.catch(err => {
 				console.log("error occured while fetching data", err);
 			});
 	};
+	
 	render() {    
 		return (
 			<div id="container">
 				<div id="takeNoteContainer">
-					<TakeNote />
+					{/* <TakeNote /> */}
         </div>
         <div className="allNotesContainer">
-						<DisplayAllNotes noteData={this.state.allNotes} />
+				{this.state.allNotes.map((data, index) => (
+						<NoteCard
+							key={index}
+							dataFromDisplay={data}
+							operation={this.getNotesFromDB}
+						/>
+					))}
 				</div>
 			</div>
 		);

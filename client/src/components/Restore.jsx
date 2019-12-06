@@ -15,11 +15,15 @@ export default class Restore extends React.Component {
 				.deleteNote(updatedState)
 				.then(response => {
 					console.log("information in deletenote response", response.data);
+					this.handleUpdation();
 				})
 				.catch(err => {
 					console.log("error occured while fetching data", err);
 				});
 		}
+	};
+	handleUpdation = () => {
+		this.props.onUpdate();
 	};
 	render() {
 		return (

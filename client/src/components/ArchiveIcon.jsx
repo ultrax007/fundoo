@@ -7,7 +7,6 @@ import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 export default class ArchiveIcon extends React.Component {
 	refreshArchive = () => {
-		this.handleUpdation();
 		// event.preventDefault();
 		if (this.props.archiveState.id !== "") {
 			let updatedArchive = {};
@@ -22,11 +21,12 @@ export default class ArchiveIcon extends React.Component {
 					console.log("error occured while fetching data", err);
 				});
 		}
+		this.handleUpdation();
 		this.props.archiveAction();
 	};
 	handleUpdation = () => {
 		this.props.onUpdate();
-	}
+	};
 	render() {
 		return (
 			<Fragment>

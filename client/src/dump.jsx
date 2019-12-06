@@ -66,3 +66,37 @@
 			
 			*/}
 	//		MuiButton-root:hover
+{/* <DisplayAllNotes noteData={this.state.allNotes} updateOperation={this.handleDataUpdate}/> */ }
+<List>
+<Divider />
+<ListItem dense onClick={this.handleToggle}>
+	<ListItemIcon>
+		<Checkbox edge="start" disableRipple color="default" />
+	</ListItemIcon>
+	<ListItemText>abcd</ListItemText>
+	<ListItemSecondaryAction>
+		<IconButton edge="end" aria-label="comments">
+			<CloseSharpIcon />
+		</IconButton>
+	</ListItemSecondaryAction>
+</ListItem>
+<Divider />
+</List>
+
+this.state.noteCheckLists.map((data,index)=>{<div>
+	<Divider />
+	<MuiThemeProvider theme={list}>
+		<ListItem dense onClick={this.handleToggle}>
+			<ListItemIcon id="List" style={listStyle}>
+				<Checkbox
+					edge="start"
+					disableRipple="true"
+					color="default"
+				/>
+			</ListItemIcon>
+			<ListItemText>
+				{this.state.noteCheckLists[0].itemName}
+			</ListItemText>
+		</ListItem>
+	</MuiThemeProvider>
+</div>})

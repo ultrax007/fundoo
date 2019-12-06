@@ -20,6 +20,7 @@ export default class DeleteForever extends React.Component {
 					console.log("error occured while fetching data", err);
 				});
 		}
+		this.props.onUpdate();
 	};
 	render() {
 		return (

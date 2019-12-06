@@ -6,7 +6,7 @@ import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import noteServices from "../services/noteServices";
-
+import CheckList from "./Checklist";
 // import Popover from "@material-ui/core/Popover";
 
 //icons imported from material ui
@@ -47,7 +47,7 @@ export default class TakeNote extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id:"",
+			id: "",
 			title: "",
 			description: "",
 			// labelIdList: "",
@@ -60,14 +60,13 @@ export default class TakeNote extends React.Component {
 		};
 		this.handleColor = this.handleColor.bind(this);
 	}
-	
 
 	handleNoteState = () => {
 		this.props.noteState();
-	}
+	};
 
 	handleCreateNote = () => {
-    if (this.state.title !== "") {
+		if (this.state.title !== "") {
 			console.log("note created");
 			let note = {};
 			note.title = this.state.title;
@@ -134,7 +133,10 @@ export default class TakeNote extends React.Component {
 
 	render() {
 		return (
-			<Paper id="noteActive" style={{ backgroundColor: this.state.color }}>
+			<Paper
+				id="noteActive"
+				style={{ backgroundColor: this.state.color, borderRadius: "8px" }}
+			>
 				<div id="titleN">
 					<InputBase
 						style={{ marginLeft: "2%", width: "89%", color: "#202124" }}
@@ -172,6 +174,8 @@ export default class TakeNote extends React.Component {
 					value={this.state.description}
 					onChange={event => this.handleDescription(event)}
 				/>
+
+				<CheckList listState={this.state} />
 				<div id="functions">
 					<div id="iconBar">
 						<MuiThemeProvider theme={iconmod}>
@@ -192,8 +196,14 @@ export default class TakeNote extends React.Component {
 									<InsertPhotoOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
-							<ColorPalette selectColor={this.handleColor} dataOfNote={this.state} />
-							<ArchiveIcon archiveAction={this.handleIsArchived} archiveState={this.state.isArchived}/>
+							<ColorPalette
+								selectColor={this.handleColor}
+								dataOfNote={this.state}
+							/>
+							<ArchiveIcon
+								archiveAction={this.handleIsArchived}
+								archiveState={this.state.isArchived}
+							/>
 							<Tooltip title="more">
 								<IconButton size="small">
 									<MoreVertOutlinedIcon fontSize="inherit" />

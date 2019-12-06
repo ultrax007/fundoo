@@ -42,8 +42,9 @@ export default class MoreMenu extends React.Component {
 					console.log("error occured while fetching data", err);
 				});
     }
-    this.props.deleteAction();
     this.handleClose();
+		this.props.deleteAction();
+		this.props.onUpdate();
 	};
 
 	handleMenu(e) {
@@ -78,6 +79,7 @@ export default class MoreMenu extends React.Component {
 					>
 						<MenuItem onClick={this.handleDelete}>Delete Note</MenuItem>
 						<MenuItem>Add Lable</MenuItem>
+						<MenuItem>Show Checklist</MenuItem>
 						<MenuItem>Ask Question</MenuItem>
 					</Menu>
 				</MuiThemeProvider>

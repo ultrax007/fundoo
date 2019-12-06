@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
+
 /**
  * Material ui imports
  */
@@ -17,6 +18,8 @@ import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
+import Dialog from "@material-ui/core/Dialog";
+import Grow from "@material-ui/core/Grow";
 /**
  * needed file imports
  */
@@ -77,7 +80,7 @@ export default class NoteCard extends React.Component {
 			title: "",
 			description: "",
 			// labelIdList: "",
-			// checklist: "",
+			noteCheckLists: "",
 			isPined: false,
 			isArchived: false,
 			isDeleted: false,
@@ -87,41 +90,13 @@ export default class NoteCard extends React.Component {
 			dialogOpen: false
 		};
 	}
-	componentWillUnmount() {
-		console.log("this component will unmount", this.state);
+
+	static getDerivedStateFromProps(props, state) {
+		return {
+			...props.dataFromDisplay
+		};
 	}
-	componentDidMount() {
-		this.setState({
-			id: this.props.dataFromDisplay.id,
-			title: this.props.dataFromDisplay.title,
-			description: this.props.dataFromDisplay.description,
-			// labelIdList: "",
-			// checklist: "",
-			isPined: this.props.dataFromDisplay.isPined,
-			isArchived: this.props.dataFromDisplay.isArchived,
-			isDeleted: this.props.dataFromDisplay.isDeleted,
-			color: this.props.dataFromDisplay.color
-			// reminder: "",
-			// collaborators: ""
-		});
-	}
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (this.props.dataFromDisplay !== nextProps.dataFromDisplay)
-		this.setState({
-			id: this.props.dataFromDisplay.id,
-			title: this.props.dataFromDisplay.title,
-			description: this.props.dataFromDisplay.description,
-			// labelIdList: "",
-			// checklist: "",
-			isPined: this.props.dataFromDisplay.isPined,
-			isArchived: this.props.dataFromDisplay.isArchived,
-			isDeleted: this.props.dataFromDisplay.isDeleted,
-			color: this.props.dataFromDisplay.color
-			// reminder: "",
-			// collaborators: ""
-		});
-		console.log("value in next props",nextProps);
-	}
+
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
 	};
@@ -165,6 +140,10 @@ export default class NoteCard extends React.Component {
 		await this.props.operation();
 	};
 
+	handleClose = () => {
+		this.setState({ dialogOpen: false });
+	};
+
 	handleUpdateNote = () => {
 		if (this.state.title !== "") {
 			console.log("note updating");
@@ -197,7 +176,7 @@ export default class NoteCard extends React.Component {
 	};
 
 	render() {
-		console.log("render works in card component" );
+		console.log("render works in card component");
 
 		return (
 			<Fragment>
@@ -264,6 +243,7 @@ export default class NoteCard extends React.Component {
 									<MoreMenu
 										deleteAction={this.handleDeleteRestore}
 										moreState={this.state}
+										onUpdate={this.handleUpdation}
 									/>
 								</CardActions>
 							) : (
@@ -271,14 +251,25 @@ export default class NoteCard extends React.Component {
 									id="cardActionsTrash"
 									style={{ justifyContent: "flex-start" }}
 								>
-									<Restore restoreState={this.state} />
-									<DeleteForever deleteState={this.state} />
+									<Restore
+										restoreState={this.state}
+										onUpdate={this.handleUpdation}
+									/>
+									<DeleteForever
+										deleteState={this.state}
+										onUpdate={this.handleUpdation}
+									/>
 								</CardActions>
 							)}
 						</MuiThemeProvider>
 					</Card>
 				) : (
-					<div id="dialogPaper">
+					<Dialog
+						open={this.state.dialogOpen}
+						TransitionComponent={Grow}
+						keepMounted
+						onClose={this.handleClose}
+					>
 						<Paper
 							id="noteDialog"
 							style={{ backgroundColor: this.state.color }}
@@ -347,6 +338,7 @@ export default class NoteCard extends React.Component {
 										<ArchiveIcon
 											archiveAction={this.handleIsArchived}
 											archiveState={this.state}
+											onUpdate={this.handleUpdation}
 										/>
 
 										<Tooltip title="more">
@@ -370,7 +362,7 @@ export default class NoteCard extends React.Component {
 								</div>
 							</div>
 						</Paper>
-					</div>
+					</Dialog>
 				)}
 			</Fragment>
 		);
