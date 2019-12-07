@@ -99,4 +99,15 @@ this.state.noteCheckLists.map((data,index)=>{<div>
 			</ListItemText>
 		</ListItem>
 	</MuiThemeProvider>
-</div>})
+</div>
+})
+
+handleText = async (event, index) => {
+	console.log("value of index", index, event.currentTarget.value);
+
+	await this.setState({
+		noteCheckLists: update(this.state.noteCheckLists, {
+			[index]: { itemName: { $set: event.currentTarget.value } }
+		})
+	});
+};
