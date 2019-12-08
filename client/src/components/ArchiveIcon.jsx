@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import "../sass/TakeNote.sass";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import UnarchiveOutlinedIcon from "@material-ui/icons/UnarchiveOutlined";
@@ -30,7 +31,7 @@ export default class ArchiveIcon extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<IconButton size="small" onClick={this.refreshArchive}>
+				<IconButton id="ib" size="small" onClick={this.refreshArchive}>
 					{this.props.archiveState.isArchived ? (
 						<Tooltip title="UnArchive">
 							<UnarchiveOutlinedIcon fontSize="inherit" />

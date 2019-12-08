@@ -203,19 +203,19 @@ export default class TakeNote extends React.Component {
 					<div id="iconBar">
 						<MuiThemeProvider theme={iconmod}>
 							<Tooltip title="Remind me">
-								<IconButton size="small">
+								<IconButton id="ib" size="small">
 									<AddAlertOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
 
 							<Tooltip title="Collaborator">
-								<IconButton size="small">
+								<IconButton id="ib" size="small">
 									<PersonAddOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
 
 							<Tooltip title="Add image">
-								<IconButton size="small">
+								<IconButton id="ib" size="small">
 									<InsertPhotoOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
@@ -227,8 +227,8 @@ export default class TakeNote extends React.Component {
 								archiveAction={this.handleIsArchived}
 								archiveState={this.state.isArchived}
 							/>
-							<Tooltip title="more">
-								<IconButton size="small">
+							<Tooltip  title="more">
+								<IconButton id="ib" size="small">
 									<MoreVertOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>

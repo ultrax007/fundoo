@@ -41,6 +41,13 @@ const list = createMuiTheme({
 			input: {
 				padding: "7px 0 7px"
 			}
+		},
+		MuiIconButton: {
+			root: {
+				"&:hover": {
+					backgroundColor: "none"
+				}
+			}
 		}
 	}
 });
@@ -87,8 +94,6 @@ export default class Checklist extends React.Component {
 		this.setState({ showList: !this.state.showList });
 		if (this.state.showList === true) {
 			document.getElementById("checkText").focus();
-		} else {
-			document.getElementById("listText").focus();
 		}
 	};
 	handleText = async (event, index) => {
@@ -153,6 +158,8 @@ export default class Checklist extends React.Component {
 			default: {
 				minWidth: "fit-content",
 				marginRight: "5px"
+			},"&:hover": {
+				backgroundColor: "none"
 			}
 		};
 
@@ -247,8 +254,8 @@ export default class Checklist extends React.Component {
 								margin="dense"
 								multiline
 								placeholder="List item"
-								// value={this.state.description}
-							 	onKeyPress ={this.handleToggle}
+								value={this.state.checkData}
+							 	onKeyDown ={this.handleToggle}
 							/>
 						</ListItem>
 					</MuiThemeProvider>
