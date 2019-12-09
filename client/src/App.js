@@ -9,6 +9,7 @@ import Dashboard from "./components/Dashboard";
 import Notes from "./components/Notes";
 import Archived from "./components/Archived";
 import Trash from "./components/Trash";
+import EditLable from "./components/EditLable";
 // import Admin from "./components/Admin";
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 					<Route path="/dashboard/notes" component={Notes}></Route>
 					<Route path="/dashboard/archived" component={Archived}></Route>
 					<Route path="/dashboard/trash" component={Trash}></Route>
+					<Route path="/dashboard/editLable" component={EditLable}></Route>
 					{/* <Route path="/dashboard/" component={}></Route> */}
 			</BrowserRouter>
 		</div>
