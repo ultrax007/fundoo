@@ -153,7 +153,13 @@ export default class TakeNote extends React.Component {
 		console.log("color:=>", color);
 		this.setState({ color });
 	};
-
+	handleChecklist = async (arr) => {
+		console.log("value in arr", arr);
+		await this.setState({
+			noteCheckLists:arr
+		})
+		console.log("value in notechecklist",this.state.noteCheckLists);
+	}
 	render() {
 		return (
 			<Paper
@@ -198,7 +204,7 @@ export default class TakeNote extends React.Component {
 					onChange={event => this.handleDescription(event)}
 				/>
 
-				<CheckList listState={this.state} />
+				<CheckList listState={this.state} onCheck={this.handleChecklist} />
 				<div id="functions">
 					<div id="iconBar">
 						<MuiThemeProvider theme={iconmod}>

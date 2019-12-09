@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard";
 import Notes from "./components/Notes";
 import Archived from "./components/Archived";
 import Trash from "./components/Trash";
-import Admin from "./components/Admin";
+// import Admin from "./components/Admin";
 function App() {
 	return (
 		<div>
@@ -22,7 +22,6 @@ function App() {
 					<Route path="/dashboard/notes" component={Notes}></Route>
 					<Route path="/dashboard/archived" component={Archived}></Route>
 					<Route path="/dashboard/trash" component={Trash}></Route>
-					<Route path="/admin" component={Admin}></Route>
 					{/* <Route path="/dashboard/" component={}></Route> */}
 			</BrowserRouter>
 		</div>
