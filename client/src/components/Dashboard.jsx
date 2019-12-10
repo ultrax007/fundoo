@@ -213,17 +213,6 @@ export default class Dashboard extends React.Component {
 						</Drawer>
 					</div>
 				</MuiThemeProvider>
-				{/* everything below will show in container area and is div CONTAINER OR CONTAINERSM */}
-				{/* <div id={style}>
-					{this.state.takeNoteToggle ? (
-						<div id="takeNoteContainer">
-							<TakeNote />
-						</div>
-					) : null}
-					<div className="allNotesContainer">
-						<DisplayAllNotes/>
-					</div>
-				</div> */}
 			</div>
 		);
 	}

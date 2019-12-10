@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import "../sass/TakeNote.sass";
+import update from "immutability-helper";
 import AddSharpIcon from "@material-ui/icons/AddSharp";
 import CloseSharpIcon from "@material-ui/icons/CloseSharp";
 import CheckSharpIcon from "@material-ui/icons/CheckSharp";
@@ -17,7 +18,6 @@ import {
 	MuiThemeProvider,
 	Typography
 } from "@material-ui/core";
-import update from "immutability-helper";
 const lined = {
 	width: "90%",
 	fontSize: "12px",

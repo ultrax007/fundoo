@@ -45,9 +45,15 @@ export default class axiosServices {
 			}
 		});
 	}
-
-	deleteMethod(target) {
-		return axios.delete(address + target);
+	
+	deleteMethod(target,isTokenReq) {
+		token = localStorage.getItem("token");
+		return axios.delete(address + target, isTokenReq && {
+			headers: {
+				'Content-type': 'application/json; charset=utf-8',
+				'Authorization': token
+			}
+		});
 	}
 
 	resetUser(userPass, tok) {

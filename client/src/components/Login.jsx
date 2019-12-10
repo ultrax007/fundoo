@@ -77,6 +77,7 @@ export default class Login extends React.Component {
 					console.log("login successful", response.data.id);
 					localStorage.removeItem("token");
 					localStorage.setItem("token", response.data.id);
+					localStorage.setItem("userId", response.data.userId);
 					console.log('token changed');
 					
 					snackStyle = {

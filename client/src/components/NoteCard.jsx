@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
-
+import update from "immutability-helper";
 /**
  * Material ui imports
  */
@@ -20,6 +20,7 @@ import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import Dialog from "@material-ui/core/Dialog";
 import Grow from "@material-ui/core/Grow";
+import Chip from "@material-ui/core/Chip";
 /**
  * needed file imports
  */
@@ -66,7 +67,8 @@ const cardAction = createMuiTheme({
 		},
 		MuiCardActions: {
 			root: {
-				justifyContent: "space-around"
+				justifyContent: "space-around",
+				padding: "0 8px"
 			}
 		}
 	}
@@ -85,6 +87,7 @@ export default class NoteCard extends React.Component {
 			isArchived: false,
 			isDeleted: false,
 			color: "",
+			noteLabels: [],
 			// reminder: "",
 			// collaborators: ""
 			dialogOpen: false
@@ -154,7 +157,7 @@ export default class NoteCard extends React.Component {
 			// note.isPined = this.state.isPined;
 			// note.color = this.state.color;
 			note.isArchived = this.state.isArchived;
-			// note.labelIdList = "";
+			// note.noteLabels = this.state.noteLabels;
 			// note.checklist = "";
 			// note.reminder = "";
 			// note.collaborators = "";
@@ -175,8 +178,48 @@ export default class NoteCard extends React.Component {
 		this.handleClick();
 	};
 
+	handleDeleteLable = (event, index) => {
+		event.preventDefault();
+		console.log(
+			"value of index in notecard",
+			index,
+			this.state.noteLabels[index].id
+		);
+	};
+
+	deleteLable = (event, index) => {
+		event.preventDefault();
+		console.log(
+			"values needed noteid and lable id",
+			this.state.id,
+			this.state.noteLabels[index].id
+		);
+		let data = {};
+		data.labelId = this.state.noteLabels[index].id;
+		data.noteId = this.state.id;
+
+		nServe
+			.deleteNoteLableFromCard(data)
+			.then(response => {
+				console.log(
+					"value of notelabels in current state",
+					this.state.noteLabels
+				);
+				console.log("success", response);
+			})
+			.catch(err => {
+				console.log("err", err);
+			});
+		this.setState({
+			noteLabels: update(this.state.noteLabels, {
+				$splice: [[index, 1]]
+			})
+		});
+		this.forceUpdate();
+	};
+
 	render() {
-		console.log("render works in card component");
+		console.log("render works in card component", this.state.noteLabels);
 
 		return (
 			<Fragment>
@@ -211,6 +254,19 @@ export default class NoteCard extends React.Component {
 								{this.state.description}
 							</Typography>
 						</CardContent>
+						<div id="chips">
+							{this.state.noteLabels.map((data, index) => (
+								<Fragment key={index}>
+									<Chip
+										size="small"
+										label={data.label}
+										onDelete={event => {
+											this.deleteLable(event, index);
+										}}
+									/>
+								</Fragment>
+							))}
+						</div>
 						<MuiThemeProvider theme={cardAction}>
 							{!this.state.isDeleted ? (
 								<CardActions id="cardActions">
