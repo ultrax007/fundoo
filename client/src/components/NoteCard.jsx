@@ -78,27 +78,30 @@ export default class NoteCard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id: "",
-			title: "",
-			description: "",
+			id: this.props.dataFromDisplay.id,
+			title: this.props.dataFromDisplay.title,
+			description: this.props.dataFromDisplay.description,
 			// labelIdList: "",
-			noteCheckLists: "",
-			isPined: false,
-			isArchived: false,
-			isDeleted: false,
-			color: "",
-			noteLabels: [],
+			// noteCheckLists: this.props.dataFromDisplay.noteCheckLists,
+			isPined: this.props.dataFromDisplay.isPined,
+			isArchived: this.props.dataFromDisplay.isArchived,
+			isDeleted: this.props.dataFromDisplay.isDeleted,
+			color: this.props.dataFromDisplay.color,
+			noteLabels: this.props.dataFromDisplay.noteLabels,
 			// reminder: "",
 			// collaborators: ""
 			dialogOpen: false
 		};
 	}
 
-	static getDerivedStateFromProps(props, state) {
-		return {
-			...props.dataFromDisplay
-		};
-	}
+	
+
+	// static getDerivedStateFromProps(props, state) {
+	// 	console.log("props state",state);
+	// 	return {
+	// 		...props.dataFromDisplay
+	// 	};
+	// }
 
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
@@ -201,11 +204,7 @@ export default class NoteCard extends React.Component {
 		nServe
 			.deleteNoteLableFromCard(data)
 			.then(response => {
-				console.log(
-					"value of notelabels in current state",
-					this.state.noteLabels
-				);
-				console.log("success", response);
+				console.log("success", response.data);
 			})
 			.catch(err => {
 				console.log("err", err);
@@ -219,7 +218,7 @@ export default class NoteCard extends React.Component {
 	};
 
 	render() {
-		console.log("render works in card component", this.state.noteLabels);
+		console.log("render works in card component", this.props);
 
 		return (
 			<Fragment>

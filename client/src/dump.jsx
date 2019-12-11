@@ -111,3 +111,28 @@ handleText = async (event, index) => {
 		})
 	});
 };
+
+
+
+// label chip
+	{/* <Chip key={data.id}
+										size="small"
+										label={data.label}
+										onClick={(event) => {
+											this.handleLabelNew(event)
+										}}
+								
+									/> */}
+
+			// 						id: "",
+			// title: "",
+			// description: "",
+			// // labelIdList: "",
+			// noteCheckLists: "",
+			// isPined: false,
+			// isArchived: false,
+			// isDeleted: false,
+			// color: "",
+			// noteLabels: [],
+			// // reminder: "",
+			// // collaborators: ""
