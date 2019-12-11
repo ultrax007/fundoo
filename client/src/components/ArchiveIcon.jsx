@@ -31,7 +31,7 @@ export default class ArchiveIcon extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<IconButton id="ib" size="small" onClick={this.refreshArchive}>
+				<IconButton id={this.props.styleid} size="small" onClick={this.refreshArchive}>
 					{this.props.archiveState.isArchived ? (
 						<Tooltip title="UnArchive">
 							<UnarchiveOutlinedIcon fontSize="inherit" />

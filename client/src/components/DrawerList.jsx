@@ -25,7 +25,7 @@ import CheckSharpIcon from "@material-ui/icons/CheckSharp";
 import CreateIcon from "@material-ui/icons/Create";
 import LabelIcon from "@material-ui/icons/Label";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { InputBase } from "@material-ui/core";
+import InputBase from "@material-ui/core/InputBase";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 
@@ -57,7 +57,7 @@ export default class DrawerList extends React.Component {
 		nServe
 			.getAllLabels()
 			.then(response => {
-				console.log("labels are", response.data);
+				// console.log("labels are", response.data);
 				this.setState({
 					labels: response.data.data.details
 				});
@@ -93,31 +93,35 @@ export default class DrawerList extends React.Component {
 		event.preventDefault();
 		let data = this.state.labels[index];
 		let id = this.state.labels[index].id;
-		console.log("value in update label ",index,data,id); 
-		nServe.updateLable(data, id)
+		console.log("value in update label ", index, data, id);
+		nServe
+			.updateLable(data, id)
 			.then(response => {
-				this.setState({editId:""})
-			console.log("success",response.data);
-			}).catch(err => {
-			console.log("err",err);
-		})
-	}
+				this.setState({ editId: "" });
+				console.log("success", response.data);
+			})
+			.catch(err => {
+				console.log("err", err);
+			});
+	};
 
 	deleteLable = (event, index) => {
 		event.preventDefault();
 		let id = this.state.labels[index].id;
-		nServe.deleteNoteLable(id)
+		nServe
+			.deleteNoteLabel(id)
 			.then(response => {
 				this.setState({
 					labels: update(this.state.labels, {
 						$splice: [[index, 1]]
 					})
-				})
-			console.log("success",response);
-			}).catch(err => {
-			console.log("err",err);
-		})
-	}
+				});
+				console.log("success", response);
+			})
+			.catch(err => {
+				console.log("err", err);
+			});
+	};
 
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
@@ -163,15 +167,16 @@ export default class DrawerList extends React.Component {
 		});
 	};
 
-	handleLableEdit = (event,index) => {
+	handleLableEdit = (event, index) => {
 		this.setState({
 			labels: update(this.state.labels, {
 				[index]: {
-					label: { $set:event.currentTarget.value }
-			}})
+					label: { $set: event.currentTarget.value }
+				}
+			})
 		});
-		console.log("editing value of label",this.state.labels[index]);
-	}
+		console.log("editing value of label", this.state.labels[index]);
+	};
 
 	handleNotes = () => {
 		this.setState({
@@ -360,7 +365,12 @@ export default class DrawerList extends React.Component {
 									<ListItemIcon
 										style={{ minWidth: "32px", padding: "3px 0 7px" }}
 									>
-										<IconButton size="small" onClick={event=>{this.deleteLable(event,index)}}>
+										<IconButton
+											size="small"
+											onClick={event => {
+												this.deleteLable(event, index);
+											}}
+										>
 											<DeleteIcon fontSize="inherit" />
 										</IconButton>
 									</ListItemIcon>
@@ -379,7 +389,7 @@ export default class DrawerList extends React.Component {
 									placeholder="Create new label"
 									value={data.label}
 									onClick={event => this.handleToggleEdit(event, index)}
-									onChange={event => this.handleLableEdit(event,index)}
+									onChange={event => this.handleLableEdit(event, index)}
 								/>
 
 								{this.state.editId === index ? (
@@ -392,7 +402,10 @@ export default class DrawerList extends React.Component {
 										}}
 									>
 										<Tooltip title="Create label">
-											<IconButton size="small" onClick={event=>this.updateLable(event,index)}>
+											<IconButton
+												size="small"
+												onClick={event => this.updateLable(event, index)}
+											>
 												<CheckSharpIcon fontSize="inherit" />
 											</IconButton>
 										</Tooltip>

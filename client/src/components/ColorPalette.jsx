@@ -106,7 +106,7 @@ export default class ColorPalette extends React.Component {
 		return (
 			<Fragment>
 				<Tooltip title="Change color">
-					<IconButton id="ib" size="small" onClick={event => this.handleColorPalette(event)}>
+					<IconButton id={this.props.styleid} size="small" onClick={event => this.handleColorPalette(event)}>
 						<ColorLensOutlinedIcon
 							fontSize="inherit"
 							

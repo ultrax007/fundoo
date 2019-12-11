@@ -228,10 +228,14 @@ export default class TakeNote extends React.Component {
 							<ColorPalette
 								selectColor={this.handleColor}
 								dataOfNote={this.state}
+								styleid={"ib"}
+
 							/>
 							<ArchiveIcon
 								archiveAction={this.handleIsArchived}
 								archiveState={this.state.isArchived}
+								styleid={"ib"}
+
 							/>
 							<Tooltip  title="more">
 								<IconButton id="ib" size="small">

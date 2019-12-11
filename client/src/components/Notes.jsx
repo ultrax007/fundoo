@@ -37,7 +37,7 @@ export default class Notes extends React.Component {
 	};
 
 	render() {
-		console.log("render works in notes component",this.state.allNotes);
+		// console.log("render works in notes component",this.state.allNotes);
 
 		return (
 			<div id="container">
@@ -45,9 +45,9 @@ export default class Notes extends React.Component {
 					<TakeNote />
 				</div>
 				<div className="allNotesContainer">
-					{this.state.allNotes.map((data, index) => (
+					{this.state.allNotes.map((data) => (
 						<NoteCard
-							key={index}
+							key={data.id}
 							dataFromDisplay={data}
 							operation={this.getNotesFromDB}
 						/>

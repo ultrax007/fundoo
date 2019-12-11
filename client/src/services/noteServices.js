@@ -40,10 +40,12 @@ export default class noteServices {
     return obj.postMethod(data, "/notes/deleteForeverNotes", true);
   }
 
-  deleteNoteLableFromCard(data) {
-    // console.log("value in service of notelabledelte card", noteId, labelId);
-    console.log("/notes/"+data.noteId+"/addLabelToNotes/"+data.labelId+"/remove");
-    return obj.postMethod(data,"/notes/"+data.noteId+"/addLabelToNotes/"+data.labelId+"/remove",true)
+  deleteNoteLabelFromCard(data) {
+    return obj.postMethod(data, "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/remove", true);
+  }
+
+  addLabelToNotes(data) {
+    return obj.postMethod(data, "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/add", true);
   }
   
   
@@ -77,8 +79,8 @@ export default class noteServices {
 
 
 
-  deleteNoteLable(id) {
-    return obj.deleteMethod("/noteLabels/"+id+"/deleteNoteLabel")
+  deleteNoteLabel(id) {
+    return obj.deleteMethod("/noteLabels/" + id + "/deleteNoteLabel");
   }
   
 }

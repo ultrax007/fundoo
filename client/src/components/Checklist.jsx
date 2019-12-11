@@ -110,7 +110,7 @@ export default class Checklist extends React.Component {
 				$splice: [[index, 1]]
 			})
 		});
-		this.handleTick();
+		// this.handleTick();
 	};
 	handleCrossClose = async (event, index) => {
 		event.preventDefault();
@@ -181,7 +181,8 @@ export default class Checklist extends React.Component {
 		console.log("checked close",this.state.statusClose);
 	};
 
-	handleTick = async () => {
+	handleTick = async (event) => {
+		event.preventDefault();
 		var openCheck = {};
 		openCheck.itemName = this.state.original;
 		openCheck.status = "open";
@@ -192,6 +193,7 @@ export default class Checklist extends React.Component {
 				$push:[openCheck]
 			})
 		})
+		
 		this.setState({ original: "" })
 		document.getElementById("listText").focus();
 		console.log("new value in open now", this.state.statusOpen);
@@ -304,7 +306,7 @@ export default class Checklist extends React.Component {
 									onChange={event => this.handleOriginalData(event)}
 								/>
 								<ListItemSecondaryAction>
-									<IconButton edge="end" aria-label="comments" size="small" onClick={this.handleTick}>
+									<IconButton edge="end" aria-label="comments" size="small" onClick={event=>this.handleTick(event)}>
 										<CheckSharpIcon />
 									</IconButton>
 								</ListItemSecondaryAction>

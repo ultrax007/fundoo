@@ -37,9 +37,9 @@ export default class Notes extends React.Component {
 					{/* <TakeNote /> */}
         </div>
         <div className="allNotesContainer">
-				{this.state.allNotes.map((data, index) => (
+				{this.state.allNotes.map((data) => (
 						<NoteCard
-							key={index}
+							key={data.id}
 							dataFromDisplay={data}
 							operation={this.getNotesFromDB}
 						/>

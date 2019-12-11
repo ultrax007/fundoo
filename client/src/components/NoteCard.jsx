@@ -17,7 +17,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
 import Dialog from "@material-ui/core/Dialog";
 import Grow from "@material-ui/core/Grow";
 import Chip from "@material-ui/core/Chip";
@@ -53,6 +52,25 @@ const iconmod = createMuiTheme({
 		MuiIconButton: {
 			sizeSmall: {
 				padding: "2%"
+			}
+		}
+	}
+});
+const backdrop = createMuiTheme({
+	overrides: {
+		MuiDialog: {
+			root: {
+				marginTop: "-15%"
+			}
+		},
+		MuiBackdrop: {
+			root: {
+				backgroundColor: "#e5e5e59c"
+			}
+		},
+		MuiPaper: {
+			rounded: {
+				borderRadius: "10px"
 			}
 		}
 	}
@@ -93,15 +111,6 @@ export default class NoteCard extends React.Component {
 			dialogOpen: false
 		};
 	}
-
-	
-
-	// static getDerivedStateFromProps(props, state) {
-	// 	console.log("props state",state);
-	// 	return {
-	// 		...props.dataFromDisplay
-	// 	};
-	// }
 
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
@@ -181,15 +190,6 @@ export default class NoteCard extends React.Component {
 		this.handleClick();
 	};
 
-	handleDeleteLable = (event, index) => {
-		event.preventDefault();
-		console.log(
-			"value of index in notecard",
-			index,
-			this.state.noteLabels[index].id
-		);
-	};
-
 	deleteLable = (event, index) => {
 		event.preventDefault();
 		console.log(
@@ -202,7 +202,7 @@ export default class NoteCard extends React.Component {
 		data.noteId = this.state.id;
 
 		nServe
-			.deleteNoteLableFromCard(data)
+			.deleteNoteLabelFromCard(data)
 			.then(response => {
 				console.log("success", response.data);
 			})
@@ -218,7 +218,7 @@ export default class NoteCard extends React.Component {
 	};
 
 	render() {
-		console.log("render works in card component", this.props);
+		// console.log("render works in card component", this.props);
 
 		return (
 			<Fragment>
@@ -289,16 +289,19 @@ export default class NoteCard extends React.Component {
 									<ColorPalette
 										selectColor={this.handleColor}
 										dataOfNote={this.state}
+										styleid={"idb"}
 									/>
 									<ArchiveIcon
 										archiveAction={this.handleIsArchived}
 										archiveState={this.state}
 										onUpdate={this.handleUpdation}
+										styleid={"idb"}
 									/>
 									<MoreMenu
 										deleteAction={this.handleDeleteRestore}
 										moreState={this.state}
 										onUpdate={this.handleUpdation}
+										styleid={"idb"}
 									/>
 								</CardActions>
 							) : (
@@ -319,105 +322,109 @@ export default class NoteCard extends React.Component {
 						</MuiThemeProvider>
 					</Card>
 				) : (
-					<Dialog
-						open={this.state.dialogOpen}
-						TransitionComponent={Grow}
-						keepMounted
-						onClose={this.handleClose}
-					>
-						<Paper
-							id="noteDialog"
-							style={{ backgroundColor: this.state.color }}
+					<MuiThemeProvider theme={backdrop}>
+						<Dialog
+							open={this.state.dialogOpen}
+							TransitionComponent={Grow}
+							keepMounted
+							onClose={this.handleClose}
 						>
-							<div id="titleN">
+							<Paper
+								id="noteDialog"
+								style={{ backgroundColor: this.state.color }}
+							>
+								<div id="titleN">
+									<InputBase
+										style={{ marginLeft: "2%", width: "89%", color: "#202124" }}
+										id="inputInactive"
+										margin="dense"
+										placeholder="Title"
+										value={this.state.title}
+										onChange={event => this.handleTitle(event)}
+									/>
+									<div id="pin">
+										<Tooltip title="pin">
+											<IconButton onClick={this.handleIsPined}>
+												{this.state.isPined ? (
+													<img src={pined} alt="pined"></img>
+												) : (
+													<img src={pin} alt="pin"></img>
+												)}
+											</IconButton>
+										</Tooltip>
+									</div>
+								</div>
+
 								<InputBase
-									style={{ marginLeft: "2%", width: "89%", color: "#202124" }}
+									style={{
+										marginLeft: "2%",
+										width: "96%",
+										color: "#202124",
+										fontSize: "12px",
+										fontWeight: "500"
+									}}
 									id="inputInactive"
 									margin="dense"
-									placeholder="Title"
-									value={this.state.title}
-									onChange={event => this.handleTitle(event)}
+									multiline
+									placeholder="Take a note..."
+									value={this.state.description}
+									onChange={event => this.handleDescription(event)}
 								/>
-								<div id="pin">
-									<Tooltip title="pin">
-										<IconButton onClick={this.handleIsPined}>
-											{this.state.isPined ? (
-												<img src={pined} alt="pined"></img>
-											) : (
-												<img src={pin} alt="pin"></img>
-											)}
-										</IconButton>
-									</Tooltip>
+								<div id="functions">
+									<div id="iconBar">
+										<MuiThemeProvider theme={iconmod}>
+											<Tooltip title="Remind me">
+												<IconButton id="ibd" size="small">
+													<AddAlertOutlinedIcon fontSize="inherit" />
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Collaborator">
+												<IconButton id="ibd" size="small">
+													<PersonAddOutlinedIcon fontSize="inherit" />
+												</IconButton>
+											</Tooltip>
+
+											<Tooltip title="Add image">
+												<IconButton id="ibd" size="small">
+													<InsertPhotoOutlinedIcon fontSize="inherit" />
+												</IconButton>
+											</Tooltip>
+											<ColorPalette
+												selectColor={this.handleColor}
+												dataOfNote={this.state}
+												styleid={"idb"}
+											/>
+											<ArchiveIcon
+												archiveAction={this.handleIsArchived}
+												archiveState={this.state}
+												onUpdate={this.handleUpdation}
+												styleid={"idb"}
+											/>
+											<MoreMenu
+												deleteAction={this.handleDeleteRestore}
+												moreState={this.state}
+												onUpdate={this.handleUpdation}
+												styleid={"idb"}
+											/>
+										</MuiThemeProvider>
+									</div>
+									<div id="button">
+										<MuiThemeProvider theme={button}>
+											<Tooltip title="close">
+												<Button
+													varient="secondary"
+													onClick={this.handleUpdateNote}
+												>
+													close
+												</Button>
+											</Tooltip>
+										</MuiThemeProvider>
+									</div>
 								</div>
-							</div>
-
-							<InputBase
-								style={{
-									marginLeft: "2%",
-									width: "96%",
-									color: "#202124",
-									fontSize: "12px",
-									fontWeight: "500"
-								}}
-								id="inputInactive"
-								margin="dense"
-								multiline
-								placeholder="Take a note..."
-								value={this.state.description}
-								onChange={event => this.handleDescription(event)}
-							/>
-							<div id="functions">
-								<div id="iconBar">
-									<MuiThemeProvider theme={iconmod}>
-										<Tooltip title="Remind me">
-											<IconButton size="small">
-												<AddAlertOutlinedIcon fontSize="inherit" />
-											</IconButton>
-										</Tooltip>
-
-										<Tooltip title="Collaborator">
-											<IconButton size="small">
-												<PersonAddOutlinedIcon fontSize="inherit" />
-											</IconButton>
-										</Tooltip>
-
-										<Tooltip title="Add image">
-											<IconButton size="small">
-												<InsertPhotoOutlinedIcon fontSize="inherit" />
-											</IconButton>
-										</Tooltip>
-										<ColorPalette
-											selectColor={this.handleColor}
-											dataOfNote={this.state}
-										/>
-										<ArchiveIcon
-											archiveAction={this.handleIsArchived}
-											archiveState={this.state}
-											onUpdate={this.handleUpdation}
-										/>
-
-										<Tooltip title="more">
-											<IconButton size="small">
-												<MoreVertOutlinedIcon fontSize="inherit" />
-											</IconButton>
-										</Tooltip>
-									</MuiThemeProvider>
-								</div>
-								<div id="button">
-									<MuiThemeProvider theme={button}>
-										<Tooltip title="close">
-											<Button
-												varient="secondary"
-												onClick={this.handleUpdateNote}
-											>
-												close
-											</Button>
-										</Tooltip>
-									</MuiThemeProvider>
-								</div>
-							</div>
-						</Paper>
-					</Dialog>
+							</Paper>
+						</Dialog>
+					</MuiThemeProvider>
 				)}
 			</Fragment>
 		);
