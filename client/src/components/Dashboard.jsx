@@ -1,6 +1,7 @@
 //Default imports for designing
 import React from "react";
 import "../sass/dashboard.sass";
+import { connect } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,6 +18,7 @@ import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
+import { drawer } from "./redux/Actions";
 
 //component imports
 // import TakeNote from "./TakeNote";
@@ -27,6 +29,7 @@ import Drawerlist from "./DrawerList";
 
 // 	}
 // });
+
 
 const theme = createMuiTheme({
 	overrides: {
@@ -72,7 +75,7 @@ const theme = createMuiTheme({
 	}
 });
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -95,8 +98,9 @@ export default class Dashboard extends React.Component {
 		});
 	};
 
-	handleDrawer = () => {
-		this.setState({ open: !this.state.open });
+	handleDrawer = async() => {
+		await this.setState({ open: !this.state.open });
+		this.props.drawer(this.state.open);
 	};
 
 	handleToggleTakeNote = async tnvalue => {
@@ -215,3 +219,10 @@ export default class Dashboard extends React.Component {
 		);
 	}
 }
+const mapStateToProps = state => {
+  return { drawerStatus: state.open };
+};
+const mapDispatchToProps = {
+	drawer
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

@@ -58,7 +58,7 @@ export default class MoreMenu extends React.Component {
 		nServe
 			.getAllLabels()
 			.then(response => {
-				console.log("labels are", response.data);
+				// console.log("labels are", response.data);
 				this.setState({
 					labels: response.data.data.details
 				});

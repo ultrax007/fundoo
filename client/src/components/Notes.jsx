@@ -1,10 +1,11 @@
 import React from "react";
 import "../sass/playground.sass";
+import { connect } from "react-redux";
 import TakeNote from "./TakeNote";
 import NoteCard from "./NoteCard";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
-export default class Notes extends React.Component {
+class Notes extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -13,7 +14,7 @@ export default class Notes extends React.Component {
 	}
 
 	UNSAFE_componentWillMount() {
-		console.log("value props of note.jsx",this.props);
+		// console.log("value props of note.jsx",this.props);
 		this.getNotesFromDB();
 	}
 
@@ -38,14 +39,16 @@ export default class Notes extends React.Component {
 	};
 
 	render() {
-		// console.log("render works in notes component",this.state.allNotes);
+		console.log("render works in notes component",this.props.drawerStatus);
+		const myStyle = this.props.drawerStatus ? "containerSM" : "container";
+		const CStyle = this.props.drawerStatus ? "allNotesContainerSM" : "allNotesContainer";
 
 		return (
-			<div id="container">
+			<div id={myStyle}>
 				<div id="takeNoteContainer">
 					<TakeNote />
 				</div>
-				<div className="allNotesContainer">
+				<div className={CStyle}>
 					{this.state.allNotes.map((data) => (
 						<NoteCard
 							key={data.id}
@@ -58,3 +61,7 @@ export default class Notes extends React.Component {
 		);
 	}
 }
+const mapStateToProps = state => {
+  return { drawerStatus: state.drawerData };
+};
+export default connect(mapStateToProps)(Notes)
