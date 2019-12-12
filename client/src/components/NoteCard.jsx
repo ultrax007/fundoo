@@ -217,6 +217,19 @@ export default class NoteCard extends React.Component {
 		this.forceUpdate();
 	};
 
+	handleAddLabel = (label) => {
+		console.log("add label in notecard has label", label,this.state.noteLabels.indexOf(label));
+		if (this.state.noteLabels.indexOf(label) === -1) {
+			this.setState({
+				noteLabels: update(this.state.noteLabels, {
+					$push: [label]
+				})
+			}, () => {
+				console.log("label added successfully");
+			})
+		}
+	}
+
 	render() {
 		// console.log("render works in card component", this.props);
 
@@ -302,6 +315,7 @@ export default class NoteCard extends React.Component {
 										moreState={this.state}
 										onUpdate={this.handleUpdation}
 										styleid={"idb"}
+										addLabel={this.handleAddLabel}
 									/>
 								</CardActions>
 							) : (

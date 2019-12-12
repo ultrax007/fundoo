@@ -13,6 +13,7 @@ export default class Notes extends React.Component {
 	}
 
 	UNSAFE_componentWillMount() {
+		console.log("value props of note.jsx",this.props);
 		this.getNotesFromDB();
 	}
 

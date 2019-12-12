@@ -49,27 +49,25 @@ const theme = createMuiTheme({
 		},
 		MuiDrawer: {
 			paper: {
-				position:"absolute",
+				position: "fixed",
 				top: "65px",
 				width: "270px",
-				height: "95vh",
-				overflowY: "auto"
+				height: "90vh",
+				overflowY: "auto",
+				'@global': {
+					'*': {
+						'scrollbar-width': 'thin',
+					},
+					'*::webkit-scrollbar': {
+						width: "2px",
+						height: "2px",
+					}
+				}
 			},
 			paperAnchorDockedLeft: {
 				borderRight: "none"
-			}
-			// "@global": {
-			// 	"*::-webkit-scrollbar": {
-			// 		width: "0.4em"
-			// 	},
-			// 	"*::-webkit-scrollbar-track": {
-			// 		"-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)"
-			// 	},
-			// 	"*::-webkit-scrollbar-thumb": {
-			// 		backgroundColor: "rgba(0,0,0,.1)",
-			// 		outline: "1px solid slategrey"
-			// 	}
-			// }
+			},
+			
 		}
 	}
 });
@@ -134,7 +132,7 @@ export default class Dashboard extends React.Component {
 			<div className="main">
 				<MuiThemeProvider theme={theme}>
 					<div className="header">
-						<AppBar position="static">
+						<AppBar position="fixed">
 							<Toolbar>
 								<IconButton
 									edge="start"
@@ -208,7 +206,7 @@ export default class Dashboard extends React.Component {
 						</AppBar>
 					</div>
 					<div>
-						<Drawer open={this.state.open} variant="persistent">
+						<Drawer open={this.state.open} variant="persistent" style={{position:"fixed", zIndex:"1000"}}>
 							<Drawerlist notes={this.getNotes} reminder={this.getReminder} archived={this.getArchived} trash={this.getTrash}/>
 						</Drawer>
 					</div>

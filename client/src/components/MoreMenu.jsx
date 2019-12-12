@@ -69,15 +69,19 @@ export default class MoreMenu extends React.Component {
 			});
 	};
 
-	addLable = (event, index) => {
+	handleLabelAdd = async (event, index) => {
 		event.preventDefault();
 		let data = {};
 		data.noteId = this.props.moreState.id;
 		// console.log("value in data.noteId", data.noteId, index);
-		data.lableId = this.state.labels[index].id;
+		data.labelId = this.state.labels[index].id;
 		console.log("value of data", data);
-		nServe.addLabelToNotes(data).then(response => {
-			console.log("success",response.data);
+		await nServe.addLabelToNotes(data).then(response => {
+			console.log("success", response);
+			if (response.data.data.success) {
+				console.log("label to be added",this.state.labels[index]);
+				this.props.addLabel(this.state.labels[index]);
+			}
 		}).catch(err => {
 			console.log("err",err);
 		})
@@ -118,6 +122,7 @@ export default class MoreMenu extends React.Component {
 		});
 		await console.log("lmenu hit", this.state.lMenu);
 	};
+
 	handleLMenuClose = async event => {
 		event.preventDefault();
 		this.setState({
@@ -164,8 +169,8 @@ export default class MoreMenu extends React.Component {
 						<MenuItem onClick={event => this.handleLMenu(event)}>
 							Add Lable
 						</MenuItem>
-						<MenuItem>Show Checklist</MenuItem>
-						<MenuItem>Ask Question</MenuItem>
+						{/* <MenuItem>Show Checklist</MenuItem> */}
+						{/* <MenuItem>Ask Question</MenuItem> */}
 					</Menu>
 					<ClickAwayListener
 						onClickAway={event => this.handleLMenuClose(event)}
@@ -174,6 +179,7 @@ export default class MoreMenu extends React.Component {
 							open={this.state.lMenu}
 							anchorEl={this.state.anchorEl}
 							style={{ zIndex: "1301" }}
+							placement={"bottom-start"}
 						>
 							<Paper id="lMenu">
 								<List dense={true}>
@@ -203,7 +209,7 @@ export default class MoreMenu extends React.Component {
 												disableRipple={true}
 												icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
 												checkedIcon={<CheckBoxIcon fontSize="small" style={{ color: "#757575" }} />}
-												onChange={event=>this.addLable(event,index)}
+												onChange={event=>this.handleLabelAdd(event,index)}
 											/>
 											<ListItemText primary={data.label}/>
 										</ListItem>
