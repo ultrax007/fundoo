@@ -7,7 +7,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
+// import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
+import PostAddOutlinedIcon from '@material-ui/icons/PostAddOutlined';
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import ArchiveOutlinedIcon from "@material-ui/icons/ArchiveOutlined";
@@ -38,6 +39,8 @@ export default class DrawerList extends React.Component {
 			editL: false,
 			archive: false,
 			trash: false,
+			label: false,
+			lId:"",
 			labels: [],
 			labelText: "",
 			dialogOpen: false,
@@ -184,7 +187,8 @@ export default class DrawerList extends React.Component {
 			reminder: false,
 			editL: false,
 			archive: false,
-			trash: false
+			trash: false,
+			label:false
 		});
 		this.props.notes();
 	};
@@ -195,7 +199,8 @@ export default class DrawerList extends React.Component {
 			reminder: true,
 			editL: false,
 			archive: false,
-			trash: false
+			trash: false,
+			label:false
 		});
 		this.props.reminder();
 	};
@@ -206,7 +211,8 @@ export default class DrawerList extends React.Component {
 			reminder: false,
 			editL: true,
 			archive: false,
-			trash: false
+			trash: false,
+			label:false
 		});
 		this.handleClick();
 	};
@@ -217,7 +223,8 @@ export default class DrawerList extends React.Component {
 			reminder: false,
 			editL: false,
 			archive: true,
-			trash: false
+			trash: false,
+			label:false
 		});
 		this.props.archived();
 	};
@@ -228,10 +235,26 @@ export default class DrawerList extends React.Component {
 			reminder: false,
 			editL: false,
 			archive: false,
-			trash: true
+			trash: true,
+			label:false
 		});
 		this.props.trash();
 	};
+
+	handleOpenLabels = (event, data) => {
+		event.preventDefault();
+		this.setState({
+			notes: false,
+			reminder: false,
+			editL: false,
+			archive: false,
+			trash: false,
+			label: true,
+			lId:data.id
+		});
+		console.log("value in open label data", data.id);
+		this.props.label(data.label);
+	}
 
 	render() {
 		var style = this.state.notes ? "hNote" : null;
@@ -239,14 +262,14 @@ export default class DrawerList extends React.Component {
 		var style2 = this.state.editL ? "hNote" : null;
 		var style3 = this.state.archive ? "hNote" : null;
 		var style4 = this.state.trash ? "hNote" : null;
-		// var style5 = this.state.labels ? "hNote" : null;
+		var style5 = this.state.label ? "hNote" : null;
 
 		return (
 			<Fragment>
 				<List component="nav">
 					<ListItem button id={style} onClick={this.handleNotes}>
 						<ListItemIcon>
-							<EmojiObjectsOutlinedIcon />
+							<PostAddOutlinedIcon />
 						</ListItemIcon>
 						<ListItemText primary="Notes" />
 					</ListItem>
@@ -263,8 +286,8 @@ export default class DrawerList extends React.Component {
 					<Typography id="labels" component="p">
 						LABELS
 					</Typography>
-					{this.state.labels.map((data, index) => (
-						<ListItem key={index}>
+					{this.state.labels.map((data) => (
+						<ListItem id={this.state.lId===data.id?style5:null} button key={data.id} onClick={event=>this.handleOpenLabels(event,data)}>
 							<ListItemIcon>
 								<LabelOutlinedIcon />
 							</ListItemIcon>

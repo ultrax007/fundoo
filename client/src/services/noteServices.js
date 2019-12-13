@@ -48,6 +48,11 @@ export default class noteServices {
     console.log("datat in nservices",data);
     return obj.postMethod(data, "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/add", true);
   }
+
+  getNotesFromLabelName(data) {
+    console.log("datat in nservices",data);
+    return obj.postMethod(data,"/notes/getNotesListByLabel/"+data.labelName, true);
+  }
   
   
   /**

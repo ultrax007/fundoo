@@ -110,6 +110,10 @@ class Dashboard extends React.Component {
 	getReminder = () => {
 		this.props.history.push("/dashboard/reminder");
 	}
+	getLabel = (data) => {
+		let path = "/dashboard/label/" + data;
+		this.props.history.push(path);
+	}
 	getArchived = () => {
 		this.props.history.push("/dashboard/archived");
 	}
@@ -210,7 +214,7 @@ class Dashboard extends React.Component {
 					</div>
 					<div>
 						<Drawer open={this.state.open} variant="persistent" style={{position:"fixed", zIndex:"1000"}}>
-							<Drawerlist notes={this.getNotes} reminder={this.getReminder} archived={this.getArchived} trash={this.getTrash}/>
+							<Drawerlist notes={this.getNotes} reminder={this.getReminder} archived={this.getArchived} trash={this.getTrash} label={this.getLabel}/>
 						</Drawer>
 					</div>
 				</MuiThemeProvider>
