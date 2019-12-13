@@ -14,18 +14,17 @@
 
 #containerSM
   margin-top: 15vh
+  max-width: 1100px
   display: flex
   flex-direction: column
   height: 90vh
   margin-left: 21%
   width: 79%
-  // padding: 0 2% 0 2% 
   transition: all 300ms ease-in-out 0s
 
 
 #takeNoteContainer
   @extend %disflex
-  // width:50%
   height: fit-content
   padding: 25px 0 25px 0
   align-items: center
@@ -33,18 +32,54 @@
 .allNotesContainer
   display: flex
   flex-flow: row wrap
-  padding: 0 22%
-  width: 66%
+  width: 768px
   justify-content: flex-start
 
 .allNotesContainerSM
   display: flex
   flex-flow: row wrap
   padding: 0 12.5%
-  width: 75%
+  width: 768px
   justify-content: flex-start
 
+@media only screen and (max-width: 1100px)
+  #container
+    margin-top: 10vh
+
+  #containerSM
+    margin-top: 10vh
+    margin-left: 29%
+    width: 71%
+  .allNotesContainer
+    padding: 0%
+    width: 768px
+    
+  .allNotesContainerSM
+    padding: 0%
+    margin-left: 12%
+    width: 78%
+
+@media only screen and (max-width: 900px)
+  #container
+    margin-top: 10vh
+
+  #containerSM
+    margin-left: 29%
+    width: 71%
+
+  .allNotesContainer
+    padding: 0%
+    width: 514px
+    
+  .allNotesContainerSM
+    padding: 0% 8%  
+    margin-left: 0%
+    width: 520px
+
 @media only screen and (max-width: 675px)
+  #container
+    margin-top: 10vh
+
   .allNotesContainer
     padding: 0%
     width: 100%

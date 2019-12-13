@@ -10,7 +10,8 @@ import Drawer from "@material-ui/core/Drawer";
 import flogo from "../assets/favicon.ico";
 import SearchIcon from "@material-ui/icons/Search";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
+import InputBase from '@material-ui/core/InputBase';
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ViewAgendaOutlinedIcon from "@material-ui/icons/ViewAgendaOutlined";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
@@ -18,18 +19,7 @@ import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
-import { drawer } from "./redux/Actions";
-
-//component imports
-// import TakeNote from "./TakeNote";
-// import NoteCard from "./NoteCard";
-// import DisplayAllNotes from "./DisplayAllNotes";
-// const scroll = createMuiTheme({
-// 	overrides: {
-
-// 	}
-// });
-
+import { drawer,typedText } from "./redux/Actions";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -70,7 +60,6 @@ const theme = createMuiTheme({
 			paperAnchorDockedLeft: {
 				borderRight: "none"
 			},
-			
 		}
 	}
 });
@@ -81,6 +70,7 @@ class Dashboard extends React.Component {
 		this.state = {
 			open: false,
 			pop_open: false,
+			searched:""
 		};
 	}
 	handleProfileDropDown(e) {
@@ -126,7 +116,16 @@ class Dashboard extends React.Component {
 	getTrash = () => {
 		this.props.history.push("/dashboard/trash");
 	}
-	
+	openSearch = () => {
+		this.props.history.push("/dashboard/search");		
+	}
+
+	handleSearch = async(event) => {
+		event.preventDefault();
+		await this.setState({ searched: event.currentTarget.value });
+		this.props.typedText(this.state.searched);
+		console.log("searched:==>",this.state.searched);
+	}
 
 	render() {
 		// var style;
@@ -158,22 +157,22 @@ class Dashboard extends React.Component {
 									</div>
 									<div className="flogotext" onClick={this.setFocusToTextBox}>Fundoo</div>
 								</div>
-								<div className="searchBlock">
-									<TextField
+								<div className="searchBlock" onClick={this.openSearch}>
+									<InputBase
 										id="searchtext"
-										margin="dense"
-										width="60%"
+										fullWidth
 										height="90%"
-										placeholder="search"
+										placeholder="Search"
 										variant="outlined"
-										// style={classes.search}
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<SearchIcon />
-												</InputAdornment>
-											)
-										}}
+										style={{height: "3.1875em",color:"#757575"}}
+										value={this.state.searched}
+										onChange={event=>this.handleSearch(event)}
+										startAdornment={
+											<InputAdornment position="start">
+												<SearchIcon style={{color:"#757575",padding:"0 15px"}}/>
+											</InputAdornment>
+										}
+										
 									/>
 								</div>
 								<div id="rightPanelLogo">
@@ -220,9 +219,13 @@ class Dashboard extends React.Component {
 	}
 }
 const mapStateToProps = state => {
-  return { drawerStatus: state.open };
+	return {
+		drawerStatus: state.open,
+		searchedText: state.searched
+	};
 };
 const mapDispatchToProps = {
-	drawer
+	drawer,
+	typedText
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

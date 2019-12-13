@@ -4,3 +4,10 @@ export function drawer(payload) {
     value: payload
   }
 };
+
+export function typedText(payload) {
+  return {
+    type: "TYPED_TEXT",
+    value: payload
+  }
+}

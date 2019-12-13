@@ -1,5 +1,6 @@
 const initialState = {
-  drawerData:false
+  drawerData: false,
+  typedData:""
 };
 function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -8,6 +9,13 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         drawerData: action.value
+      }
+    }
+    case "TYPED_TEXT": {
+      console.log("in reducer typed_text", action.value);
+      return {
+        ...state,
+        typedData: action.value
       }
     }
       default:return state

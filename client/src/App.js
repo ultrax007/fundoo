@@ -10,7 +10,7 @@ import Notes from "./components/Notes";
 import Archived from "./components/Archived";
 import Trash from "./components/Trash";
 import EditLable from "./components/EditLable";
-// import Admin from "./components/Admin";
+import Search from "./components/Search";
 function App() {
 	return (
 		<div>
@@ -24,6 +24,7 @@ function App() {
 					<Route path="/dashboard/archived" component={Archived}></Route>
 					<Route path="/dashboard/trash" component={Trash}></Route>
 					<Route path="/dashboard/editLable" component={EditLable}></Route>
+					<Route path="/dashboard/search" component={Search}></Route>
 					{/* <Route path="/dashboard/" component={}></Route> */}
 			</BrowserRouter>
 		</div>

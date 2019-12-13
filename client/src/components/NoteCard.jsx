@@ -236,7 +236,7 @@ export default class NoteCard extends React.Component {
 		return (
 			<Fragment>
 				{!this.state.dialogOpen ? (
-					<Card id="card" style={{ backgroundColor: this.state.color }}>
+					<Card id="card" style={{ backgroundColor: this.state.color }} >
 						<CardContent>
 							<div id="title">
 								<Typography
