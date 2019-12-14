@@ -243,7 +243,7 @@ export default class NoteCard extends React.Component {
 									variant="h5"
 									component="h4"
 									style={{ width: "80%", overflowWrap: "break-word" }}
-									onClick={this.handleClick}
+									onClick={!this.state.isDeleted?this.handleClick:null}
 								>
 									{this.state.title}
 								</Typography>
@@ -262,7 +262,7 @@ export default class NoteCard extends React.Component {
 								</div>
 							</div>
 
-							<Typography variant="subtitle2" onClick={this.handleClick}>
+							<Typography variant="subtitle2" onClick={!this.state.isDeleted?this.handleClick:null}>
 								{this.state.description}
 							</Typography>
 						</CardContent>
@@ -271,6 +271,7 @@ export default class NoteCard extends React.Component {
 								<Fragment key={index}>
 									<Chip
 										size="small"
+										style={{margin:"2px 3px"}}
 										label={data.label}
 										onDelete={event => {
 											this.deleteLable(event, index);

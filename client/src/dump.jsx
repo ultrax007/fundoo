@@ -137,3 +137,25 @@ handleText = async (event, index) => {
 			// // reminder: "",
 			// // collaborators: ""
 			// #e5e5e59c
+
+			// {
+			// 	itemName: "first",
+			// 	status: "open",
+			// 	isDeleted: false,
+			// 	id: "5dea229e451e8200198asdf64c",
+			// 	notesId: "5de8ecd7451eas01986861f"
+			// },
+			// {
+			// 	itemName: "second",
+			// 	status: "close",
+			// 	isDeleted: false,
+			// 	id: "5dea229e451e82001986864c",
+			// 	notesId: "5de8ecd7451e82001986861f"
+			// },
+			// {
+			// 	itemName: "third",
+			// 	status: "open",
+			// 	isDeleted: false,
+			// 	id: "5dea229eaasdfe82001986864c",
+			// 	notesId: "5de8ecd7asdfe82001986861f"
+			// }

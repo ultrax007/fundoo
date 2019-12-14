@@ -74,21 +74,20 @@ export default class Checklist extends React.Component {
 			showList: false
 		};
 	}
-	static getDerivedStateFromProps(props, state) {
-		return {
-			...props.listState
-		};
-	}
-	componentDidMount() {
-		console.log("state is", this.state);
-		var notecl = this.state.noteCheckLists;
-		this.setState({
-			statusOpen: notecl.filter(notecl => notecl.status === "open")
-		});
 
+	
+	componentDidMount() {
+		console.log("value in listState",this.props.listState);
 		this.setState({
-			statusClose: notecl.filter(notecl => notecl.status === "close")
+			...this.props.listState
+		}, () => {
+			var notecl = this.state.noteCheckLists;
+			this.setState({
+				statusOpen: notecl.filter(notecl => notecl.status === "open"),
+				statusClose: notecl.filter(notecl => notecl.status === "close")
+			})
 		});
+		console.log("state is", this.state);
 	}
 
 	handleText = async (event, index) => {
@@ -103,15 +102,15 @@ export default class Checklist extends React.Component {
 
 	handleCrossOpen = async (event, index) => {
 		event.preventDefault();
-		console.log("value of index", index);
+		console.log("value of index", this.state.statusOpen[index]);
 
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
 				$splice: [[index, 1]]
 			})
 		});
-		// this.handleTick();
 	};
+
 	handleCrossClose = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", index);
@@ -126,98 +125,111 @@ export default class Checklist extends React.Component {
 	handleCheckOpen = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", index);
-		console.log("before operation",this.state.statusOpen,this.state.statusClose);
+		console.log(
+			"before operation",
+			this.state.statusOpen,
+			this.state.statusClose
+		);
 
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
 				[index]: {
 					status: {
-						$set:"close" 
+						$set: "close"
 					}
 				}
-			})			
+			})
 		});
 		await this.setState({
 			statusClose: update(this.state.statusClose, {
 				$unshift: [this.state.statusOpen[index]]
 			})
-		})
+		});
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
 				$splice: [[index, 1]]
 			})
-		})
-		
-		console.log("checked open",this.state.statusOpen);
-		console.log("checked close",this.state.statusClose);
+		});
+
+		console.log("checked open", this.state.statusOpen);
+		console.log("checked close", this.state.statusClose);
 	};
 
 	handleCheckClose = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", index);
-		console.log("before operation",this.state.statusOpen,this.state.statusClose);
+		console.log(
+			"before operation",
+			this.state.statusOpen,
+			this.state.statusClose
+		);
 
 		await this.setState({
 			statusClose: update(this.state.statusClose, {
 				[index]: {
 					status: {
-						$set:"open" 
+						$set: "open"
 					}
 				}
-			})			
+			})
 		});
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
 				$unshift: [this.state.statusClose[index]]
 			})
-		})
+		});
 		await this.setState({
 			statusClose: update(this.state.statusClose, {
 				$splice: [[index, 1]]
 			})
-		})
-		
-		console.log("checked open",this.state.statusOpen);
-		console.log("checked close",this.state.statusClose);
+		});
+
+		console.log("checked open", this.state.statusOpen);
+		console.log("checked close", this.state.statusClose);
 	};
 
-	handleTick = async (event) => {
+	handleTick = async event => {
 		event.preventDefault();
 		var openCheck = {};
 		openCheck.itemName = this.state.original;
 		openCheck.status = "open";
 		openCheck.isDeleted = "false";
-		
+
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
-				$push:[openCheck]
+				$push: [openCheck]
 			})
-		})
-		
-		this.setState({ original: "" })
+		});
+
+		this.setState({ original: "" });
 		document.getElementById("listText").focus();
 		console.log("new value in open now", this.state.statusOpen);
 		var newCheck = this.state.statusOpen.concat(this.state.statusClose);
-		console.log("value in newCheck",newCheck);
+		console.log("value in newCheck", newCheck);
 		this.props.onCheck(newCheck);
-	}
+	};
 
-	handleDummyData = async (event) => {
+	handleDummyData = async event => {
 		await this.setState({ dummy: event.currentTarget.value });
 		if (this.state.dummy.length > 0) {
 			this.setState({
 				original: this.state.dummy,
-				dummy:""
-			})
-			document.getElementById("checkText").focus();
-			// setTimeout(() => {
-				
-			// }, 500);
+				dummy: ""
+			});
+			var el = document.getElementById("checkText");
+			el.focus();
+			if (typeof el.selectionStart == "number") {
+				el.selectionStart = el.selectionEnd = el.value.length;
+			} else if (typeof el.createTextRange != "undefined") {
+				var range = el.createTextRange();
+				range.collapse(false);
+				range.select();
+			}
 		}
 	};
-	handleOriginalData = async (event) => {
+	handleOriginalData = async event => {
 		await this.setState({ original: event.currentTarget.value });
-		if (this.state.original.length<=0) {
+		if (this.state.original.length <= 0) {
 			document.getElementById("listText").focus();
 		}
 	};
@@ -232,7 +244,8 @@ export default class Checklist extends React.Component {
 			default: {
 				minWidth: "fit-content",
 				marginRight: "5px"
-			},"&:hover": {
+			},
+			"&:hover": {
 				backgroundColor: "none"
 			}
 		};
@@ -246,7 +259,12 @@ export default class Checklist extends React.Component {
 								<div key={index}>
 									<MuiThemeProvider theme={list}>
 										<ListItem dense>
-											<ListItemIcon id="List" style={listStyle} size="small" onClick={event=>this.handleCheckOpen(event,index)}>
+											<ListItemIcon
+												id="List"
+												style={listStyle}
+												size="small"
+												onClick={event => this.handleCheckOpen(event, index)}
+											>
 												<Checkbox
 													edge="start"
 													disableRipple={true}
@@ -281,7 +299,7 @@ export default class Checklist extends React.Component {
 						  ))
 						: null}
 					{/********************************* below this will be checklist input**************************************** */}
-					{this.state.original.length>0 ? (
+					{this.state.original.length > 0 ? (
 						<MuiThemeProvider theme={list}>
 							<ListItem dense>
 								<ListItemIcon id="List" style={listStyle} size="small">
@@ -306,7 +324,12 @@ export default class Checklist extends React.Component {
 									onChange={event => this.handleOriginalData(event)}
 								/>
 								<ListItemSecondaryAction>
-									<IconButton edge="end" aria-label="comments" size="small" onClick={event=>this.handleTick(event)}>
+									<IconButton
+										edge="end"
+										aria-label="comments"
+										size="small"
+										onClick={event => this.handleTick(event)}
+									>
 										<CheckSharpIcon />
 									</IconButton>
 								</ListItemSecondaryAction>
@@ -314,31 +337,31 @@ export default class Checklist extends React.Component {
 						</MuiThemeProvider>
 					) : null}
 
-{/************************************** this will show input ****************************************************************************** */}
-				
-						<MuiThemeProvider theme={list}>
-							<ListItem dense>
-								<ListItemIcon style={{ minWidth: "fit-content", margin: "0 3%" }}>
-									<AddSharpIcon fontSize="inherit" />
-									{/* <Checkbox edge="start" disableRipple color="default" /> */}
-								</ListItemIcon>
-								<InputBase
-									id="listText"
-									style={{
-										width: "90%",
-										fontSize: "12px",
-										padding: "7px 0 7px"
-									}}
-									margin="dense"
-									placeholder="List item"
-									value={this.state.dummy}
-									onChange={event => this.handleDummyData(event)}
-								/>
-							</ListItem>
-						</MuiThemeProvider> 
+					{/************************************** this will show input ****************************************************************************** */}
+
+					<MuiThemeProvider theme={list}>
+						<ListItem dense>
+							<ListItemIcon style={{ minWidth: "fit-content", margin: "0 3%" }}>
+								<AddSharpIcon fontSize="inherit" />
+								{/* <Checkbox edge="start" disableRipple color="default" /> */}
+							</ListItemIcon>
+							<InputBase
+								id="listText"
+								style={{
+									width: "90%",
+									fontSize: "12px",
+									padding: "7px 0 7px"
+								}}
+								margin="dense"
+								placeholder="List item"
+								value={this.state.dummy}
+								onChange={event => this.handleDummyData(event)}
+							/>
+						</ListItem>
+					</MuiThemeProvider>
 
 					{/*********************will appear on status close******************************************************************** */}
-					{this.state.statusClose.length!==0 ? (
+					{this.state.statusClose.length !== 0 ? (
 						<div>
 							<Divider style={{ width: "90%", margin: "0 5%" }} />
 							<ListItem>
@@ -353,16 +376,19 @@ export default class Checklist extends React.Component {
 						</div>
 					) : null}
 
-
-
-				{/************************************** this will show checked boxes below****************************************************************************** */}
+					{/************************************** this will show checked boxes below****************************************************************************** */}
 					{this.state.statusClose
 						? this.state.statusClose.map((data, index) => (
 								<div key={index}>
 									<Divider />
 									<MuiThemeProvider theme={list}>
 										<ListItem dense>
-											<ListItemIcon id="List" style={listStyle} size="small" onClick={event=>this.handleCheckClose(event,index)}>
+											<ListItemIcon
+												id="List"
+												style={listStyle}
+												size="small"
+												onClick={event => this.handleCheckClose(event, index)}
+											>
 												<Checkbox
 													edge="start"
 													disableRipple={true}

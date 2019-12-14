@@ -15,19 +15,7 @@ export default class userServices {
     return obj.postMethod(data,"/user/userSignUp", false);
   }
   
-  reset(data,token) {
-    return obj.resetUser(data, token);
-  }
-
-  /**
-   * operation methods
-   */
-  createNote(data) {
-    console.log("data in userservices",data);
-    return obj.postMethod(data, "/notes/addNotes", true)
-  }
-  
-  getAllNotes() {
-    return obj.getMethod("/notes/getNotesList", true);
+  reset(data) {
+    return obj.resetMethod(data,"/user/reset-password",data.token);
   }
 }

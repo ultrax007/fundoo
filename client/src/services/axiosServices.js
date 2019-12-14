@@ -3,15 +3,14 @@ import axios from "axios";
 const address = "http://fundoonotes.incubation.bridgelabz.com/api";
 var token = localStorage.getItem("token");
 export default class axiosServices {
-	// constructor() {}
-	getEncodData(toConvert) {
-		const formBody = [];
-		for (const property in toConvert) {
-			const encodedKey = encodeURIComponent(property);
-			const encodedValue = encodeURIComponent(toConvert[property]);
-			formBody.push(encodedKey + "=" + encodedValue);
-		}
-		return formBody.join("&");
+	
+	resetMethod(data, target, token) {
+		return axios.post(address + target, data, {
+			headers: {
+				'Content-type': 'application/json; charset=utf-8',
+				'Authorization': token
+			}
+		});
 	}
 
 	postMethod(data, target, isTokenReq) {
@@ -52,20 +51,6 @@ export default class axiosServices {
 			headers: {
 				'Content-type': 'application/json; charset=utf-8',
 				'Authorization': token
-			}
-		});
-	}
-
-	resetUser(userPass, tok) {
-		token = localStorage.getItem("token");
-
-		var formData = this.getEncodData(userPass);
-		console.log("password is " + userPass + " \ntoken is==>  " + tok);
-
-		return axios.post(address + "/user/reset-password", formData, {
-			headers: {
-				Authorization: token,
-				"Content-Type": "application/x-www-form-urlencoded"
 			}
 		});
 	}

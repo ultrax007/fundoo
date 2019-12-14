@@ -32,19 +32,21 @@ export default class ResetPassword extends React.Component {
 		resetData.newPassword = this.state.password;
 		let url = window.location.pathname;
 		let token = url.substring(15);//29 to directly start at token value
+		resetData.token = token;
 		console.log("data in token",token);		
 		// var formData = new FormData();
 		// formData.append('newPassword',this.state.password)
 		userve
-			.reset(resetData, token)
+			.reset(resetData)
 			.then(response => {
 				console.log("data in response", response);
 				if (response.status) {
 					alert("password resetted successfully")
 					this.props.history.push(path);
 				} else {
-					path = "/";
-					this.props.history.push(path);
+					console.log("couldnt reset password");
+					// path = "/";
+					// this.props.history.push(path);
 				}
 			})
 			.catch(err => {

@@ -2,6 +2,8 @@ import React from "react";
 import "../sass/playground.sass";
 import { connect } from "react-redux";
 import NoteCard from "./NoteCard";
+import Typography from "@material-ui/core/Typography";
+import sad from "../assets/sad.svg";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 
@@ -60,7 +62,25 @@ class Search extends React.Component {
 								))}
 						</div>
 					</div>
-				) : null}
+				) : (
+					<div id="sad">
+						<img src={sad} alt="sad" width="150px"></img>
+						<Typography
+							variant="h3"
+							component="h3"
+							style={{ color: "#e5e5e5", padding: "25px 0" }}
+						>
+							Sorry nothing to display
+						</Typography>
+						<Typography
+							variant="h4"
+							component="h4"
+							style={{ color: "#c3c3c3", padding: "25px 0" }}
+						>
+							type something to search...
+						</Typography>
+					</div>
+				)}
 			</>
 		);
 	}
