@@ -26,12 +26,15 @@ export default class TakeNote extends React.Component {
 		});
 	};
 
+	handleTakeNoteClose = () => {
+		this.props.operation();
+	}
 	render() {
 		return (
 			<Fragment>
 				{this.state.noteClicked ? (
 					<ClickAwayListener onClickAway={this.handleNoteState}>
-						<TakeNoteDialog  noteState={this.handleNoteState}/>
+						<TakeNoteDialog noteState={this.handleNoteState} takeNoteClose={this.handleTakeNoteClose}/>
 					</ClickAwayListener>
 				) : (
 						<TakeNoteDefault noteState={this.handleNoteState}/>

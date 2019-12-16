@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
 import update from "immutability-helper";
+import CheckList from "./Checklist";
+import NoteCardChecklist from "./NoteCardChecklist";
 /**
  * Material ui imports
  */
@@ -20,6 +22,7 @@ import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import Dialog from "@material-ui/core/Dialog";
 import Grow from "@material-ui/core/Grow";
 import Chip from "@material-ui/core/Chip";
+
 /**
  * needed file imports
  */
@@ -100,7 +103,7 @@ export default class NoteCard extends React.Component {
 			title: this.props.dataFromDisplay.title,
 			description: this.props.dataFromDisplay.description,
 			// labelIdList: "",
-			// noteCheckLists: this.props.dataFromDisplay.noteCheckLists,
+			noteCheckLists: this.props.dataFromDisplay.noteCheckLists,
 			isPined: this.props.dataFromDisplay.isPined,
 			isArchived: this.props.dataFromDisplay.isArchived,
 			isDeleted: this.props.dataFromDisplay.isDeleted,
@@ -217,18 +220,109 @@ export default class NoteCard extends React.Component {
 		this.forceUpdate();
 	};
 
-	handleAddLabel = (label) => {
-		console.log("add label in notecard has label", label,this.state.noteLabels.indexOf(label));
+	handleAddLabel = label => {
+		console.log(
+			"add label in notecard has label",
+			label,
+			this.state.noteLabels.indexOf(label)
+		);
 		if (this.state.noteLabels.indexOf(label) === -1) {
-			this.setState({
-				noteLabels: update(this.state.noteLabels, {
-					$push: [label]
-				})
-			}, () => {
-				console.log("label added successfully");
-			})
+			this.setState(
+				{
+					noteLabels: update(this.state.noteLabels, {
+						$push: [label]
+					})
+				},
+				() => {
+					console.log("label added successfully");
+				}
+			);
 		}
-	}
+	};
+
+	handleChecklistAdd = async arr => {
+		console.log("value in arr", arr);
+		await this.setState({
+			noteCheckLists: arr
+		});
+		console.log("value in notechecklist", this.state.noteCheckLists);
+	};
+
+	handleChecklistRemove = key => {
+		console.log("value in remove item", key);
+		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
+			if (this.state.noteCheckLists[i].key === key) {
+				console.log("index of item in notechecklist", i);
+				this.setState(
+					{
+						noteCheckLists: update(this.state.noteCheckLists, {
+							$splice: [[i, 1]]
+						})
+					},
+					() => {
+						console.log(
+							"after item removal note checklist is",
+							this.state.noteCheckLists
+						);
+					}
+				);
+				i = this.state.noteCheckLists.length;
+			}
+		}
+	};
+
+	handleChecklistCheck = key => {
+		console.log("in handlechecklistcheck with item name", key);
+
+		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
+			if (this.state.noteCheckLists[i].key === key) {
+				console.log("found id in notechecklists", this.state.noteCheckLists[i]);
+				if (this.state.noteCheckLists[i].status === "open") {
+					this.setState(
+						{
+							noteCheckLists: update(this.state.noteCheckLists, {
+								[i]: {
+									status: {
+										$set: "close"
+									}
+								}
+							})
+						},
+						() => {
+							i = this.state.noteCheckLists.length;
+							console.log(
+								"succesfully changed status in if",
+								this.state.noteCheckLists,
+								"value of i",
+								i
+							);
+						}
+					);
+				} else {
+					this.setState(
+						{
+							noteCheckLists: update(this.state.noteCheckLists, {
+								[i]: {
+									status: {
+										$set: "open"
+									}
+								}
+							})
+						},
+						() => {
+							i = this.state.noteCheckLists.length;
+							console.log(
+								"succesfully changed status in else",
+								this.state.noteCheckLists,
+								"value of i",
+								i
+							);
+						}
+					);
+				}
+			}
+		}
+	};
 
 	render() {
 		// console.log("render works in card component", this.props);
@@ -236,14 +330,14 @@ export default class NoteCard extends React.Component {
 		return (
 			<Fragment>
 				{!this.state.dialogOpen ? (
-					<Card id="card" style={{ backgroundColor: this.state.color }} >
+					<Card id="card" style={{ backgroundColor: this.state.color }}>
 						<CardContent>
 							<div id="title">
 								<Typography
 									variant="h5"
 									component="h4"
 									style={{ width: "80%", overflowWrap: "break-word" }}
-									onClick={!this.state.isDeleted?this.handleClick:null}
+									onClick={!this.state.isDeleted ? this.handleClick : null}
 								>
 									{this.state.title}
 								</Typography>
@@ -262,16 +356,25 @@ export default class NoteCard extends React.Component {
 								</div>
 							</div>
 
-							<Typography variant="subtitle2" onClick={!this.state.isDeleted?this.handleClick:null}>
+							<Typography
+								variant="subtitle2"
+								onClick={!this.state.isDeleted ? this.handleClick : null}
+							>
 								{this.state.description}
 							</Typography>
+							<NoteCardChecklist
+								listState={this.state}
+								onChecked={this.handleChecklistCheck}
+								onTick={this.handleChecklistAdd}
+								onRemove={this.handleChecklistRemove}
+							/>
 						</CardContent>
 						<div id="chips">
 							{this.state.noteLabels.map((data, index) => (
 								<Fragment key={index}>
 									<Chip
 										size="small"
-										style={{margin:"2px 3px"}}
+										style={{ margin: "2px 3px" }}
 										label={data.label}
 										onDelete={event => {
 											this.deleteLable(event, index);
@@ -385,6 +488,26 @@ export default class NoteCard extends React.Component {
 									value={this.state.description}
 									onChange={event => this.handleDescription(event)}
 								/>
+								<CheckList
+									listState={this.state}
+									onChecked={this.handleChecklistCheck}
+									onTick={this.handleChecklistAdd}
+									onRemove={this.handleChecklistRemove}
+								/>
+								<div id="chips">
+									{this.state.noteLabels.map((data, index) => (
+										<Fragment key={index}>
+											<Chip
+												size="small"
+												style={{ margin: "2px 3px" }}
+												label={data.label}
+												onDelete={event => {
+													this.deleteLable(event, index);
+												}}
+											/>
+										</Fragment>
+									))}
+								</div>
 								<div id="functions">
 									<div id="iconBar">
 										<MuiThemeProvider theme={iconmod}>

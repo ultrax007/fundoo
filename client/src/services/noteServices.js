@@ -9,7 +9,7 @@ export default class noteServices {
 
 
   createNote(data) {
-    return obj.postMethod(data, "/notes/addNotes", true)
+    return obj.formDataPostMethod(data, "/notes/addNotes", true)
   }
 
   createLabel(data) {

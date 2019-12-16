@@ -13,6 +13,16 @@ export default class axiosServices {
 		});
 	}
 
+	formDataPostMethod(data, target, isTokenReq) {
+		 token = localStorage.getItem("token");
+
+		return axios.post(address + target, data, isTokenReq && {
+			headers: {
+				'Content-type': 'application/x-www-form-urlencoded',
+				'Authorization': token
+			}
+		});
+	}
 	postMethod(data, target, isTokenReq) {
 		 token = localStorage.getItem("token");
 

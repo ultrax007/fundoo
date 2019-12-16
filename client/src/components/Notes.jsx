@@ -45,8 +45,8 @@ class Notes extends React.Component {
 
 		return (
 			<div id={myStyle}>
-				<div id="takeNoteContainer">
-					<TakeNote />
+				<div id="takeNoteContainer" >
+					<TakeNote operation={this.getNotesFromDB} />
 				</div>
 				<div className={CStyle}>
 					{this.state.allNotes.map((data) => (

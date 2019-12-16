@@ -2,24 +2,16 @@ import React, { Fragment } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import "../sass/TakeNote.sass";
 import update from "immutability-helper";
-import AddSharpIcon from "@material-ui/icons/AddSharp";
-import CloseSharpIcon from "@material-ui/icons/CloseSharp";
-import CheckSharpIcon from "@material-ui/icons/CheckSharp";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 // import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
-import {
-	createMuiTheme,
-	MuiThemeProvider,
-	Typography
-} from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 var uniqid = require("uniqid");
 
@@ -29,17 +21,16 @@ const lined = {
 	padding: "7px 0 7px",
 	textDecoration: "line-through"
 };
-const unlined = {
-	width: "90%",
-	fontSize: "12px",
-	padding: "7px 0 7px"
-};
+
 const list = createMuiTheme({
 	overrides: {
 		MuiListItem: {
 			dense: {
 				paddingTop: "0",
 				paddingBottom: "0"
+			},
+			gutters: {
+				paddingLeft: "0px"
 			}
 		},
 		MuiInputBase: {
@@ -57,7 +48,7 @@ const list = createMuiTheme({
 	}
 });
 
-export default class Checklist extends React.Component {
+export default class NoteCardChecklist extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -94,7 +85,7 @@ export default class Checklist extends React.Component {
 				});
 			}
 		);
-		console.log("state is", this.state);
+		// console.log("state is", this.state);
 	}
 
 	handleText = async (event, index) => {
@@ -252,10 +243,8 @@ export default class Checklist extends React.Component {
 		var listStyle = {
 			width: "16px",
 			height: "16px",
-			default: {
-				minWidth: "fit-content",
-				marginRight: "5px"
-			},
+			paddingRight: "10px",
+			minWidth: "0px",
 			"&:hover": {
 				backgroundColor: "none"
 			}
@@ -264,7 +253,7 @@ export default class Checklist extends React.Component {
 		return (
 			<Fragment>
 				<List>
-					{/***************************************closed status will appear here************************************************* */}
+					{/***************************************open status will appear here************************************************* */}
 					{this.state.statusOpen
 						? this.state.statusOpen.map((data, index) => (
 								<div key={index}>
@@ -278,8 +267,10 @@ export default class Checklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
-													icon={<CheckBoxOutlineBlankIcon />}
-													checkedIcon={<CheckBoxOutlinedIcon />}
+													icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+													checkedIcon={
+														<CheckBoxOutlinedIcon fontSize="small" />
+													}
 													disableRipple={true}
 													color="default"
 													fontSize="inherit"
@@ -287,115 +278,20 @@ export default class Checklist extends React.Component {
 													checked={false}
 												/>
 											</ListItemIcon>
-
-											<InputBase
-												style={unlined}
-												margin="dense"
-												multiline
-												placeholder="List item"
-												value={data.itemName}
-												onChange={event => this.handleText(event, index)}
-											/>
-											<ListItemSecondaryAction>
-												<IconButton
-													edge="end"
-													aria-label="close"
-													onClick={event => this.handleCrossOpen(event, index)}
-													size="small"
-												>
-													<CloseSharpIcon />
-												</IconButton>
-											</ListItemSecondaryAction>
+											<ListItemText primary={data.itemName} />
 										</ListItem>
 									</MuiThemeProvider>
 								</div>
 						  ))
 						: null}
-					{/********************************* below this will be checklist input**************************************** */}
-					{this.state.original.length > 0 ? (
-						<MuiThemeProvider theme={list}>
-							<ListItem dense>
-								<ListItemIcon id="List" style={listStyle} size="small">
-									<Checkbox
-										edge="start"
-										icon={<CheckBoxOutlineBlankIcon />}
-										checkedIcon={<CheckBoxOutlinedIcon />}
-										disableRipple={true}
-										color="default"
-										fontSize="inherit"
-									/>
-								</ListItemIcon>
-								<InputBase
-									id="checkText"
-									style={{
-										width: "90%",
-										fontSize: "12px",
-										padding: "7px 0 7px"
-									}}
-									margin="dense"
-									multiline
-									placeholder="List item"
-									value={this.state.original}
-									onChange={event => this.handleOriginalData(event)}
-								/>
-								<ListItemSecondaryAction>
-									<IconButton
-										edge="end"
-										aria-label="comments"
-										size="small"
-										onClick={event => this.handleTick(event)}
-									>
-										<CheckSharpIcon />
-									</IconButton>
-								</ListItemSecondaryAction>
-							</ListItem>
-						</MuiThemeProvider>
+					{/************************************** closed ones will appear****************************************************************************** */}
+					{this.state.statusOpen.length > 0 &&
+					this.state.statusClose.length > 0 ? (
+						<Divider />
 					) : null}
-
-					{/************************************** this will show input ****************************************************************************** */}
-
-					<MuiThemeProvider theme={list}>
-						<ListItem dense>
-							<ListItemIcon style={{ minWidth: "fit-content", margin: "0 3%" }}>
-								<AddSharpIcon fontSize="inherit" />
-								{/* <Checkbox edge="start" disableRipple color="default" /> */}
-							</ListItemIcon>
-							<InputBase
-								id="listText"
-								style={{
-									width: "90%",
-									fontSize: "12px",
-									padding: "7px 0 7px"
-								}}
-								margin="dense"
-								placeholder="List item"
-								value={this.state.dummy}
-								onChange={event => this.handleDummyData(event)}
-							/>
-						</ListItem>
-					</MuiThemeProvider>
-
-					{/*********************will appear on status close******************************************************************** */}
-					{this.state.statusClose.length !== 0 ? (
-						<div>
-							<Divider style={{ width: "90%", margin: "0 5%" }} />
-							<ListItem>
-								<Typography
-									variant="body2"
-									component="p"
-									style={{ color: "#757575" }}
-								>
-									{this.state.statusClose.length} Completed item
-								</Typography>
-							</ListItem>
-						</div>
-					) : null}
-
-					{/************************************** this will show checked boxes below****************************************************************************** */}
 					{this.state.statusClose
 						? this.state.statusClose.map((data, index) => (
 								<div key={index}>
-									<Divider />
 									<MuiThemeProvider theme={list}>
 										<ListItem dense>
 											<ListItemIcon
@@ -406,8 +302,10 @@ export default class Checklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
-													icon={<CheckBoxOutlineBlankIcon />}
-													checkedIcon={<CheckBoxOutlinedIcon />}
+													icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+													checkedIcon={
+														<CheckBoxOutlinedIcon fontSize="small" />
+													}
 													disableRipple={true}
 													color="default"
 													fontSize="inherit"
@@ -424,7 +322,7 @@ export default class Checklist extends React.Component {
 												value={data.itemName}
 												onChange={event => this.handleText(event, index)}
 											/>
-											<ListItemSecondaryAction>
+											{/* <ListItemSecondaryAction>
 												<IconButton
 													edge="end"
 													aria-label="close"
@@ -433,14 +331,12 @@ export default class Checklist extends React.Component {
 												>
 													<CloseSharpIcon />
 												</IconButton>
-											</ListItemSecondaryAction>
+											</ListItemSecondaryAction> */}
 										</ListItem>
 									</MuiThemeProvider>
 								</div>
 						  ))
 						: null}
-
-					<Divider />
 				</List>
 			</Fragment>
 		);

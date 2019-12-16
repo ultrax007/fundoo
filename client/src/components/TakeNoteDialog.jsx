@@ -1,5 +1,6 @@
 import React from "react";
 import "../sass/TakeNote.sass";
+import update from "immutability-helper";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
@@ -66,26 +67,38 @@ export default class TakeNote extends React.Component {
 		this.props.noteState();
 	};
 
+	getEncodData(toConvert) {
+		const formBody = [];
+		for (const property in toConvert) {
+			const encodedKey = encodeURIComponent(property);
+			const encodedValue = encodeURIComponent(toConvert[property]);
+			formBody.push(encodedKey + "=" + encodedValue);
+		}
+		return formBody.join("&");
+	}
+
 	handleCreateNote = () => {
 		if (this.state.title !== "") {
-			console.log("note created");
+			console.log("note created", this.state.noteCheckLists);
 			let note = {};
 			note.title = this.state.title;
 			note.description = this.state.description;
 			note.isPined = this.state.isPined;
 			note.color = this.state.color;
 			note.isArchived = this.state.isArchived;
+			note.checklist = JSON.stringify(this.state.noteCheckLists);
 			// note.labelIdList = "";
-			// note.checklist = "";
 			// note.reminder = "";
 			// note.collaborators = "";
 			// hit create node api
-			console.log("data in note", note);
+			var data = this.getEncodData(note);
+			console.log("data in note", data);
 			nServe
-				.createNote(note)
+				.createNote(data)
 				.then(response => {
 					if (response.status === 200) {
 						console.log("note created successfully", response);
+						this.props.takeNoteClose();
 					}
 				})
 				.catch(error => {
@@ -138,6 +151,79 @@ export default class TakeNote extends React.Component {
 		});
 		console.log("value in notechecklist", this.state.noteCheckLists);
 	};
+
+	handleChecklistRemove = key => {
+		console.log("value in remove item", key);
+		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
+			if (this.state.noteCheckLists[i].key === key) {
+				console.log("index of item in notechecklist", i);
+				this.setState(
+					{
+						noteCheckLists: update(this.state.noteCheckLists, {
+							$splice: [[i, 1]]
+						})
+					},
+					() => {
+						console.log(
+							"after item removal note checklist is",
+							this.state.noteCheckLists
+						);
+					}
+				);
+				i = this.state.noteCheckLists.length;
+			}
+		}
+	};
+
+	handleChecklistCheck = key => {
+		console.log("in handlechecklistcheck with item name", key);
+
+		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
+			if (this.state.noteCheckLists[i].key === key) {
+				console.log("found id in notechecklists", this.state.noteCheckLists[i]);
+				if (this.state.noteCheckLists[i].status === "open") {
+					this.setState(
+						{
+							noteCheckLists: update(this.state.noteCheckLists, {
+								[i]: {
+									status: {
+										$set: "close"
+									}
+								}
+							})
+						},
+						() => {
+							i = this.state.noteCheckLists.length;
+							console.log(
+								"succesfully changed status in if",
+								this.state.noteCheckLists,"value of i",i
+							);
+						}
+					);
+				} else {
+					this.setState(
+						{
+							noteCheckLists: update(this.state.noteCheckLists, {
+								[i]: {
+									status: {
+										$set: "open"
+									}
+								}
+							})
+						},
+						() => {
+							i = this.state.noteCheckLists.length;
+							console.log(
+								"succesfully changed status in else",
+								this.state.noteCheckLists,"value of i",i
+							);
+						}
+					);
+				}
+			}
+		}
+	};
+
 	render() {
 		return (
 			<Paper
@@ -146,6 +232,7 @@ export default class TakeNote extends React.Component {
 			>
 				<div id="titleN">
 					<InputBase
+						autoFocus
 						style={{ marginLeft: "2%", width: "89%", color: "#202124" }}
 						id="inputInactive"
 						margin="dense"
@@ -182,7 +269,12 @@ export default class TakeNote extends React.Component {
 					onChange={event => this.handleDescription(event)}
 				/>
 
-				<CheckList listState={this.state} onCheck={this.handleChecklistAdd} />
+				<CheckList
+					listState={this.state}
+					onChecked={this.handleChecklistCheck}
+					onTick={this.handleChecklistAdd}
+					onRemove={this.handleChecklistRemove}
+				/>
 				<div id="functions">
 					<div id="iconBar">
 						<MuiThemeProvider theme={iconmod}>
