@@ -34,6 +34,8 @@ export default class ColorPalette extends React.Component {
 
 	refreshColor = (event, colorCode) => {
 		event.preventDefault();
+		event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
 		this.handleClose();
 		console.log("color code is:=>", colorCode);
 		this.props.selectColor(colorCode);
