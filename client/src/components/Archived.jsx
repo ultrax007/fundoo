@@ -23,7 +23,6 @@ class Archived extends React.Component {
 			.then(response =>  {
 				console.log("information in response", response.data.data.data);
 				this.setState({ allNotes:response.data.data.data});
-				// const usersAvailabe = this.state.users.filter(user => user._id !== this.state.loggedUserId);reverse()
 				console.log("value of allnotes in archived",this.state.allNotes);
 			})
 			.catch(err => {

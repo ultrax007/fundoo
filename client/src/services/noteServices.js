@@ -53,6 +53,21 @@ export default class noteServices {
     console.log("datat in nservices",data);
     return obj.postMethod(data,"/notes/getNotesListByLabel/"+data.labelName, true);
   }
+
+  addChecklist(data) {
+    console.log("datat in nservices",data);
+    return obj.postMethod(data,"/notes/"+data.notesId+"/checklist/add", true);
+  }
+
+  updateChecklist(data) {
+    console.log("datat in nservices",data);
+    return obj.postMethod(data,"/notes/"+data.notesId+"/checklist/"+data.checkListId+"/update", true);
+  }
+
+  removeChecklist(data) {
+    console.log("datat in nservices",data);
+    return obj.postMethod(data,"/notes/"+data.noteId+"/checklist/"+data.checklistId+"/remove", true);
+  }
   
   
   /**

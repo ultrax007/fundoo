@@ -84,6 +84,11 @@ const cardAction = createMuiTheme({
 		MuiIconButton: {
 			sizeSmall: {
 				padding: "2%"
+			},
+			root: {
+				"&:hover": {
+					backgroundColor: "#fff0"
+				}
 			}
 		},
 		MuiCardActions: {
@@ -102,7 +107,6 @@ export default class NoteCard extends React.Component {
 			id: this.props.dataFromDisplay.id,
 			title: this.props.dataFromDisplay.title,
 			description: this.props.dataFromDisplay.description,
-			// labelIdList: "",
 			noteCheckLists: this.props.dataFromDisplay.noteCheckLists,
 			isPined: this.props.dataFromDisplay.isPined,
 			isArchived: this.props.dataFromDisplay.isArchived,
@@ -248,10 +252,10 @@ export default class NoteCard extends React.Component {
 		console.log("value in notechecklist", this.state.noteCheckLists);
 	};
 
-	handleChecklistRemove = key => {
-		console.log("value in remove item", key);
+	handleChecklistRemove = id => {
+		console.log("value in remove item", id);
 		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
-			if (this.state.noteCheckLists[i].key === key) {
+			if (this.state.noteCheckLists[i].id === id) {
 				console.log("index of item in notechecklist", i);
 				this.setState(
 					{
@@ -271,11 +275,11 @@ export default class NoteCard extends React.Component {
 		}
 	};
 
-	handleChecklistCheck = key => {
-		console.log("in handlechecklistcheck with item name", key);
+	handleChecklistCheck = id => {
+		console.log("in handlechecklistcheck with item name", id);
 
 		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
-			if (this.state.noteCheckLists[i].key === key) {
+			if (this.state.noteCheckLists[i].id === id) {
 				console.log("found id in notechecklists", this.state.noteCheckLists[i]);
 				if (this.state.noteCheckLists[i].status === "open") {
 					this.setState(
@@ -289,6 +293,20 @@ export default class NoteCard extends React.Component {
 							})
 						},
 						() => {
+							let data = {};
+							data.checkListId = this.state.noteCheckLists[i].id;
+							data.notesId = this.state.noteCheckLists[i].notesId;
+							data.status = this.state.noteCheckLists[i].status;
+							data.itemName = this.state.noteCheckLists[i].itemName;
+							console.log("value in data", data);
+							nServe
+								.updateChecklist(data)
+								.then(response => {
+									console.log("updated db successfully", response);
+								})
+								.catch(err => {
+									console.log("error while updating", err);
+								});
 							i = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in if",
@@ -310,6 +328,20 @@ export default class NoteCard extends React.Component {
 							})
 						},
 						() => {
+							let data = {};
+							data.checkListId = this.state.noteCheckLists[i].id;
+							data.notesId = this.state.noteCheckLists[i].notesId;
+							data.status = this.state.noteCheckLists[i].status;
+							data.itemName = this.state.noteCheckLists[i].itemName;
+							console.log("value in data", data);
+							nServe
+								.updateChecklist(data)
+								.then(response => {
+									console.log("updated db successfully", response);
+								})
+								.catch(err => {
+									console.log("error while updating", err);
+								});
 							i = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in else",

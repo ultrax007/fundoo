@@ -26,10 +26,13 @@ const button = createMuiTheme({
 		MuiButton: {
 			root: {
 				padding: "0",
-				color: "#757575",
+				color: "#494949",
 				"&:hover": {
-					backgroundColor: "none"
+					backgroundColor: "fff0"
 				}
+			},
+			text: {
+				padding: "0px"
 			}
 		}
 	}
@@ -38,7 +41,13 @@ const iconmod = createMuiTheme({
 	overrides: {
 		MuiIconButton: {
 			sizeSmall: {
-				padding: "2%"
+				padding: "1%",
+				color: "#494949"
+			},
+			root: {
+				"&:hover": {
+					backgroundColor: "fff0"
+				}
 			}
 		}
 	}
@@ -142,7 +151,7 @@ export default class TakeNote extends React.Component {
 	};
 	handleColor = color => {
 		console.log("color:=>", color);
-		this.setState({ color });
+		this.setState({ color: color });
 	};
 	handleChecklistAdd = async arr => {
 		console.log("value in arr", arr);
@@ -196,7 +205,9 @@ export default class TakeNote extends React.Component {
 							i = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in if",
-								this.state.noteCheckLists,"value of i",i
+								this.state.noteCheckLists,
+								"value of i",
+								i
 							);
 						}
 					);
@@ -215,7 +226,9 @@ export default class TakeNote extends React.Component {
 							i = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in else",
-								this.state.noteCheckLists,"value of i",i
+								this.state.noteCheckLists,
+								"value of i",
+								i
 							);
 						}
 					);

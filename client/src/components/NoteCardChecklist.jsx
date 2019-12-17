@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
-import "../sass/TakeNote.sass";
+// import "../sass/TakeNote.sass";
 import update from "immutability-helper";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -13,8 +13,6 @@ import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
-var uniqid = require("uniqid");
-
 const lined = {
 	width: "90%",
 	fontSize: "12px",
@@ -22,7 +20,7 @@ const lined = {
 	textDecoration: "line-through"
 };
 
-const list = createMuiTheme({
+const nlist = createMuiTheme({
 	overrides: {
 		MuiListItem: {
 			dense: {
@@ -53,26 +51,16 @@ export default class NoteCardChecklist extends React.Component {
 		super(props);
 		this.state = {
 			id: "",
-			title: "",
-			description: "",
-			// labelIdList: "",
 			noteCheckLists: [],
-			isPined: false,
-			isArchived: false,
-			isDeleted: false,
-			color: "",
 			statusOpen: [],
 			statusClose: [],
 			dummy: "",
 			original: "",
-			// reminder: "",
-			// collaborators: ""
 			showList: false
 		};
 	}
 
 	componentDidMount() {
-		// console.log("value in listState",this.props.listState);
 		this.setState(
 			{
 				...this.props.listState
@@ -80,12 +68,15 @@ export default class NoteCardChecklist extends React.Component {
 			() => {
 				var notecl = this.state.noteCheckLists;
 				this.setState({
-					statusOpen: notecl.filter(notecl => notecl.status === "open"),
-					statusClose: notecl.filter(notecl => notecl.status === "close")
+					statusOpen: notecl.filter(
+						notecl => notecl.status === "open" && notecl.isDeleted !== true
+					),
+					statusClose: notecl.filter(
+						notecl => notecl.status === "close" && notecl.isDeleted !== true
+					)
 				});
 			}
 		);
-		// console.log("state is", this.state);
 	}
 
 	handleText = async (event, index) => {
@@ -98,30 +89,6 @@ export default class NoteCardChecklist extends React.Component {
 		});
 	};
 
-	handleCrossOpen = async (event, index) => {
-		event.preventDefault();
-		console.log("value of index", this.state.statusOpen[index]);
-		await this.props.onRemove(this.state.statusOpen[index].key);
-
-		await this.setState({
-			statusOpen: update(this.state.statusOpen, {
-				$splice: [[index, 1]]
-			})
-		});
-	};
-
-	handleCrossClose = async (event, index) => {
-		event.preventDefault();
-		console.log("value of index", index);
-		await this.props.onRemove(this.state.statusClose[index].key);
-
-		await this.setState({
-			statusClose: update(this.state.statusClose, {
-				$splice: [[index, 1]]
-			})
-		});
-	};
-
 	handleCheckOpen = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", index);
@@ -130,7 +97,8 @@ export default class NoteCardChecklist extends React.Component {
 			this.state.statusOpen,
 			this.state.statusClose
 		);
-		await this.props.onChecked(this.state.statusOpen[index].key);
+		console.log("value in handle check open", this.state.statusOpen[index].id);
+		await this.props.onChecked(this.state.statusOpen[index].id);
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
 				[index]: {
@@ -163,7 +131,7 @@ export default class NoteCardChecklist extends React.Component {
 			this.state.statusOpen,
 			this.state.statusClose
 		);
-		await this.props.onChecked(this.state.statusClose[index].key);
+		await this.props.onChecked(this.state.statusClose[index].id);
 		await this.setState({
 			statusClose: update(this.state.statusClose, {
 				[index]: {
@@ -188,54 +156,6 @@ export default class NoteCardChecklist extends React.Component {
 		console.log("checked close", this.state.statusClose);
 	};
 
-	handleTick = async event => {
-		event.preventDefault();
-		var openCheck = {};
-		openCheck.itemName = this.state.original;
-		openCheck.status = "open";
-		openCheck.isDeleted = false;
-		openCheck.notesId = "";
-		openCheck.key = uniqid();
-
-		await this.setState({
-			statusOpen: update(this.state.statusOpen, {
-				$push: [openCheck]
-			})
-		});
-
-		this.setState({ original: "" });
-		document.getElementById("listText").focus();
-		console.log("new value in open now", this.state.statusOpen);
-		var newCheck = this.state.statusOpen.concat(this.state.statusClose);
-		console.log("value in newCheck", newCheck);
-		this.props.onTick(newCheck);
-	};
-
-	handleDummyData = async event => {
-		await this.setState({ dummy: event.currentTarget.value });
-		if (this.state.dummy.length > 0) {
-			this.setState({
-				original: this.state.dummy,
-				dummy: ""
-			});
-			var el = document.getElementById("checkText");
-			el.focus();
-			if (typeof el.selectionStart == "number") {
-				el.selectionStart = el.selectionEnd = el.value.length;
-			} else if (typeof el.createTextRange != "undefined") {
-				var range = el.createTextRange();
-				range.collapse(false);
-				range.select();
-			}
-		}
-	};
-	handleOriginalData = async event => {
-		await this.setState({ original: event.currentTarget.value });
-		if (this.state.original.length <= 0) {
-			document.getElementById("listText").focus();
-		}
-	};
-
 	render() {
 		// console.log("in checklist");
 		// console.log("value in statusopen", this.state.statusOpen);
@@ -252,12 +172,12 @@ export default class NoteCardChecklist extends React.Component {
 
 		return (
 			<Fragment>
-				<List>
-					{/***************************************open status will appear here************************************************* */}
-					{this.state.statusOpen
-						? this.state.statusOpen.map((data, index) => (
-								<div key={index}>
-									<MuiThemeProvider theme={list}>
+				<MuiThemeProvider theme={nlist}>
+					<List>
+						{/***************************************open status will appear here************************************************* */}
+						{this.state.statusOpen
+							? this.state.statusOpen.map((data, index) => (
+									<div key={index}>
 										<ListItem dense>
 											<ListItemIcon
 												id="List"
@@ -267,32 +187,32 @@ export default class NoteCardChecklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
+													size="small"
 													icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
 													checkedIcon={
 														<CheckBoxOutlinedIcon fontSize="small" />
 													}
 													disableRipple={true}
 													color="default"
-													fontSize="inherit"
+													fontSize="small"
 													// onCheck={event=>this.handleCheck(event,index)}
 													checked={false}
 												/>
 											</ListItemIcon>
 											<ListItemText primary={data.itemName} />
 										</ListItem>
-									</MuiThemeProvider>
-								</div>
-						  ))
-						: null}
-					{/************************************** closed ones will appear****************************************************************************** */}
-					{this.state.statusOpen.length > 0 &&
-					this.state.statusClose.length > 0 ? (
-						<Divider />
-					) : null}
-					{this.state.statusClose
-						? this.state.statusClose.map((data, index) => (
-								<div key={index}>
-									<MuiThemeProvider theme={list}>
+									</div>
+							  ))
+							: null}
+						{/************************************** closed ones will appear****************************************************************************** */}
+						{this.state.statusOpen.length > 0 &&
+						this.state.statusClose.length > 0 ? (
+							<Divider />
+						) : null}
+						{this.state.statusClose
+							? this.state.statusClose.map((data, index) => (
+									<div key={index}>
+										{/* <MuiThemeProvider theme={list}> */}
 										<ListItem dense>
 											<ListItemIcon
 												id="List"
@@ -302,6 +222,7 @@ export default class NoteCardChecklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
+													size="small"
 													icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
 													checkedIcon={
 														<CheckBoxOutlinedIcon fontSize="small" />
@@ -333,11 +254,12 @@ export default class NoteCardChecklist extends React.Component {
 												</IconButton>
 											</ListItemSecondaryAction> */}
 										</ListItem>
-									</MuiThemeProvider>
-								</div>
-						  ))
-						: null}
-				</List>
+										{/* </MuiThemeProvider> */}
+									</div>
+							  ))
+							: null}
+					</List>
+				</MuiThemeProvider>
 			</Fragment>
 		);
 	}

@@ -28,7 +28,18 @@ import LabelIcon from "@material-ui/icons/Label";
 import DeleteIcon from "@material-ui/icons/Delete";
 import InputBase from "@material-ui/core/InputBase";
 import noteServices from "../services/noteServices";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 const nServe = new noteServices();
+
+const dlist = createMuiTheme({
+	overrides: {
+		MuiListItem: {
+			gutters: {
+				paddingLeft: "16px"
+			}
+		}
+	}
+});
 
 export default class DrawerList extends React.Component {
 	constructor(props) {
@@ -266,6 +277,7 @@ export default class DrawerList extends React.Component {
 
 		return (
 			<Fragment>
+				<MuiThemeProvider theme={dlist}>
 				<List component="nav">
 					<ListItem button id={style} onClick={this.handleNotes}>
 						<ListItemIcon>
@@ -316,7 +328,8 @@ export default class DrawerList extends React.Component {
 						</ListItemIcon>
 						<ListItemText primary="Trash" />
 					</ListItem>
-				</List>
+					</List>
+					</MuiThemeProvider>
 				<Dialog
 					open={this.state.dialogOpen}
 					TransitionComponent={Grow}

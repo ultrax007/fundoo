@@ -33,6 +33,7 @@ export default class TakeNote extends React.Component {
 			<Paper id="noteInactive">
 				<MuiThemeProvider theme={theme}>
 					<InputBase
+						autoComplete="off"
 						style={{ marginLeft: "2%", width: "72%", color: "#202124" }}
 						id="inputInactive"
 						margin="dense"

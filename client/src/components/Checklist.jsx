@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import "../sass/TakeNote.sass";
 import update from "immutability-helper";
+import noteServices from "../services/noteServices";
 import AddSharpIcon from "@material-ui/icons/AddSharp";
 import CloseSharpIcon from "@material-ui/icons/CloseSharp";
 import CheckSharpIcon from "@material-ui/icons/CheckSharp";
@@ -20,6 +21,7 @@ import {
 	MuiThemeProvider,
 	Typography
 } from "@material-ui/core";
+const nServe = new noteServices();
 
 var uniqid = require("uniqid");
 
@@ -40,11 +42,17 @@ const list = createMuiTheme({
 			dense: {
 				paddingTop: "0",
 				paddingBottom: "0"
+			},
+			gutters: {
+				paddingLeft: "0px"
 			}
 		},
 		MuiInputBase: {
 			input: {
 				padding: "7px 0 7px"
+			},
+			inputMarginDense: {
+				padding: "3px 0 3px"
 			}
 		},
 		MuiIconButton: {
@@ -62,20 +70,11 @@ export default class Checklist extends React.Component {
 		super(props);
 		this.state = {
 			id: "",
-			title: "",
-			description: "",
-			// labelIdList: "",
 			noteCheckLists: [],
-			isPined: false,
-			isArchived: false,
-			isDeleted: false,
-			color: "",
 			statusOpen: [],
 			statusClose: [],
 			dummy: "",
 			original: "",
-			// reminder: "",
-			// collaborators: ""
 			showList: false
 		};
 	}
@@ -89,8 +88,8 @@ export default class Checklist extends React.Component {
 			() => {
 				var notecl = this.state.noteCheckLists;
 				this.setState({
-					statusOpen: notecl.filter(notecl => notecl.status === "open"),
-					statusClose: notecl.filter(notecl => notecl.status === "close")
+					statusOpen: notecl.filter(notecl => notecl.status === "open" && notecl.isDeleted!== true),
+					statusClose: notecl.filter(notecl => notecl.status === "close" && notecl.isDeleted!== true)
 				});
 			}
 		);
@@ -110,7 +109,17 @@ export default class Checklist extends React.Component {
 	handleCrossOpen = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", this.state.statusOpen[index]);
-		await this.props.onRemove(this.state.statusOpen[index].key);
+		if (this.state.id !== "") {
+			let data = {};
+			data.noteId = this.state.id;
+			data.checklistId = this.state.statusOpen[index].id;
+			this.handleRemoveChecklist(data);
+			console.log("value in data in handle crossopen",data);
+			
+			await this.props.onRemove(this.state.statusOpen[index].id);
+		} else {
+			await this.props.onRemove(this.state.statusOpen[index].key);
+		}
 
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
@@ -122,7 +131,16 @@ export default class Checklist extends React.Component {
 	handleCrossClose = async (event, index) => {
 		event.preventDefault();
 		console.log("value of index", index);
-		await this.props.onRemove(this.state.statusClose[index].key);
+		if (this.state.id !== "") {
+			let data = {};
+			data.noteId = this.state.id;
+			data.checklistId = this.state.statusClose[index].id;
+			this.handleRemoveChecklist(data);
+			console.log("value in data in handle crossopen",data);
+			await this.props.onRemove(this.state.statusClose[index].id);
+		} else {
+			await this.props.onRemove(this.state.statusClose[index].key);
+		}
 
 		await this.setState({
 			statusClose: update(this.state.statusClose, {
@@ -199,12 +217,18 @@ export default class Checklist extends React.Component {
 
 	handleTick = async event => {
 		event.preventDefault();
+
 		var openCheck = {};
 		openCheck.itemName = this.state.original;
 		openCheck.status = "open";
 		openCheck.isDeleted = false;
-		openCheck.notesId = "";
+		openCheck.notesId = this.state.id;
 		openCheck.key = uniqid();
+
+		console.log("in handle tick id in state is ", this.state.id);
+		if (this.state.id !== "") {
+			this.handleAddChecklist(openCheck);
+		}
 
 		await this.setState({
 			statusOpen: update(this.state.statusOpen, {
@@ -218,6 +242,28 @@ export default class Checklist extends React.Component {
 		var newCheck = this.state.statusOpen.concat(this.state.statusClose);
 		console.log("value in newCheck", newCheck);
 		this.props.onTick(newCheck);
+	};
+
+	handleAddChecklist = data => {
+		nServe
+			.addChecklist(data)
+			.then(response => {
+				console.log("checklist item added successfully", response);
+			})
+			.catch(err => {
+				console.log("error occured while adding checklist", err);
+			});
+	};
+
+	handleRemoveChecklist = data => {
+		nServe
+			.removeChecklist(data)
+			.then(response => {
+				console.log("checklist item removed successfully", response);
+			})
+			.catch(err => {
+				console.log("error occured while removing checklist", err);
+			});
 	};
 
 	handleDummyData = async event => {
@@ -252,12 +298,13 @@ export default class Checklist extends React.Component {
 		var listStyle = {
 			width: "16px",
 			height: "16px",
+			marginLeft: "18px",
 			default: {
 				minWidth: "fit-content",
 				marginRight: "5px"
 			},
 			"&:hover": {
-				backgroundColor: "none"
+				backgroundColor: "#fff0"
 			}
 		};
 
@@ -278,6 +325,7 @@ export default class Checklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
+													size="small"
 													icon={<CheckBoxOutlineBlankIcon />}
 													checkedIcon={<CheckBoxOutlinedIcon />}
 													disableRipple={true}
@@ -303,7 +351,7 @@ export default class Checklist extends React.Component {
 													onClick={event => this.handleCrossOpen(event, index)}
 													size="small"
 												>
-													<CloseSharpIcon />
+													<CloseSharpIcon fontSize="inherit" />
 												</IconButton>
 											</ListItemSecondaryAction>
 										</ListItem>
@@ -318,6 +366,7 @@ export default class Checklist extends React.Component {
 								<ListItemIcon id="List" style={listStyle} size="small">
 									<Checkbox
 										edge="start"
+										size="small"
 										icon={<CheckBoxOutlineBlankIcon />}
 										checkedIcon={<CheckBoxOutlinedIcon />}
 										disableRipple={true}
@@ -345,7 +394,7 @@ export default class Checklist extends React.Component {
 										size="small"
 										onClick={event => this.handleTick(event)}
 									>
-										<CheckSharpIcon />
+										<CheckSharpIcon fontSize="inherit" />
 									</IconButton>
 								</ListItemSecondaryAction>
 							</ListItem>
@@ -406,6 +455,7 @@ export default class Checklist extends React.Component {
 											>
 												<Checkbox
 													edge="start"
+													size="small"
 													icon={<CheckBoxOutlineBlankIcon />}
 													checkedIcon={<CheckBoxOutlinedIcon />}
 													disableRipple={true}
@@ -431,7 +481,7 @@ export default class Checklist extends React.Component {
 													onClick={event => this.handleCrossClose(event, index)}
 													size="small"
 												>
-													<CloseSharpIcon />
+													<CloseSharpIcon fontSize="inherit" />
 												</IconButton>
 											</ListItemSecondaryAction>
 										</ListItem>
