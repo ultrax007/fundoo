@@ -8,27 +8,67 @@ import IconButton from "@material-ui/core/IconButton";
 import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import Popover from "@material-ui/core/Popover";
 import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
+import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import Paper from "@material-ui/core/Paper";
-import { withStyles } from '@material-ui/core/styles';
+import 'date-fns';
+import DateFnsUtils from "@date-io/date-fns";
+import {
+	MuiPickersUtilsProvider,
+	KeyboardTimePicker,
+	KeyboardDatePicker
+} from "@material-ui/pickers";
+
+import { withStyles } from "@material-ui/core/styles";
+
 const styles = {
-  MuiListItemIcon: {
-    
-     minWidth: "30px"
-    
-  }
-}
+	MuiListItemIcon: {
+		color: "#494949",
+		minWidth: "30px"
+	},
+	MuiList: {
+		paddingTop: "0"
+	},
+	MuiListItem: {
+		paddingTop: "0",
+		paddingBottom: "0"
+	}
+};
 class RemindMe extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			pop_open: false,
-			anchorEl: null
+			picker_open: false,
+      anchorEl: null,
+      reminderDate: new Date('2019-12-18T21:11:54'),
+      reminderTime:new Date('2019-12-18T21:11:54')
 		};
-	}
+  }
+  handleDateChange = date => {
+    console.log("value in event",date);
+    this.setState({
+      reminderDate: date
+    });
+    console.log("value in handle change ",this.state.reminderDate);
+  }
+  handleTimeChange = event => {
+    this.setState({
+      reminderTime: event.target.value
+    });
+    console.log("value in handle change ",this.state.reminderTime);
+  }
 	handleRemindMe(event) {
 		event.preventDefault();
 		this.setState({
 			pop_open: !this.state.pop_open,
+			anchorEl: event.currentTarget
+		});
+	}
+	handlePicker(event) {
+		event.preventDefault();
+		this.setState({
+			pop_open: false,
+			picker_open: !this.state.picker_open,
 			anchorEl: event.currentTarget
 		});
 	}
@@ -38,11 +78,22 @@ class RemindMe extends React.Component {
 			anchorEl: null
 		});
 	};
-  render() {
-    const { classes } = this.props;
-    
+	handlePickerClose = () => {
+		this.setState({
+			picker_open: !this.state.picker_open,
+			anchorEl: null
+		});
+	};
+	render() {
+		const { classes } = this.props;
+		const picker = {
+			fontSize: "13px"
+		};
 		const text = {
 			fontSize: "13px"
+		};
+		const ptext = {
+			fontSize: "14px"
 		};
 		const time = {
 			fontSize: "13px",
@@ -73,11 +124,11 @@ class RemindMe extends React.Component {
 					}}
 				>
 					<Paper id="remindMe">
-						<List>
-							<ListItem>
+						<List classes={{ padding: classes.MuiList }}>
+							<ListItem classes={{ root: classes.MuiListItem }}>
 								<ListItemText primary="Reminder:"></ListItemText>
 							</ListItem>
-							<ListItem button>
+							<ListItem button classes={{ root: classes.MuiListItem }}>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Later today"
@@ -87,7 +138,7 @@ class RemindMe extends React.Component {
 									secondary="8:00 PM"
 								/>
 							</ListItem>
-							<ListItem button>
+							<ListItem button classes={{ root: classes.MuiListItem }}>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Tomorrow"
@@ -97,7 +148,7 @@ class RemindMe extends React.Component {
 									secondary="8:00 AM"
 								/>
 							</ListItem>
-							<ListItem button>
+							<ListItem button classes={{ root: classes.MuiListItem }}>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Next week"
@@ -107,8 +158,8 @@ class RemindMe extends React.Component {
 									secondary="Mon, 8:00 AM"
 								/>
 							</ListItem>
-							<ListItem button>
-                <ListItemIcon classes={{ root: classes.MuiListItemIcon }}>
+							<ListItem button onClick={event => this.handlePicker(event)} classes={{ root: classes.MuiListItem }}>
+								<ListItemIcon classes={{ root: classes.MuiListItemIcon }}>
 									<AccessTimeSharpIcon fontSize="inherit" />
 								</ListItemIcon>
 								<ListItemText
@@ -116,6 +167,67 @@ class RemindMe extends React.Component {
 									primary="Pick date & time"
 								/>
 							</ListItem>
+						</List>
+					</Paper>
+				</Popover>
+				<Popover
+					open={this.state.picker_open}
+					anchorEl={this.state.anchorEl}
+					onClose={this.handlePickerClose}
+					anchorOrigin={{
+						vertical: "center",
+						horizontal: "left"
+					}}
+					transformOrigin={{
+						vertical: "bottom",
+						horizontal: "left"
+					}}
+				>
+					<Paper id="remindMePicker">
+						<List classes={{ padding: classes.MuiList }}>
+							<ListItem classes={{ root: classes.MuiListItem }}>
+								<ListItemIcon classes={{root: classes.MuiListItemIcon}}>
+									<IconButton size="small">
+										<ArrowBackOutlinedIcon
+											fontSize="inherit"
+											style={{ padding: "5px" }}
+										/>
+									</IconButton>
+								</ListItemIcon>
+								<ListItemText
+									primaryTypographyProps={{ style: ptext }}
+									primary="Pick date & time"
+								></ListItemText>
+							</ListItem>
+
+							<MuiPickersUtilsProvider utils={DateFnsUtils}>
+								<ListItem classes={{ root: classes.MuiListItem }}>
+									<KeyboardDatePicker
+                    disableToolbar
+                    name="reminderDate"
+										size="small"
+										variant="inline"
+										format="MM/dd/yyyy"
+										margin="dense"
+										id="date-picker-inline"
+                    inputProps={{ style: picker }}
+										value={this.state.reminderDate}
+										onChange={this.handleDateChange}
+									/>
+								</ListItem>
+								<ListItem classes={{ root: classes.MuiListItem }}>
+                  <KeyboardTimePicker
+                    name="reminderTime"
+										size="small"
+										margin="dense"
+										id="time-picker"
+										inputProps={{ style: picker }}
+										keyboardIcon={<AccessTimeSharpIcon fontSize="inherit" />}
+										value={this.state.reminderTime}
+										onChange={this.handleTimeChange}
+									/>
+								</ListItem>
+							</MuiPickersUtilsProvider>
 						</List>
 					</Paper>
 				</Popover>
