@@ -11,3 +11,10 @@ export function typedText(payload) {
     value: payload
   }
 }
+
+export function view(payload) {
+  return {
+    type: "VIEW_TYPE",
+    value: payload
+  }
+}

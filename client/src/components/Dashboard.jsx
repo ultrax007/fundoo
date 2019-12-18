@@ -11,15 +11,16 @@ import flogo from "../assets/favicon.ico";
 import SearchIcon from "@material-ui/icons/Search";
 import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
 // import TextField from "@material-ui/core/TextField";
-import InputBase from '@material-ui/core/InputBase';
+import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ViewAgendaOutlinedIcon from "@material-ui/icons/ViewAgendaOutlined";
+import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
-import { drawer,typedText } from "./redux/Actions";
+import { drawer, typedText, view } from "./redux/Actions";
 
 const theme = createMuiTheme({
 	overrides: {
@@ -47,19 +48,19 @@ const theme = createMuiTheme({
 				width: "270px",
 				height: "90vh",
 				overflowY: "auto",
-				'@global': {
-					'*': {
-						'scrollbar-width': 'thin',
+				"@global": {
+					"*": {
+						"scrollbar-width": "thin"
 					},
-					'*::webkit-scrollbar': {
+					"*::webkit-scrollbar": {
 						width: "2px",
-						height: "2px",
+						height: "2px"
 					}
 				}
 			},
 			paperAnchorDockedLeft: {
 				borderRight: "none"
-			},
+			}
 		}
 	}
 });
@@ -70,7 +71,8 @@ class Dashboard extends React.Component {
 		this.state = {
 			open: false,
 			pop_open: false,
-			searched:""
+			listView: false,
+			searched: ""
 		};
 	}
 	handleProfileDropDown(e) {
@@ -88,7 +90,7 @@ class Dashboard extends React.Component {
 		});
 	};
 
-	handleDrawer = async() => {
+	handleDrawer = async () => {
 		await this.setState({ open: !this.state.open });
 		this.props.drawer(this.state.open);
 	};
@@ -101,35 +103,41 @@ class Dashboard extends React.Component {
 	};
 	handleLogout = () => {
 		localStorage.clear();
-		const path = '/';
+		const path = "/";
 		this.props.history.push(path);
-	}
+	};
 	getNotes = () => {
 		this.props.history.push("/dashboard/notes");
-	}
+	};
 	getReminder = () => {
 		this.props.history.push("/dashboard/reminder");
-	}
-	getLabel = (data) => {
+	};
+	getLabel = data => {
 		let path = "/dashboard/label/" + data;
 		this.props.history.push(path);
-	}
+	};
 	getArchived = () => {
 		this.props.history.push("/dashboard/archived");
-	}
+	};
 	getTrash = () => {
 		this.props.history.push("/dashboard/trash");
-	}
+	};
 	openSearch = () => {
-		this.props.history.push("/dashboard/search");		
-	}
+		this.props.history.push("/dashboard/search");
+	};
 
-	handleSearch = async(event) => {
+	handleSearch = async event => {
 		event.preventDefault();
 		await this.setState({ searched: event.currentTarget.value });
 		this.props.typedText(this.state.searched);
-		console.log("searched:==>",this.state.searched);
-	}
+		console.log("searched:==>", this.state.searched);
+	};
+
+	handleGridList = async event => {
+		event.preventDefault();
+		await this.setState({ listView: !this.state.listView });
+		this.props.view(this.state.listView);
+	};
 
 	render() {
 		// var style;
@@ -159,7 +167,9 @@ class Dashboard extends React.Component {
 											onClick={this.setFocusToTextBox}
 										></img>
 									</div>
-									<div className="flogotext" onClick={this.setFocusToTextBox}>Fundoo</div>
+									<div className="flogotext" onClick={this.setFocusToTextBox}>
+										Fundoo
+									</div>
 								</div>
 								<div className="searchBlock" onClick={this.openSearch}>
 									<InputBase
@@ -168,22 +178,27 @@ class Dashboard extends React.Component {
 										height="90%"
 										placeholder="Search"
 										variant="outlined"
-										style={{height: "3.1875em",color:"#757575"}}
+										style={{ height: "3.1875em", color: "#757575" }}
 										value={this.state.searched}
-										onChange={event=>this.handleSearch(event)}
+										onChange={event => this.handleSearch(event)}
 										startAdornment={
 											<InputAdornment position="start">
-												<SearchIcon style={{color:"#757575",padding:"0 15px"}}/>
+												<SearchIcon
+													style={{ color: "#757575", padding: "0 15px" }}
+												/>
 											</InputAdornment>
 										}
-										
 									/>
 								</div>
 								<div id="rightPanelLogo">
-									<IconButton>
-										<ViewAgendaOutlinedIcon />
+									<IconButton id="logos" onClick={event => this.handleGridList(event)}>
+										{this.state.listView ? (
+											<DashboardOutlinedIcon  />
+										) : (
+											<ViewAgendaOutlinedIcon />
+										)}
 									</IconButton>
-									<IconButton>
+									<IconButton id="logos">
 										<ShoppingCartOutlinedIcon />
 									</IconButton>
 								</div>
@@ -204,7 +219,11 @@ class Dashboard extends React.Component {
 											horizontal: "right"
 										}}
 									>
-										<Button variant="outlined" margin="dense" onClick={this.handleLogout}>
+										<Button
+											variant="outlined"
+											margin="dense"
+											onClick={this.handleLogout}
+										>
 											logout
 										</Button>
 									</Popover>
@@ -213,8 +232,18 @@ class Dashboard extends React.Component {
 						</AppBar>
 					</div>
 					<div>
-						<Drawer open={this.state.open} variant="persistent" style={{position:"fixed", zIndex:"1000"}}>
-							<Drawerlist notes={this.getNotes} reminder={this.getReminder} archived={this.getArchived} trash={this.getTrash} label={this.getLabel}/>
+						<Drawer
+							open={this.state.open}
+							variant="persistent"
+							style={{ position: "fixed", zIndex: "1000" }}
+						>
+							<Drawerlist
+								notes={this.getNotes}
+								reminder={this.getReminder}
+								archived={this.getArchived}
+								trash={this.getTrash}
+								label={this.getLabel}
+							/>
 						</Drawer>
 					</div>
 				</MuiThemeProvider>
@@ -225,11 +254,13 @@ class Dashboard extends React.Component {
 const mapStateToProps = state => {
 	return {
 		drawerStatus: state.open,
-		searchedText: state.searched
+		searchedText: state.searched,
+		viewStatus: state.listView
 	};
 };
 const mapDispatchToProps = {
 	drawer,
-	typedText
+	typedText,
+	view
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

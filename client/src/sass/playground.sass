@@ -33,19 +33,30 @@
   display: flex
   flex-flow: row wrap
   width: 768px
-  justify-content: flex-start
+  // justify-content: flex-start
 
 .allNotesContainerSM
   display: flex
   flex-flow: row wrap
   padding: 0 12.5%
   width: 768px
-  justify-content: flex-start
+
+.listAllNotesContainer
+  display: flex
+  flex-flow: row wrap
+  width: 768px
+  // justify-content: flex-start
+
+.listAllNotesContainerSM
+  display: flex
+  flex-flow: row wrap
+  padding: 0 12.5%
+  width: 768px
+  // justify-content: flex-start
 
 @media only screen and (max-width: 4440px)
   #container
     margin-top: 10vh
-
   #containerSM
     margin-top: 10vh
     margin-left: 18%
@@ -53,8 +64,14 @@
   .allNotesContainer
     padding: 0%
     width: 1024px
-    
   .allNotesContainerSM
+    padding: 0%
+    margin-left: 6%
+    width: 94%
+  .listAllNotesContainer
+    padding: 0%
+    width: 1024px
+  .listAllNotesContainerSM
     padding: 0%
     margin-left: 6%
     width: 94%
@@ -62,16 +79,21 @@
 @media only screen and (max-width: 1500px)
   #container
     margin-top: 10vh
-
   #containerSM
     margin-top: 10vh
-    margin-left: 29%
-    width: 71%
+    margin-left: 21%
+    width: 79%
   .allNotesContainer
     padding: 0%
     width: 768px
-    
   .allNotesContainerSM
+    padding: 0%
+    margin-left: 12%
+    width: 78%
+  .listAllNotesContainer
+    padding: 0%
+    width: 768px
+  .listAllNotesContainerSM
     padding: 0%
     margin-left: 12%
     width: 78%
@@ -79,7 +101,6 @@
 @media only screen and (max-width: 1100px)
   #container
     margin-top: 10vh
-
   #containerSM
     margin-top: 10vh
     margin-left: 29%
@@ -87,8 +108,14 @@
   .allNotesContainer
     padding: 0%
     width: 768px
-    
   .allNotesContainerSM
+    padding: 0%
+    margin-left: 12%
+    width: 78%
+  .listAllNotesContainer
+    padding: 0%
+    width: 580px
+  .listAllNotesContainerSM
     padding: 0%
     margin-left: 12%
     width: 78%
@@ -96,29 +123,39 @@
 @media only screen and (max-width: 900px)
   #container
     margin-top: 10vh
-
   #containerSM
     margin-left: 29%
     width: 71%
-
   .allNotesContainer
     padding: 0%
-    width: 514px
-    
+    width: 580px 
   .allNotesContainerSM
     padding: 0% 8%  
     margin-left: 0%
     width: 520px
+  .listAllNotesContainer
+    padding: 0%
+    width: 580px 
+  .listAllNotesContainerSM
+    padding: 0% 8%  
+    margin-left: 0%
+    width: 520px
+  .my-masonry-grid_column > card
+    padding: 0 10px 
 
 @media only screen and (max-width: 675px)
   #container
     margin-top: 10vh
-
   .allNotesContainer
     padding: 0%
     width: 100%
-    
   .allNotesContainerSM
+    padding: 0%
+    width: 100%
+  .listAllNotesContainer
+    padding: 0%
+    width: 100%
+  .listAllNotesContainerSM
     padding: 0%
     width: 100%
 
@@ -132,3 +169,13 @@
   width: 100%
   flex-direction: column
   align-items: center
+
+.my-masonry-grid 
+  display: -webkit-box
+  display: -ms-flexbox 
+  display: flex
+  width: 100%
+
+.my-masonry-grid_column 
+  background-clip: padding-box
+

@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/NoteCard.sass";
+import { connect } from "react-redux";
 import update from "immutability-helper";
 import CheckList from "./Checklist";
 import NoteCardChecklist from "./NoteCardChecklist";
@@ -100,7 +101,7 @@ const cardAction = createMuiTheme({
 	}
 });
 
-export default class NoteCard extends React.Component {
+class NoteCard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -278,14 +279,14 @@ export default class NoteCard extends React.Component {
 	handleChecklistCheck = id => {
 		console.log("in handlechecklistcheck with item name", id);
 
-		for (let i = 0; i < this.state.noteCheckLists.length; i++) {
-			if (this.state.noteCheckLists[i].id === id) {
-				console.log("found id in notechecklists", this.state.noteCheckLists[i]);
-				if (this.state.noteCheckLists[i].status === "open") {
+		for (let index = 0; index < this.state.noteCheckLists.length; index++) {
+			if (this.state.noteCheckLists[index].id === id) {
+				console.log("found id in notechecklists", this.state.noteCheckLists[index]);
+				if (this.state.noteCheckLists[index].status === "open") {
 					this.setState(
 						{
 							noteCheckLists: update(this.state.noteCheckLists, {
-								[i]: {
+								[index]: {
 									status: {
 										$set: "close"
 									}
@@ -294,10 +295,10 @@ export default class NoteCard extends React.Component {
 						},
 						() => {
 							let data = {};
-							data.checkListId = this.state.noteCheckLists[i].id;
-							data.notesId = this.state.noteCheckLists[i].notesId;
-							data.status = this.state.noteCheckLists[i].status;
-							data.itemName = this.state.noteCheckLists[i].itemName;
+							data.checkListId = this.state.noteCheckLists[index].id;
+							data.notesId = this.state.noteCheckLists[index].notesId;
+							data.status = this.state.noteCheckLists[index].status;
+							data.itemName = this.state.noteCheckLists[index].itemName;
 							console.log("value in data", data);
 							nServe
 								.updateChecklist(data)
@@ -307,12 +308,12 @@ export default class NoteCard extends React.Component {
 								.catch(err => {
 									console.log("error while updating", err);
 								});
-							i = this.state.noteCheckLists.length;
+							index = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in if",
 								this.state.noteCheckLists,
 								"value of i",
-								i
+								index
 							);
 						}
 					);
@@ -320,7 +321,7 @@ export default class NoteCard extends React.Component {
 					this.setState(
 						{
 							noteCheckLists: update(this.state.noteCheckLists, {
-								[i]: {
+								[index]: {
 									status: {
 										$set: "open"
 									}
@@ -329,10 +330,10 @@ export default class NoteCard extends React.Component {
 						},
 						() => {
 							let data = {};
-							data.checkListId = this.state.noteCheckLists[i].id;
-							data.notesId = this.state.noteCheckLists[i].notesId;
-							data.status = this.state.noteCheckLists[i].status;
-							data.itemName = this.state.noteCheckLists[i].itemName;
+							data.checkListId = this.state.noteCheckLists[index].id;
+							data.notesId = this.state.noteCheckLists[index].notesId;
+							data.status = this.state.noteCheckLists[index].status;
+							data.itemName = this.state.noteCheckLists[index].itemName;
 							console.log("value in data", data);
 							nServe
 								.updateChecklist(data)
@@ -342,12 +343,12 @@ export default class NoteCard extends React.Component {
 								.catch(err => {
 									console.log("error while updating", err);
 								});
-							i = this.state.noteCheckLists.length;
+							index = this.state.noteCheckLists.length;
 							console.log(
 								"succesfully changed status in else",
 								this.state.noteCheckLists,
 								"value of i",
-								i
+								index
 							);
 						}
 					);
@@ -362,7 +363,7 @@ export default class NoteCard extends React.Component {
 		return (
 			<Fragment>
 				{!this.state.dialogOpen ? (
-					<Card id="card" style={{ backgroundColor: this.state.color }}>
+					<Card id={this.props.viewStatus?"Lcard":"card"} style={{ backgroundColor: this.state.color }}>
 						<CardContent>
 							<div id="title">
 								<Typography
@@ -419,19 +420,19 @@ export default class NoteCard extends React.Component {
 							{!this.state.isDeleted ? (
 								<CardActions id="cardActions">
 									<Tooltip title="Remind me">
-										<IconButton size="small">
+										<IconButton id="idb" size="small">
 											<AddAlertOutlinedIcon fontSize="inherit" />
 										</IconButton>
 									</Tooltip>
 
 									<Tooltip title="Collaborator">
-										<IconButton size="small">
+										<IconButton id="idb" size="small">
 											<PersonAddOutlinedIcon fontSize="inherit" />
 										</IconButton>
 									</Tooltip>
 
 									<Tooltip title="Add image">
-										<IconButton size="small">
+										<IconButton id="idb" size="small">
 											<InsertPhotoOutlinedIcon fontSize="inherit" />
 										</IconButton>
 									</Tooltip>
@@ -563,19 +564,19 @@ export default class NoteCard extends React.Component {
 											<ColorPalette
 												selectColor={this.handleColor}
 												dataOfNote={this.state}
-												styleid={"idb"}
+												styleid={"ibd"}
 											/>
 											<ArchiveIcon
 												archiveAction={this.handleIsArchived}
 												archiveState={this.state}
 												onUpdate={this.handleUpdation}
-												styleid={"idb"}
+												styleid={"ibd"}
 											/>
 											<MoreMenu
 												deleteAction={this.handleDeleteRestore}
 												moreState={this.state}
 												onUpdate={this.handleUpdation}
-												styleid={"idb"}
+												styleid={"ibd"}
 											/>
 										</MuiThemeProvider>
 									</div>
@@ -600,13 +601,7 @@ export default class NoteCard extends React.Component {
 		);
 	}
 }
-// {this.state.dialogOpen ? (
-// 	<MuiThemeProvider theme={dialog}>
-// 		<Dialog onClose={this.handleClick} open={this.handleClick}>
-// 			<NoteDialog
-// 				diaData={this.state}
-// 				handleDialog={this.handleClick}
-// 			/>
-// 		</Dialog>
-// 	</MuiThemeProvider>
-// ) : null}
+const mapStateToProps = state => {
+  return { viewStatus: state.viewData };
+};
+export default connect(mapStateToProps)(NoteCard)

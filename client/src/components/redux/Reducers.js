@@ -18,6 +18,13 @@ function rootReducer(state = initialState, action) {
         typedData: action.value
       }
     }
+    case "VIEW_TYPE": {
+      console.log("in reducer view_type", action.value);
+      return {
+        ...state,
+        viewData:action.value
+      }
+    }
       default:return state
   }
 }
