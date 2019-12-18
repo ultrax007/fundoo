@@ -10,7 +10,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 // import ListItemText from "@material-ui/core/ListItemText";
-import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 const lined = {
@@ -235,24 +234,8 @@ export default class NoteCardChecklist extends React.Component {
 												/>
 											</ListItemIcon>
 
-											<InputBase
-												style={lined}
-												margin="dense"
-												multiline
-												placeholder="List item"
-												value={data.itemName}
-												onChange={event => this.handleText(event, index)}
-											/>
-											{/* <ListItemSecondaryAction>
-												<IconButton
-													edge="end"
-													aria-label="close"
-													onClick={event => this.handleCrossClose(event, index)}
-													size="small"
-												>
-													<CloseSharpIcon />
-												</IconButton>
-											</ListItemSecondaryAction> */}
+											<ListItemText style={lined} primary={data.itemName} />
+											
 										</ListItem>
 										{/* </MuiThemeProvider> */}
 									</div>

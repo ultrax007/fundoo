@@ -17,7 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
+
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import Dialog from "@material-ui/core/Dialog";
@@ -29,6 +29,7 @@ import Chip from "@material-ui/core/Chip";
  */
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
+import RemindMe from "./RemindMe";
 import ColorPalette from "./ColorPalette";
 import ArchiveIcon from "./ArchiveIcon";
 import MoreMenu from "./MoreMenu";
@@ -419,12 +420,9 @@ class NoteCard extends React.Component {
 						<MuiThemeProvider theme={cardAction}>
 							{!this.state.isDeleted ? (
 								<CardActions id="cardActions">
-									<Tooltip title="Remind me">
-										<IconButton id="idb" size="small">
-											<AddAlertOutlinedIcon fontSize="inherit" />
-										</IconButton>
-									</Tooltip>
 
+									<RemindMe remindState={this.state} styleid={"idb"} />
+									
 									<Tooltip title="Collaborator">
 										<IconButton id="idb" size="small">
 											<PersonAddOutlinedIcon fontSize="inherit" />
@@ -544,11 +542,12 @@ class NoteCard extends React.Component {
 								<div id="functions">
 									<div id="iconBar">
 										<MuiThemeProvider theme={iconmod}>
-											<Tooltip title="Remind me">
+											{/* <Tooltip title="Remind me">
 												<IconButton id="ibd" size="small">
 													<AddAlertOutlinedIcon fontSize="inherit" />
 												</IconButton>
-											</Tooltip>
+											</Tooltip> */}
+												<RemindMe styleid={"ibd"}/>
 
 											<Tooltip title="Collaborator">
 												<IconButton id="ibd" size="small">
