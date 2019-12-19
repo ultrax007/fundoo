@@ -10,7 +10,7 @@ import Popover from "@material-ui/core/Popover";
 import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import Paper from "@material-ui/core/Paper";
-import 'date-fns';
+import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -19,6 +19,7 @@ import {
 } from "@material-ui/pickers";
 
 import { withStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 
 const styles = {
 	MuiListItemIcon: {
@@ -33,43 +34,147 @@ const styles = {
 		paddingBottom: "0"
 	}
 };
+const picker = {
+	fontSize: "13px"
+};
+const text = {
+	fontSize: "13px"
+};
+const ptext = {
+	fontSize: "14px"
+};
+const time = {
+	fontSize: "13px",
+	textAlign: "end"
+};
 class RemindMe extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			pop_open: false,
 			picker_open: false,
-      anchorEl: null,
-      reminderDate: new Date('2019-12-18T21:11:54'),
-      reminderTime:new Date('2019-12-18T21:11:54')
+			anchorEl: null,
+			panchorEl: null,
+			reminder: "",
+			sDate: "",
+			sTime: "",
+			reminderDate: new Date(),
+			reminderTime: new Date("2019-12-19T20:00:00")
 		};
-  }
-  handleDateChange = date => {
-    console.log("value in event",date);
-    this.setState({
-      reminderDate: date
-    });
-    console.log("value in handle change ",this.state.reminderDate);
-  }
-  handleTimeChange = event => {
-    this.setState({
-      reminderTime: event.target.value
-    });
-    console.log("value in handle change ",this.state.reminderTime);
-  }
+	}
+	handleDateChange = async date => {
+		console.log("value in date", date);
+		await this.setState({
+			reminderDate: date,
+			sDate: date.toString().slice(0, 15)
+		});
+		console.log("value in handle change ", this.state.reminderDate);
+	};
+	handleTimeChange = async time => {
+		console.log("value in time", time);
+		await this.setState({
+			reminderTime: time,
+			sTime: time.toString().slice(15, 33)
+		});
+		console.log("value in handle change ", this.state.reminderTime);
+	};
+	handleSave = async event => {
+		event.preventDefault();
+		event.stopPropagation();
+		if (this.state.sDate === "") {
+			console.log("date is empty");
+			await this.setState(
+				{
+					reminderDate: new Date()
+				},
+				() => {
+					this.setState({
+						sDate: this.state.reminderDate.toString().slice(0, 15)
+					});
+				}
+			);
+		}
+		// console.log("sdate is",this.state.sDate);
+		if (this.state.sTime === "") {
+			console.log("time is empty");
+			await this.setState(
+				{
+					reminderTime: new Date("2019-12-19T20:00:00")
+				},
+				() => {
+					this.setState({
+						sTime: this.state.reminderTime.toString().slice(15, 33)
+					});
+				}
+			);
+		}
+		await this.setState(
+			{
+				reminder: this.state.sDate.concat(this.state.sTime),
+				picker_open: false,
+				pop_open: false
+			},
+			() => {
+				console.log("reminder is", this.state.reminder);
+			}
+		);
+	};
+	handeSetReminder = async (date, time) => {
+		await this.setState({
+			sDate: date.toString().slice(0, 15)
+		});
+		await this.setState({
+			sTime: time.toString().slice(15, 33)
+		});
+		await this.setState(
+			{
+				reminder: this.state.sDate.concat(this.state.sTime),
+				pop_open: false
+			},
+			() => {
+				console.log("reminder is", this.state.reminder);
+			}
+		);
+	};
+	handleTemplates = async (event, choice) => {
+		event.preventDefault();
+		switch (choice) {
+			case "1": {
+				this.handeSetReminder(new Date(), new Date("2019-12-19T20:00:00"));
+				break;
+			}
+			case "2": {
+				const today = new Date();
+				const tomorrow = new Date(today);
+				tomorrow.setDate(tomorrow.getDate() + 1);
+				this.handeSetReminder(tomorrow, new Date("2019-12-19T08:00:00"));
+				break;
+			}
+			case "3": {
+				var monday = new Date();
+				monday.setDate(monday.getDate() + ((1 + 7 - monday.getDay()) % 7));
+				this.handeSetReminder(monday, new Date("2019-12-19T08:00:00"));
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	};
 	handleRemindMe(event) {
 		event.preventDefault();
 		this.setState({
 			pop_open: !this.state.pop_open,
-			anchorEl: event.currentTarget
+			anchorEl: event.currentTarget,
+			panchorEl: event.currentTarget
 		});
 	}
 	handlePicker(event) {
 		event.preventDefault();
 		this.setState({
 			pop_open: false,
-			picker_open: !this.state.picker_open,
-			anchorEl: event.currentTarget
+			picker_open: true
+			// anchorEl: event.currentTarget
 		});
 	}
 	handleClose = () => {
@@ -81,24 +186,12 @@ class RemindMe extends React.Component {
 	handlePickerClose = () => {
 		this.setState({
 			picker_open: !this.state.picker_open,
-			anchorEl: null
+			panchorEl: null
 		});
 	};
 	render() {
 		const { classes } = this.props;
-		const picker = {
-			fontSize: "13px"
-		};
-		const text = {
-			fontSize: "13px"
-		};
-		const ptext = {
-			fontSize: "14px"
-		};
-		const time = {
-			fontSize: "13px",
-			textAlign: "end"
-		};
+
 		return (
 			<Fragment>
 				<Tooltip title="Remind me">
@@ -128,7 +221,11 @@ class RemindMe extends React.Component {
 							<ListItem classes={{ root: classes.MuiListItem }}>
 								<ListItemText primary="Reminder:"></ListItemText>
 							</ListItem>
-							<ListItem button classes={{ root: classes.MuiListItem }}>
+							<ListItem
+								button
+								classes={{ root: classes.MuiListItem }}
+								onClick={event => this.handleTemplates(event, "1")}
+							>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Later today"
@@ -138,7 +235,11 @@ class RemindMe extends React.Component {
 									secondary="8:00 PM"
 								/>
 							</ListItem>
-							<ListItem button classes={{ root: classes.MuiListItem }}>
+							<ListItem
+								button
+								classes={{ root: classes.MuiListItem }}
+								onClick={event => this.handleTemplates(event, "2")}
+							>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Tomorrow"
@@ -148,7 +249,11 @@ class RemindMe extends React.Component {
 									secondary="8:00 AM"
 								/>
 							</ListItem>
-							<ListItem button classes={{ root: classes.MuiListItem }}>
+							<ListItem
+								button
+								classes={{ root: classes.MuiListItem }}
+								onClick={event => this.handleTemplates(event, "3")}
+							>
 								<ListItemText
 									primaryTypographyProps={{ style: text }}
 									primary="Next week"
@@ -158,7 +263,11 @@ class RemindMe extends React.Component {
 									secondary="Mon, 8:00 AM"
 								/>
 							</ListItem>
-							<ListItem button onClick={event => this.handlePicker(event)} classes={{ root: classes.MuiListItem }}>
+							<ListItem
+								button
+								onClick={event => this.handlePicker(event)}
+								classes={{ root: classes.MuiListItem }}
+							>
 								<ListItemIcon classes={{ root: classes.MuiListItemIcon }}>
 									<AccessTimeSharpIcon fontSize="inherit" />
 								</ListItemIcon>
@@ -172,7 +281,7 @@ class RemindMe extends React.Component {
 				</Popover>
 				<Popover
 					open={this.state.picker_open}
-					anchorEl={this.state.anchorEl}
+					anchorEl={this.state.panchorEl}
 					onClose={this.handlePickerClose}
 					anchorOrigin={{
 						vertical: "center",
@@ -186,7 +295,7 @@ class RemindMe extends React.Component {
 					<Paper id="remindMePicker">
 						<List classes={{ padding: classes.MuiList }}>
 							<ListItem classes={{ root: classes.MuiListItem }}>
-								<ListItemIcon classes={{root: classes.MuiListItemIcon}}>
+								<ListItemIcon classes={{ root: classes.MuiListItemIcon }}>
 									<IconButton size="small">
 										<ArrowBackOutlinedIcon
 											fontSize="inherit"
@@ -203,21 +312,21 @@ class RemindMe extends React.Component {
 							<MuiPickersUtilsProvider utils={DateFnsUtils}>
 								<ListItem classes={{ root: classes.MuiListItem }}>
 									<KeyboardDatePicker
-                    disableToolbar
-                    name="reminderDate"
+										disableToolbar
+										name="reminderDate"
 										size="small"
 										variant="inline"
 										format="MM/dd/yyyy"
 										margin="dense"
 										id="date-picker-inline"
-                    inputProps={{ style: picker }}
+										inputProps={{ style: picker }}
 										value={this.state.reminderDate}
 										onChange={this.handleDateChange}
 									/>
 								</ListItem>
 								<ListItem classes={{ root: classes.MuiListItem }}>
-                  <KeyboardTimePicker
-                    name="reminderTime"
+									<KeyboardTimePicker
+										name="reminderTime"
 										size="small"
 										margin="dense"
 										id="time-picker"
@@ -228,6 +337,20 @@ class RemindMe extends React.Component {
 									/>
 								</ListItem>
 							</MuiPickersUtilsProvider>
+							<ListItem
+								classes={{ root: classes.MuiListItem }}
+								style={{ justifyContent: "flex-end" }}
+							>
+								<Button
+									size="small"
+									color="primary"
+									onClick={event => {
+										this.handleSave(event);
+									}}
+								>
+									Save
+								</Button>
+							</ListItem>
 						</List>
 					</Paper>
 				</Popover>

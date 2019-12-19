@@ -99,7 +99,10 @@ class Dashboard extends React.Component {
 		await this.setState({ takeNoteToggle: tnvalue });
 	};
 	setFocusToTextBox = () => {
-		document.getElementById("inputInactive").focus();
+		let el = document.getElementById("inputInactive");
+		if (el !== null) {
+			document.getElementById("inputInactive").focus();
+		}
 	};
 	handleLogout = () => {
 		localStorage.clear();
