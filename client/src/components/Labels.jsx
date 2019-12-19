@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import "../sass/playground.sass";
 import { connect } from "react-redux";
+import Masonry from "react-masonry-css";
 import Typography from "@material-ui/core/Typography";
 import sad from "../assets/sad.svg";
 import NoteCard from "./NoteCard";
@@ -59,25 +60,46 @@ class Labels extends React.Component {
 		}
 	}
 	render() {
+		const breakpointColumnsObj = {
+			default: this.props.viewStatus ? 1 : 3,
+			4440: this.props.viewStatus ? 1 : 4,
+			1500: this.props.viewStatus ? 1 : 3,
+			1100: this.props.viewStatus ? 1 : 2,
+			900: 1,
+			675: 1
+		};
 		const myStyle = this.props.drawerStatus ? "containerSM" : "container";
 		const CStyle = this.props.drawerStatus
-			? "allNotesContainerSM"
+			? this.props.viewStatus
+				? "listAllNotesContainerSM"
+				: "allNotesContainerSM"
+			: this.props.viewStatus
+			? "listAllNotesContainer"
 			: "allNotesContainer";
 		let noteArray = this.state.labels;
 		return (
-			<Fragment>{noteArray.length>0?
-				<div id={myStyle}>
-					<div id="takeNoteContainer">{/* <TakeNote /> */}</div>
-					<div className={CStyle}>
-						{noteArray.map(data => (
-							<NoteCard
-								key={data.id}
-								dataFromDisplay={data}
-								operation={this.getAllLabelsFromDb}
-							/>
-						))}
+			<Fragment>
+				{noteArray.length > 0 ? (
+					<div id={myStyle}>
+						<div id="takeNoteContainer">{/* <TakeNote /> */}</div>
+						<div className={CStyle}>
+							<Masonry
+								breakpointCols={breakpointColumnsObj}
+								className="my-masonry-grid"
+								columnClassName="my-masonry-grid_column"
+							>
+								{noteArray.map(data => (
+									<NoteCard
+										key={data.id}
+										dataFromDisplay={data}
+										operation={this.getAllLabelsFromDb}
+									/>
+								))}
+							</Masonry>
+						</div>
 					</div>
-				</div>:<div id="sad">
+				) : (
+					<div id="sad">
 						<img src={sad} alt="sad" width="150px"></img>
 						<Typography
 							variant="h3"
@@ -86,7 +108,8 @@ class Labels extends React.Component {
 						>
 							Sorry nothing to display...
 						</Typography>
-					</div>}
+					</div>
+				)}
 			</Fragment>
 		);
 	}
@@ -94,7 +117,8 @@ class Labels extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		drawerStatus: state.drawerData
+		drawerStatus: state.drawerData,
+		viewStatus: state.viewData
 	};
 };
 

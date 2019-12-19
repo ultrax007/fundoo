@@ -20,6 +20,8 @@ import {
 
 import { withStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import noteServices from "../services/noteServices";
+const nServe = new noteServices();
 
 const styles = {
 	MuiListItemIcon: {
@@ -55,13 +57,29 @@ class RemindMe extends React.Component {
 			picker_open: false,
 			anchorEl: null,
 			panchorEl: null,
-			reminder: "",
+			reminder: [],
 			sDate: "",
 			sTime: "",
 			reminderDate: new Date(),
 			reminderTime: new Date("2019-12-19T20:00:00")
 		};
 	}
+
+	hitReminderApi = () => {
+		let data = {};
+		data.noteIdList = [this.props.remindState.id];
+		data.reminder = [this.state.reminder];
+		data.type = "reminder";
+		console.log("value of data in hit api", data);
+		nServe.addUpdateReminder(data).then(response => {
+			let newReminder = this.state.reminder.slice(4, 10) + "," + this.state.reminder.slice(16, 21);
+			this.props.addReminder(newReminder);
+			console.log("success", response);
+		}).catch(err => {
+			console.log("err",err);
+		})
+	}
+
 	handleDateChange = async date => {
 		console.log("value in date", date);
 		await this.setState({
@@ -94,7 +112,6 @@ class RemindMe extends React.Component {
 				}
 			);
 		}
-		// console.log("sdate is",this.state.sDate);
 		if (this.state.sTime === "") {
 			console.log("time is empty");
 			await this.setState(
@@ -116,6 +133,7 @@ class RemindMe extends React.Component {
 			},
 			() => {
 				console.log("reminder is", this.state.reminder);
+				this.hitReminderApi();
 			}
 		);
 	};
@@ -132,6 +150,7 @@ class RemindMe extends React.Component {
 				pop_open: false
 			},
 			() => {
+				this.hitReminderApi();
 				console.log("reminder is", this.state.reminder);
 			}
 		);

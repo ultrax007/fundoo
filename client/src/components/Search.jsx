@@ -1,6 +1,7 @@
 import React from "react";
 import "../sass/playground.sass";
 import { connect } from "react-redux";
+import Masonry from "react-masonry-css";
 import NoteCard from "./NoteCard";
 import Typography from "@material-ui/core/Typography";
 import sad from "../assets/sad.svg";
@@ -35,10 +36,21 @@ class Search extends React.Component {
 	};
 
 	render() {
-		console.log("render works in notes component", this.props.drawerStatus);
+		const breakpointColumnsObj = {
+			default: this.props.viewStatus ? 1 : 3,
+			4440: this.props.viewStatus ? 1 : 4,
+			1500: this.props.viewStatus ? 1 : 3,
+			1100: this.props.viewStatus ? 1 : 2,
+			900: 1,
+			675: 1
+		};
 		const myStyle = this.props.drawerStatus ? "containerSM" : "container";
 		const CStyle = this.props.drawerStatus
-			? "allNotesContainerSM"
+			? this.props.viewStatus
+				? "listAllNotesContainerSM"
+				: "allNotesContainerSM"
+			: this.props.viewStatus
+			? "listAllNotesContainer"
 			: "allNotesContainer";
 		let noteArray = this.state.allNotes;
 		return (
@@ -47,6 +59,11 @@ class Search extends React.Component {
 					<div id={myStyle}>
 						<div id="takeNoteContainer">{/* <TakeNote /> */}</div>
 						<div className={CStyle}>
+						<Masonry
+						breakpointCols={breakpointColumnsObj}
+						className="my-masonry-grid"
+						columnClassName="my-masonry-grid_column"
+					>
 							{noteArray
 								.filter(
 									noteArray =>
@@ -59,7 +76,7 @@ class Search extends React.Component {
 										dataFromDisplay={data}
 										operation={this.getNotesFromDB}
 									/>
-								))}
+								))}</Masonry>
 						</div>
 					</div>
 				) : (
@@ -89,6 +106,7 @@ class Search extends React.Component {
 const mapStateToProps = state => {
 	return {
 		drawerStatus: state.drawerData,
+		viewStatus: state.viewData,
 		searchedText: state.typedData
 	};
 };

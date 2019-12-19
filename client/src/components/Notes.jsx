@@ -6,14 +6,7 @@ import NoteCard from "./NoteCard";
 import Masonry from "react-masonry-css";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
-const breakpointColumnsObj = {
-	default: 3,
-	4440: 4,
-	1500: 3,
-	1100: 2,
-	900: 1,
-	675: 1
-};
+
 class Notes extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,7 +16,6 @@ class Notes extends React.Component {
 	}
 
 	UNSAFE_componentWillMount() {
-		// console.log("value props of note.jsx",this.props);
 		this.getNotesFromDB();
 	}
 
@@ -48,15 +40,22 @@ class Notes extends React.Component {
 	};
 
 	render() {
-		console.log("render works in notes component", this.props.drawerStatus);
+		const breakpointColumnsObj = {
+			default: this.props.viewStatus ? 1 : 3,
+			4440: this.props.viewStatus ? 1 : 4,
+			1500: this.props.viewStatus ? 1 : 3,
+			1100: this.props.viewStatus ? 1 : 2,
+			900: 1,
+			675: 1
+		};
 		const myStyle = this.props.drawerStatus ? "containerSM" : "container";
 		const CStyle = this.props.drawerStatus
 			? this.props.viewStatus
 				? "listAllNotesContainerSM"
 				: "allNotesContainerSM"
 			: this.props.viewStatus
-				? "listAllNotesContainer"
-				: "allNotesContainer";
+			? "listAllNotesContainer"
+			: "allNotesContainer";
 
 		return (
 			<div id={myStyle}>
@@ -64,31 +63,19 @@ class Notes extends React.Component {
 					<TakeNote operation={this.getNotesFromDB} />
 				</div>
 				<div className={CStyle}>
-					{this.props.viewStatus ? (
-						<>
-							{this.state.allNotes.map(data => (
-								<NoteCard
-									key={data.id}
-									dataFromDisplay={data}
-									operation={this.getNotesFromDB}
-								/>
-							))}
-						</>
-					) : (
-						<Masonry
-							breakpointCols={breakpointColumnsObj}
-							className="my-masonry-grid"
-							columnClassName="my-masonry-grid_column"
-						>
-							{this.state.allNotes.map(data => (
-								<NoteCard
-									key={data.id}
-									dataFromDisplay={data}
-									operation={this.getNotesFromDB}
-								/>
-							))}
-						</Masonry>
-					)}
+					<Masonry
+						breakpointCols={breakpointColumnsObj}
+						className="my-masonry-grid"
+						columnClassName="my-masonry-grid_column"
+					>
+						{this.state.allNotes.map(data => (
+							<NoteCard
+								key={data.id}
+								dataFromDisplay={data}
+								operation={this.getNotesFromDB}
+							/>
+						))}
+					</Masonry>
 				</div>
 			</div>
 		);

@@ -19,6 +19,14 @@ export default class noteServices {
   updateNote(data) {
     return obj.postMethod(data, "/notes/updateNotes", true);
   }
+
+  addUpdateReminder(data) {
+    return obj.postMethod(data, "/notes/addUpdateReminderNotes", true);
+  }
+
+  deleteReminder(data) {
+    return obj.postMethod(data, "/notes/removeReminderNotes", true);
+  }
   
   updateLable(data,id) {
     return obj.postMethod(data, "/noteLabels/" + id + "/updateNoteLabel", true);

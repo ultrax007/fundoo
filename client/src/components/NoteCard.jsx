@@ -20,6 +20,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
+import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
 import Dialog from "@material-ui/core/Dialog";
 import Grow from "@material-ui/core/Grow";
 import Chip from "@material-ui/core/Chip";
@@ -37,7 +38,7 @@ import Restore from "./Restore";
 import DeleteForever from "./DeleteForever";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
-
+let date, time;
 const button = createMuiTheme({
 	overrides: {
 		MuiButton: {
@@ -115,10 +116,31 @@ class NoteCard extends React.Component {
 			isDeleted: this.props.dataFromDisplay.isDeleted,
 			color: this.props.dataFromDisplay.color,
 			noteLabels: this.props.dataFromDisplay.noteLabels,
-			// reminder: "",
+			reminder: this.props.dataFromDisplay.reminder,
+			reminderString: new Date(
+				this.props.dataFromDisplay.reminder[0]
+			).toString(),
+			combined: "",
 			// collaborators: ""
 			dialogOpen: false
 		};
+	}
+
+	componentDidMount() {
+		console.log("date is", this.state.reminderString);
+		if (this.state.reminderString !== "Invalid Date") {
+			date = this.state.reminderString.slice(4, 10);
+			time = this.state.reminderString.slice(16, 21);
+			console.log("value in reminder", this.state.reminderString, date, time);
+			this.setState(
+				{
+					combined: date + "," + time
+				},
+				() => {
+					console.log("value in combined", this.state.combined);
+				}
+			);
+		}
 	}
 
 	handleClick = () => {
@@ -282,7 +304,10 @@ class NoteCard extends React.Component {
 
 		for (let index = 0; index < this.state.noteCheckLists.length; index++) {
 			if (this.state.noteCheckLists[index].id === id) {
-				console.log("found id in notechecklists", this.state.noteCheckLists[index]);
+				console.log(
+					"found id in notechecklists",
+					this.state.noteCheckLists[index]
+				);
 				if (this.state.noteCheckLists[index].status === "open") {
 					this.setState(
 						{
@@ -358,13 +383,41 @@ class NoteCard extends React.Component {
 		}
 	};
 
+	handleAddReminder = (reminder) => {
+		console.log("value in new Reminder", reminder);
+		this.setState({
+			combined:reminder
+		})
+	}
+
+	handleDeleteReminder = (event) => {
+		event.preventDefault();
+		let data = { noteIdList: [this.state.id] };
+		nServe
+			.deleteReminder(data)
+			.then(response => {
+				console.log("successfully deleted reminder", response);
+				this.setState({
+					reminder: [],
+					reminderString: "",
+					combined: ""
+				});
+			})
+			.catch(err => {
+				console.log("err deleting reminder", err);
+			});
+	};
+
 	render() {
 		// console.log("render works in card component", this.props);
 
 		return (
 			<Fragment>
 				{!this.state.dialogOpen ? (
-					<Card id={this.props.viewStatus?"Lcard":"card"} style={{ backgroundColor: this.state.color }}>
+					<Card
+						id={this.props.viewStatus ? "Lcard" : "card"}
+						style={{ backgroundColor: this.state.color }}
+					>
 						<CardContent>
 							<div id="title">
 								<Typography
@@ -403,7 +456,19 @@ class NoteCard extends React.Component {
 								onRemove={this.handleChecklistRemove}
 							/>
 						</CardContent>
+						{/*  */}
 						<div id="chips">
+							{this.state.combined !== "" ? (
+								<Chip
+									icon={<AccessTimeSharpIcon/>}
+									size="small"
+									style={{ margin: "2px 3px" }}
+									label={this.state.combined}
+									onDelete={event => {
+										this.handleDeleteReminder(event)
+									}}
+								/>
+							) : null}
 							{this.state.noteLabels.map((data, index) => (
 								<Fragment key={index}>
 									<Chip
@@ -420,9 +485,8 @@ class NoteCard extends React.Component {
 						<MuiThemeProvider theme={cardAction}>
 							{!this.state.isDeleted ? (
 								<CardActions id="cardActions">
+									<RemindMe remindState={this.state} addReminder={this.handleAddReminder} styleid={"idb"} />
 
-									<RemindMe remindState={this.state} styleid={"idb"} />
-									
 									<Tooltip title="Collaborator">
 										<IconButton id="idb" size="small">
 											<PersonAddOutlinedIcon fontSize="inherit" />
@@ -547,7 +611,7 @@ class NoteCard extends React.Component {
 													<AddAlertOutlinedIcon fontSize="inherit" />
 												</IconButton>
 											</Tooltip> */}
-												<RemindMe styleid={"ibd"}/>
+											<RemindMe styleid={"ibd"} />
 
 											<Tooltip title="Collaborator">
 												<IconButton id="ibd" size="small">
@@ -601,6 +665,6 @@ class NoteCard extends React.Component {
 	}
 }
 const mapStateToProps = state => {
-  return { viewStatus: state.viewData };
+	return { viewStatus: state.viewData };
 };
-export default connect(mapStateToProps)(NoteCard)
+export default connect(mapStateToProps)(NoteCard);
