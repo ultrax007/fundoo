@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "../sass/TakeNote.sass";
 import update from "immutability-helper";
 import Paper from "@material-ui/core/Paper";
@@ -8,15 +8,16 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import noteServices from "../services/noteServices";
 import CheckList from "./Checklist";
-// import Popover from "@material-ui/core/Popover";
 
 //icons imported from material ui
-import AddAlertOutlinedIcon from "@material-ui/icons/AddAlertOutlined";
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
-import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
+import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
+import Chip from "@material-ui/core/Chip";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
+import RemindMe from "./RemindMe";
+import MoreMenu from "./MoreMenu";
 import ColorPalette from "./ColorPalette";
 import ArchiveIcon from "./ArchiveIcon";
 const nServe = new noteServices();
@@ -61,12 +62,13 @@ export default class TakeNote extends React.Component {
 			title: "",
 			description: "",
 			noteCheckLists: [],
-			// labelIdList: "",
-			// checklist: "",
+			noteLabels: [],
+			labelIdList: [],
 			isPined: false,
 			isArchived: false,
-			color: ""
-			// reminder: "",
+			color: "",
+			reminder: [],
+			combined: ""
 			// collaborators: ""
 		};
 		this.handleColor = this.handleColor.bind(this);
@@ -96,8 +98,8 @@ export default class TakeNote extends React.Component {
 			note.color = this.state.color;
 			note.isArchived = this.state.isArchived;
 			note.checklist = JSON.stringify(this.state.noteCheckLists);
-			// note.labelIdList = "";
-			// note.reminder = "";
+			note.reminder = this.state.reminder;
+			note.labelIdList = JSON.stringify(this.state.labelIdList);
 			// note.collaborators = "";
 			// hit create node api
 			var data = this.getEncodData(note);
@@ -130,16 +132,51 @@ export default class TakeNote extends React.Component {
 		console.log("description:=>", event.currentTarget.value);
 		this.setState({ description: event.currentTarget.value });
 	};
-	// handleLabelIdList = event => {
-	// 	event.preventDefault();
-	// 	console.log("labelIdList;=>", event.currentTarget.value);
-	// 	this.setState({ labelIdList: event.currentTarget.value });
-	// };
-	// handleChecklist = event => {
-	// 	event.preventDefault();
-	// 	console.log("checklist:=>", event.currentTarget.value);
-	// 	this.setState({ checklist: event.currentTarget.value });
-	// };
+	deleteLable = (event, index) => {
+		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		let id = this.state.labelIdList.indexOf(this.state.noteLabels[index].id);
+		console.log("value of id in delete lable", id);
+		this.setState({
+			labelIdList: update(this.state.labelIdList, {
+				$splice: [[id, 1]]
+			}),
+			noteLabels: update(this.state.noteLabels, {
+				$splice: [[index, 1]]
+			})
+		}, () => {
+				console.log("after removal labels are", this.state);
+		});
+	};
+
+	handleAddLabel = label => {
+		console.log(
+			"add label in notecard has label",
+			label,
+			this.state.noteLabels.indexOf(label)
+		);
+		if (this.state.noteLabels.indexOf(label) === -1) {
+			this.setState(
+				{
+					noteLabels: update(this.state.noteLabels, {
+						$push: [label]
+					}),
+					labelIdList: update(this.state.labelIdList, {
+						$push: [label.id]
+					})
+				},
+				() => {
+					console.log(
+						"label added successfully",
+						this.state.noteLabels,
+						this.state.labelIdList
+					);
+				}
+			);
+		}
+	};
+
 	handleIsPined = async () => {
 		await this.setState({ isPined: !this.state.isPined });
 		console.log("isPined:=>", this.state.isPined);
@@ -236,7 +273,27 @@ export default class TakeNote extends React.Component {
 			}
 		}
 	};
-
+	handleAddReminder = reminder => {
+		let date = reminder.slice(4, 10);
+		let time = reminder.slice(16, 21);
+		this.setState(
+			{
+				reminder: reminder.toString(),
+				combined: date + "," + time
+			},
+			() => {
+				console.log("value in combined", this.state.combined);
+				console.log("value in reminder", this.state.reminder);
+			}
+		);
+	};
+	handleDeleteReminder = event => {
+		event.preventDefault();
+		this.setState({
+			reminder: [],
+			combined: ""
+		});
+	};
 	render() {
 		return (
 			<Paper
@@ -288,14 +345,39 @@ export default class TakeNote extends React.Component {
 					onTick={this.handleChecklistAdd}
 					onRemove={this.handleChecklistRemove}
 				/>
+				<div id="chips">
+					{this.state.combined !== "" ? (
+						<Chip
+							icon={<AccessTimeSharpIcon />}
+							size="small"
+							style={{ margin: "2px 3px" }}
+							label={this.state.combined}
+							onDelete={event => {
+								this.handleDeleteReminder(event);
+							}}
+						/>
+					) : null}
+					{this.state.noteLabels.map((data, index) => (
+						<Fragment key={data.id}>
+							<Chip
+								size="small"
+								style={{ margin: "2px 3px" }}
+								label={data.label}
+								onDelete={event => {
+									this.deleteLable(event, index);
+								}}
+							/>
+						</Fragment>
+					))}
+				</div>
 				<div id="functions">
 					<div id="iconBar">
 						<MuiThemeProvider theme={iconmod}>
-							<Tooltip title="Remind me">
-								<IconButton id="ib" size="small">
-									<AddAlertOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip>
+							<RemindMe
+								remindState={this.state}
+								addReminder={this.handleAddReminder}
+								styleid={"ib"}
+							/>
 
 							<Tooltip title="Collaborator">
 								<IconButton id="ib" size="small">
@@ -318,11 +400,11 @@ export default class TakeNote extends React.Component {
 								archiveState={this.state.isArchived}
 								styleid={"ib"}
 							/>
-							<Tooltip title="more">
-								<IconButton id="ib" size="small">
-									<MoreVertOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip>
+							<MoreMenu
+								addLabel={this.handleAddLabel}
+								moreState={this.state}
+								styleid={"ib"}
+							/>
 						</MuiThemeProvider>
 					</div>
 					<div id="button">

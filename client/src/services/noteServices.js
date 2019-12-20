@@ -100,6 +100,10 @@ export default class noteServices {
     return obj.getMethod("/notes/getTrashNotesList", true);
   }
 
+  getReminderNotes() {
+    return obj.getMethod("/notes/getReminderNotesList", true);
+  }
+
 
 
   /**

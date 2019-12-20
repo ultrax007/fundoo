@@ -20,11 +20,9 @@ class Trash extends React.Component {
 	getNotesFromDB = () => {
 		nServe
 			.getTrashNotes()
-			.then(response => {
+			.then(async response => {
 				console.log("information in response", response.data.data.data);
-				this.setState({ allNotes: response.data.data.data });
-				// const usersAvailabe = this.state.users.filter(user => user._id !== this.state.loggedUserId);reverse()
-				// console.log(this.state.allNotes);
+				await this.setState({ allNotes: response.data.data.data.reverse() });
 			})
 			.catch(err => {
 				console.log("error occured while fetching data", err);

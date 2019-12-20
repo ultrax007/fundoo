@@ -12,13 +12,6 @@ export default class TakeNote extends React.Component {
 		}
 	}
 
-	// setNoteState = () => {
-	// 	console.log("in setNoteState");
-	// 	this.setState({
-	// 		noteClicked: true
-	// 	});
-	// }
-
 	handleNoteState = () => {
 		console.log("note state changed");
 		this.setState({

@@ -127,19 +127,14 @@ class NoteCard extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("date is", this.state.reminderString);
+		// console.log("date is", this.state.reminderString);
 		if (this.state.reminderString !== "Invalid Date") {
 			date = this.state.reminderString.slice(4, 10);
 			time = this.state.reminderString.slice(16, 21);
-			console.log("value in reminder", this.state.reminderString, date, time);
-			this.setState(
-				{
-					combined: date + "," + time
-				},
-				() => {
-					console.log("value in combined", this.state.combined);
-				}
-			);
+			// console.log("value in reminder", this.state.reminderString, date, time);
+			this.setState({
+				combined: date + "," + time
+			});
 		}
 	}
 
@@ -383,14 +378,14 @@ class NoteCard extends React.Component {
 		}
 	};
 
-	handleAddReminder = (reminder) => {
+	handleAddReminder = reminder => {
 		console.log("value in new Reminder", reminder);
 		this.setState({
-			combined:reminder
-		})
-	}
+			combined: reminder
+		});
+	};
 
-	handleDeleteReminder = (event) => {
+	handleDeleteReminder = event => {
 		event.preventDefault();
 		let data = { noteIdList: [this.state.id] };
 		nServe
@@ -460,12 +455,12 @@ class NoteCard extends React.Component {
 						<div id="chips">
 							{this.state.combined !== "" ? (
 								<Chip
-									icon={<AccessTimeSharpIcon/>}
+									icon={<AccessTimeSharpIcon />}
 									size="small"
 									style={{ margin: "2px 3px" }}
 									label={this.state.combined}
 									onDelete={event => {
-										this.handleDeleteReminder(event)
+										this.handleDeleteReminder(event);
 									}}
 								/>
 							) : null}
@@ -485,7 +480,11 @@ class NoteCard extends React.Component {
 						<MuiThemeProvider theme={cardAction}>
 							{!this.state.isDeleted ? (
 								<CardActions id="cardActions">
-									<RemindMe remindState={this.state} addReminder={this.handleAddReminder} styleid={"idb"} />
+									<RemindMe
+										remindState={this.state}
+										addReminder={this.handleAddReminder}
+										styleid={"idb"}
+									/>
 
 									<Tooltip title="Collaborator">
 										<IconButton id="idb" size="small">

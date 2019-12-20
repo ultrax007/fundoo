@@ -19,6 +19,7 @@ import SearchSharpIcon from "@material-ui/icons/SearchSharp";
 import Checkbox from "@material-ui/core/Checkbox";
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import { withStyles } from "@material-ui/core/styles";
 import noteServices from "../services/noteServices";
 import "../sass/playground.sass";
 const nServe = new noteServices();
@@ -37,13 +38,27 @@ const theme = createMuiTheme({
 		}
 	}
 });
-
-export default class MoreMenu extends React.Component {
+const styles = {
+	MuiList: {
+		paddingTop: "0",
+		paddingBottom: "0"
+	},
+	gutters: {
+		paddingLeft: "8px",
+		paddingRight: "4px"
+	},
+	MuiListItem: {
+		paddingTop: "0",
+		paddingBottom: "0"
+	}
+};
+class MoreMenu extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			pop_open: false,
 			anchorEl: null,
+			lanchorEl:null,
 			lMenu: false,
 			searchText: "",
 			labels:[]
@@ -71,7 +86,10 @@ export default class MoreMenu extends React.Component {
 
 	handleLabelAdd = async (event, index) => {
 		event.preventDefault();
-		let data = {};
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		if (this.props.moreState.id !== "") {
+			let data = {};
 		data.noteId = this.props.moreState.id;
 		// console.log("value in data.noteId", data.noteId, index);
 		data.labelId = this.state.labels[index].id;
@@ -85,6 +103,12 @@ export default class MoreMenu extends React.Component {
 		}).catch(err => {
 			console.log("err",err);
 		})
+		}
+		else {
+			console.log("adding lable to take note",this.state.labels[index]);
+			this.props.addLabel(this.state.labels[index]);
+		}
+		
 	};
 
 	handleDelete = () => {
@@ -106,46 +130,58 @@ export default class MoreMenu extends React.Component {
 		this.props.onUpdate();
 	};
 
-	handleMenu(e) {
-		e.preventDefault();
-		this.setState({
-			pop_open: !this.state.pop_open,
-			anchorEl: e.currentTarget
+	handleMenu = async (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		await this.setState({
+			pop_open: true,
+			anchorEl: event.currentTarget,
+			lanchorEl: event.currentTarget,
 		});
+		console.log("value of anchorEl",this.state.anchorEl);
 	}
 
 	handleLMenu = async event => {
 		event.preventDefault();
-		this.setState({
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		console.log("value of lanchorel",this.state.lanchorEl);
+		await this.setState({
 			pop_open: false,
-			lMenu: !this.state.lMenu
+			anchorEl:null,
+			lMenu: true
 		});
-		await console.log("lmenu hit", this.state.lMenu);
+		console.log("lmenu hit open", this.state.lMenu);
 	};
 
 	handleLMenuClose = async event => {
 		event.preventDefault();
-		this.setState({
-			pop_open: false,
+		// event.stopPropagation();
+		// event.nativeEvent.stopImmediatePropagation();
+		await this.setState({
 			lMenu: false,
-			anchorEl: null
+			lanchorEl: null
 		});
-		await console.log("lmenu hit", this.state.lMenu);
+		console.log("lmenu hit close", this.state.lMenu);
 	};
 
 	handleClose = () => {
 		this.setState({
-			pop_open: !this.state.pop_open,
+			pop_open: false,
 			anchorEl: null
 		});
 	};
 
 	handleSearchText = event => {
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 		this.setState({ searchText: event.currentTarget.value });
 		console.log("value in search", this.state.searchText);
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
 			<Fragment>
 				<Tooltip title="more">
@@ -165,28 +201,29 @@ export default class MoreMenu extends React.Component {
 						onClose={this.handleClose}
 						TransitionComponent={Fade}
 					>
-						<MenuItem onClick={this.handleDelete}>Delete Note</MenuItem>
+						{this.props.moreState.id!==""?<MenuItem onClick={this.handleDelete}>Delete Note</MenuItem>:null}
+						
 						<MenuItem onClick={event => this.handleLMenu(event)}>
 							Add Lable
 						</MenuItem>
 						{/* <MenuItem>Show Checklist</MenuItem> */}
 						{/* <MenuItem>Ask Question</MenuItem> */}
 					</Menu>
+						<Popper
+							open={this.state.lMenu}
+							anchorEl={this.state.lanchorEl}
+							style={{ zIndex: "1301" }}
+							placement={"left-start"}
+						>
 					<ClickAwayListener
 						onClickAway={event => this.handleLMenuClose(event)}
 					>
-						<Popper
-							open={this.state.lMenu}
-							anchorEl={this.state.anchorEl}
-							style={{ zIndex: "1301" }}
-							placement={"bottom-start"}
-						>
 							<Paper id="lMenu">
-								<List dense={true}>
-									<ListItem>
+								<List dense={true} classes={{ padding: classes.MuiList }}>
+									<ListItem classes={{ root: classes.MuiListItem }}>
 										<ListItemText primary="Label note" />
 									</ListItem>
-									<ListItem>
+									<ListItem classes={{ root: classes.MuiListItem }}>
 										<InputBase
 											margin="dense"
 											placeholder="Enter label name"
@@ -203,9 +240,9 @@ export default class MoreMenu extends React.Component {
 										/>
 									</ListItem>
 									{this.state.labels.map((data,index) => (
-										<ListItem key={data.id}>
+										<ListItem dense key={data.id} classes={{ root: classes.MuiListItem, gutters:classes.gutters }}>
 											<Checkbox
-												fontSize="small"
+												size="small"
 												disableRipple={true}
 												icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
 												checkedIcon={<CheckBoxIcon fontSize="small" style={{ color: "#757575" }} />}
@@ -216,10 +253,11 @@ export default class MoreMenu extends React.Component {
 									))}
 								</List>
 							</Paper>
-						</Popper>
 					</ClickAwayListener>
+						</Popper>
 				</MuiThemeProvider>
 			</Fragment>
 		);
 	}
 }
+export default withStyles(styles)(MoreMenu);

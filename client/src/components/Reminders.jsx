@@ -1,12 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "../sass/playground.sass";
+import TakeNote from "./TakeNote";
 import { connect } from "react-redux";
+import Typography from "@material-ui/core/Typography";
 import Masonry from "react-masonry-css";
 import NoteCard from "./NoteCard";
+import sad from "../assets/sad.svg";
 import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 
-class Archived extends React.Component {
+class Reminders extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -20,7 +23,7 @@ class Archived extends React.Component {
 
 	getNotesFromDB = () => {
 		nServe
-			.getArchivedNotes()
+			.getReminderNotes()
 			.then(async response => {
 				console.log("information in response", response.data.data.data);
 				await this.setState({ allNotes: response.data.data.data.reverse() });
@@ -49,9 +52,13 @@ class Archived extends React.Component {
 			? "listAllNotesContainer"
 			: "allNotesContainer";
 
-		return (
+    return (
+      <Fragment>
+				{this.state.allNotes.length > 0 ? (
 			<div id={myStyle}>
-				<div id="takeNoteContainer">{/* <TakeNote /> */}</div>
+				<div id="takeNoteContainer">
+					<TakeNote operation={this.getNotesFromDB} />
+				</div>
 				<div className={CStyle}>
 					<Masonry
 						breakpointCols={breakpointColumnsObj}
@@ -67,11 +74,24 @@ class Archived extends React.Component {
 						))}
 					</Masonry>
 				</div>
-			</div>
+          </div>
+          ) : (
+					<div id="sad">
+						<img src={sad} alt="sad" width="150px"></img>
+						<Typography
+							variant="h3"
+							component="h3"
+							style={{ color: "#e5e5e5", padding: "25px 0" }}
+						>
+							Sorry nothing to display...
+						</Typography>
+					</div>
+				)}
+			</Fragment>
 		);
 	}
 }
 const mapStateToProps = state => {
 	return { drawerStatus: state.drawerData, viewStatus: state.viewData };
 };
-export default connect(mapStateToProps)(Archived);
+export default connect(mapStateToProps)(Reminders);

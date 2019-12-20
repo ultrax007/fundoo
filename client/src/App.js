@@ -12,6 +12,7 @@ import Trash from "./components/Trash";
 import EditLable from "./components/Labels";
 import Search from "./components/Search";
 import Labels from "./components/Labels";
+import Reminders from "./components/Reminders";
 function App() {
 	return (
 		<div>
@@ -22,6 +23,7 @@ function App() {
 					<Route path="/resetPassword" component={ResetPassword}></Route>
 					<Route path="/dashboard" component={Dashboard}></Route>
 					<Route path="/dashboard/notes" component={Notes}></Route>
+					<Route path="/dashboard/reminders" component={Reminders}></Route>
 					<Route path="/dashboard/archived" component={Archived}></Route>
 					<Route path="/dashboard/trash" component={Trash}></Route>
 					<Route path="/dashboard/editLable" component={EditLable}></Route>

@@ -18,6 +18,7 @@ import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import Avatar from "@material-ui/core/Avatar";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
+import CloseSharpIcon from "@material-ui/icons/CloseSharp";
 import Popover from "@material-ui/core/Popover";
 import Drawerlist from "./DrawerList";
 import { drawer, typedText, view } from "./redux/Actions";
@@ -113,7 +114,7 @@ class Dashboard extends React.Component {
 		this.props.history.push("/dashboard/notes");
 	};
 	getReminder = () => {
-		this.props.history.push("/dashboard/reminder");
+		this.props.history.push("/dashboard/reminders");
 	};
 	getLabel = data => {
 		let path = "/dashboard/label/" + data;
@@ -126,11 +127,13 @@ class Dashboard extends React.Component {
 		this.props.history.push("/dashboard/trash");
 	};
 	openSearch = () => {
+		document.getElementById("searchtext").focus();
 		this.props.history.push("/dashboard/search");
 	};
 
 	handleSearch = async event => {
 		event.preventDefault();
+		
 		await this.setState({ searched: event.currentTarget.value });
 		this.props.typedText(this.state.searched);
 		console.log("searched:==>", this.state.searched);
@@ -174,7 +177,7 @@ class Dashboard extends React.Component {
 										Fundoo
 									</div>
 								</div>
-								<div className="searchBlock" onClick={this.openSearch}>
+								<div className="searchBlock" >
 									<InputBase
 										id="searchtext"
 										fullWidth
@@ -184,19 +187,34 @@ class Dashboard extends React.Component {
 										style={{ height: "3.1875em", color: "#757575" }}
 										value={this.state.searched}
 										onChange={event => this.handleSearch(event)}
+										onClick={this.openSearch}
 										startAdornment={
 											<InputAdornment position="start">
 												<SearchIcon
+													onClick={this.openSearch}
 													style={{ color: "#757575", padding: "0 15px" }}
 												/>
 											</InputAdornment>
 										}
 									/>
+									<IconButton
+										size="small"
+										style={{ width: "30px",alignSelf:"center"}}
+										onClick={this.getNotes}
+									>
+										<CloseSharpIcon
+											id="closeIcon"
+											style={{ color: "#757575", padding: "0 15px" }}
+										/>
+									</IconButton>
 								</div>
 								<div id="rightPanelLogo">
-									<IconButton id="logos" onClick={event => this.handleGridList(event)}>
+									<IconButton
+										id="logos"
+										onClick={event => this.handleGridList(event)}
+									>
 										{this.state.listView ? (
-											<DashboardOutlinedIcon  />
+											<DashboardOutlinedIcon />
 										) : (
 											<ViewAgendaOutlinedIcon />
 										)}

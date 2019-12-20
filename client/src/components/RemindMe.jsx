@@ -66,19 +66,29 @@ class RemindMe extends React.Component {
 	}
 
 	hitReminderApi = () => {
-		let data = {};
-		data.noteIdList = [this.props.remindState.id];
-		data.reminder = [this.state.reminder];
-		data.type = "reminder";
-		console.log("value of data in hit api", data);
-		nServe.addUpdateReminder(data).then(response => {
-			let newReminder = this.state.reminder.slice(4, 10) + "," + this.state.reminder.slice(16, 21);
-			this.props.addReminder(newReminder);
-			console.log("success", response);
-		}).catch(err => {
-			console.log("err",err);
-		})
-	}
+		if (this.props.remindState.id !== "") {
+			let data = {};
+			data.noteIdList = [this.props.remindState.id];
+			data.reminder = [this.state.reminder];
+			data.type = "reminder";
+			console.log("value of data in hit api", data);
+			nServe
+				.addUpdateReminder(data)
+				.then(response => {
+					let newReminder =
+						this.state.reminder.slice(4, 10) +
+						"," +
+						this.state.reminder.slice(16, 21);
+					this.props.addReminder(newReminder);
+					console.log("success", response);
+				})
+				.catch(err => {
+					console.log("err", err);
+				});
+		} else {
+			this.props.addReminder(this.state.reminder);
+		}
+	};
 
 	handleDateChange = async date => {
 		console.log("value in date", date);
@@ -99,6 +109,7 @@ class RemindMe extends React.Component {
 	handleSave = async event => {
 		event.preventDefault();
 		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 		if (this.state.sDate === "") {
 			console.log("date is empty");
 			await this.setState(
@@ -157,6 +168,7 @@ class RemindMe extends React.Component {
 	};
 	handleTemplates = async (event, choice) => {
 		event.preventDefault();
+		event.nativeEvent.stopImmediatePropagation();
 		switch (choice) {
 			case "1": {
 				this.handeSetReminder(new Date(), new Date("2019-12-19T20:00:00"));
@@ -182,6 +194,7 @@ class RemindMe extends React.Component {
 	};
 	handleRemindMe(event) {
 		event.preventDefault();
+		event.nativeEvent.stopImmediatePropagation();
 		this.setState({
 			pop_open: !this.state.pop_open,
 			anchorEl: event.currentTarget,
@@ -190,21 +203,28 @@ class RemindMe extends React.Component {
 	}
 	handlePicker(event) {
 		event.preventDefault();
+		event.nativeEvent.stopImmediatePropagation();
 		this.setState({
 			pop_open: false,
 			picker_open: true
 			// anchorEl: event.currentTarget
 		});
 	}
-	handleClose = () => {
+	handleClose = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 		this.setState({
-			pop_open: !this.state.pop_open,
+			pop_open: false,
 			anchorEl: null
 		});
 	};
-	handlePickerClose = () => {
+	handlePickerClose = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 		this.setState({
-			picker_open: !this.state.picker_open,
+			picker_open: false,
 			panchorEl: null
 		});
 	};
@@ -225,7 +245,7 @@ class RemindMe extends React.Component {
 				<Popover
 					open={this.state.pop_open}
 					anchorEl={this.state.anchorEl}
-					onClose={this.handleClose}
+					onClose={event => { this.handleClose(event) }}
 					anchorOrigin={{
 						vertical: "center",
 						horizontal: "center"
@@ -301,7 +321,7 @@ class RemindMe extends React.Component {
 				<Popover
 					open={this.state.picker_open}
 					anchorEl={this.state.panchorEl}
-					onClose={this.handlePickerClose}
+					onClose={event => { this.handlePickerClose(event) }}
 					anchorOrigin={{
 						vertical: "center",
 						horizontal: "left"

@@ -75,7 +75,7 @@ $grey-color: #424242
   flex-direction: row
 
 .searchBlock
-  @extend %cField
+  @extend %rField
   width: 56%
   background-color: #f1f3f4
   border-radius: 5px
@@ -92,4 +92,11 @@ $grey-color: #424242
   margin-left: 4%
   width: fit-content
   // justify-content: space-between
+
+#closeIcon
+  visibility: hidden
+
+.searchBlock:hover
+  #closeIcon
+    visibility: visible
 
