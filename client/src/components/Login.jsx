@@ -61,12 +61,14 @@ export default class Login extends React.Component {
 	changeProgress = () => {
 		this.setState({ proress: false });
 	};
-
+	capitalizeFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
 	handleSubmit = () => {
 		let loginData = {};
 		loginData.email = this.state.email;
 		loginData.password = this.state.password;
-		
+
 		userve
 			.login(loginData)
 			.then(response => {
@@ -78,8 +80,10 @@ export default class Login extends React.Component {
 					localStorage.removeItem("token");
 					localStorage.setItem("token", response.data.id);
 					localStorage.setItem("userId", response.data.userId);
-					console.log('token changed');
-					
+					let name = this.capitalizeFirstLetter(response.data.firstName) + " " + this.capitalizeFirstLetter(response.data.lastName);
+					localStorage.setItem("name", name);
+					localStorage.setItem("email", response.data.email)
+					console.log("name is",name);
 					snackStyle = {
 						color: "white",
 						height: "fitContent",
@@ -88,9 +92,8 @@ export default class Login extends React.Component {
 					};
 					this.setState({ sOpen: true, message: "successful login" });
 					setTimeout(() => {
-					this.props.history.push(path);
+						this.props.history.push(path);
 					}, 1000);
-
 				}
 			})
 			.catch(err => {

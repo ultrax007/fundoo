@@ -2,6 +2,7 @@
 import React from "react";
 import "../sass/dashboard.sass";
 import { connect } from "react-redux";
+import compose from "recompose/compose";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,8 +10,20 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import flogo from "../assets/favicon.ico";
 import SearchIcon from "@material-ui/icons/Search";
-import { createMuiTheme, MuiThemeProvider, Button } from "@material-ui/core";
+import {
+	createMuiTheme,
+	MuiThemeProvider,
+	Button,
+	Paper,
+	List,
+	ListItem,
+	ListItemText,
+	Chip
+} from "@material-ui/core";
 // import TextField from "@material-ui/core/TextField";
+import { withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
+import CameraAltOutlinedIcon from "@material-ui/icons/CameraAltOutlined";
 import InputBase from "@material-ui/core/InputBase";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ViewAgendaOutlinedIcon from "@material-ui/icons/ViewAgendaOutlined";
@@ -65,6 +78,32 @@ const theme = createMuiTheme({
 		}
 	}
 });
+
+const styles = {
+	gutters: {
+		padding:"0 16px"
+	},
+	MuiAvatar: {
+		width: "70px",
+		height: "70px",
+		boxShadow:
+			" 0px 0px 14px 4px rgba(117, 242, 255, 0.25), 0 0px 6px 3px rgba(156, 255, 164, 0.20)"
+	},
+	MuiList: {
+		paddingTop: "5px"
+	},
+	MuiListItem: {
+		padding: "8px",
+		justifyContent: "center"
+	},
+	MuiButton: {
+		fontSize:"10px"
+	},
+	typography: {
+		color:"#fff",
+		textShadow:"1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;"
+	}
+};
 
 class Dashboard extends React.Component {
 	constructor(props) {
@@ -133,7 +172,7 @@ class Dashboard extends React.Component {
 
 	handleSearch = async event => {
 		event.preventDefault();
-		
+
 		await this.setState({ searched: event.currentTarget.value });
 		this.props.typedText(this.state.searched);
 		console.log("searched:==>", this.state.searched);
@@ -146,8 +185,7 @@ class Dashboard extends React.Component {
 	};
 
 	render() {
-		// var style;
-		// style = this.state.open ? "containerSM" : "container";
+		const { classes } = this.props;
 
 		return (
 			<div className="main">
@@ -177,7 +215,7 @@ class Dashboard extends React.Component {
 										Fundoo
 									</div>
 								</div>
-								<div className="searchBlock" >
+								<div className="searchBlock">
 									<InputBase
 										id="searchtext"
 										fullWidth
@@ -199,7 +237,7 @@ class Dashboard extends React.Component {
 									/>
 									<IconButton
 										size="small"
-										style={{ width: "30px",alignSelf:"center"}}
+										style={{ width: "30px", alignSelf: "center" }}
 										onClick={this.getNotes}
 									>
 										<CloseSharpIcon
@@ -240,13 +278,65 @@ class Dashboard extends React.Component {
 											horizontal: "right"
 										}}
 									>
-										<Button
-											variant="outlined"
-											margin="dense"
-											onClick={this.handleLogout}
-										>
-											logout
-										</Button>
+										<Paper id="profileMenu">
+											<List classes={{ padding: classes.MuiList }}>
+												<ListItem classes={{ gutters: classes.gutters }} style={{ justifyContent: "center" }}>
+													<Badge
+														overlap="circle"
+														anchorOrigin={{
+															vertical: "bottom",
+															horizontal: "right"
+														}}
+														badgeContent={
+															<IconButton
+																size="small"
+																style={{
+																	backgroundColor: "#8844bbe0",
+																	boxShadow:
+																		" -4px -2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+																}}
+															>
+																<CameraAltOutlinedIcon fontSize="inherit" />
+															</IconButton>
+														}
+													>
+														<Avatar
+															src={flogo}
+															classes={{ root: classes.MuiAvatar }}
+														>
+															<AccountCircleOutlinedIcon />
+														</Avatar>
+													</Badge>
+													<ListItemText
+														classes={{root:classes.typography}}
+														primary={localStorage.getItem("name")}
+													/>
+												</ListItem>
+												{/* <ListItem classes={{ gutters: classes.gutters }} style={{ textAlign: "center" }}>
+													
+												</ListItem> */}
+												<ListItem classes={{ gutters: classes.gutters }} style={{ justifyContent: "center" }}>
+													<Chip
+														
+														size="small"
+														label={localStorage.getItem("email")}
+													/>
+												</ListItem>
+												<ListItem classes={{ root: classes.MuiListItem,gutters:classes.gutters }}>
+													<Button
+														classes={{containedSizeSmall:classes.MuiButton}}
+														disableElevation
+														size="small"
+														variant="contained"
+														color="primary"
+														margin="dense"
+														onClick={this.handleLogout}
+													>
+														logout
+													</Button>
+												</ListItem>
+											</List>
+										</Paper>
 									</Popover>
 								</div>
 							</Toolbar>
@@ -284,4 +374,7 @@ const mapDispatchToProps = {
 	typedText,
 	view
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps)
+)(Dashboard);
