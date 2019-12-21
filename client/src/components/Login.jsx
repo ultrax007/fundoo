@@ -82,7 +82,8 @@ export default class Login extends React.Component {
 					localStorage.setItem("userId", response.data.userId);
 					let name = this.capitalizeFirstLetter(response.data.firstName) + " " + this.capitalizeFirstLetter(response.data.lastName);
 					localStorage.setItem("name", name);
-					localStorage.setItem("email", response.data.email)
+					localStorage.setItem("email", response.data.email);
+					localStorage.setItem("imageUrl", response.data.imageUrl);
 					console.log("name is",name);
 					snackStyle = {
 						color: "white",

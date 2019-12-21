@@ -18,4 +18,8 @@ export default class userServices {
   reset(data) {
     return obj.resetMethod(data,"/user/reset-password",data.token);
   }
+
+  profileImageUpload(data) {
+    return obj.postImage(data,"/user/uploadProfileImage",true);
+  }
 }

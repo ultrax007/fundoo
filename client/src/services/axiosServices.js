@@ -64,4 +64,14 @@ export default class axiosServices {
 			}
 		});
 	}
+	postImage(data,target,isTokenReq) { 
+		token = localStorage.getItem("token");
+
+		return axios.post(address + target, data, isTokenReq && {
+			headers: {
+				'Content-type': 'multipart/form-data',
+				'Authorization': token
+			}
+		});
+	}
 }
