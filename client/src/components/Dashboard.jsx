@@ -124,7 +124,7 @@ class Dashboard extends React.Component {
 			listView: false,
 			searched: "",
 			selectedFile: null,
-			base64: "",
+			base64: "http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl"),
 			// src: null,
 			// crop: {
 			// 	unit: "%",
@@ -216,14 +216,14 @@ class Dashboard extends React.Component {
 		e.preventDefault();
 		e.nativeEvent.stopImmediatePropagation();
 		this.setState({
-			pop_open: !this.state.pop_open,
+			pop_open: true,
 			anchorEl: e.currentTarget
 		});
 	}
 
 	handleClose = () => {
 		this.setState({
-			pop_open: !this.state.pop_open,
+			pop_open: false,
 			anchorEl: null
 		});
 	};
@@ -308,6 +308,7 @@ class Dashboard extends React.Component {
 			.profileImageUpload(formData)
 			.then(response => {
 				console.log("response is", response);
+				this.state.handleClose();
 			})
 			.catch(err => {
 				console.log("err", err);
@@ -394,7 +395,7 @@ class Dashboard extends React.Component {
 								<div id="avatar">
 									<Avatar
 										alt={localStorage.getItem("name").charAt(0)}
-										src={"http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl")}
+										src={this.state.base64}
 										onClick={event => this.handleProfileDropDown(event)}
 									/>
 
@@ -464,7 +465,7 @@ class Dashboard extends React.Component {
 													>
 														<Avatar
 															alt={localStorage.getItem("name").charAt(0)}
-															src={"http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl")}
+															src={this.state.base64}
 															classes={{ root: classes.MuiAvatar }}
 														/>
 													</Badge>
