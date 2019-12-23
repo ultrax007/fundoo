@@ -31,6 +31,7 @@ import Chip from "@material-ui/core/Chip";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import RemindMe from "./RemindMe";
+import Collaborator from "./Collaborator";
 import ColorPalette from "./ColorPalette";
 import ArchiveIcon from "./ArchiveIcon";
 import MoreMenu from "./MoreMenu";
@@ -486,12 +487,16 @@ class NoteCard extends React.Component {
 										styleid={"idb"}
 									/>
 
-									<Tooltip title="Collaborator">
+									{/* <Tooltip title="Collaborator">
 										<IconButton id="idb" size="small">
 											<PersonAddOutlinedIcon fontSize="inherit" />
 										</IconButton>
-									</Tooltip>
-
+									</Tooltip> */}
+									<Collaborator
+										collabAdd={this.handleAddCollaborator}
+										collabState={this.state}
+										styelid={"idb"}
+									/>
 									<Tooltip title="Add image">
 										<IconButton id="idb" size="small">
 											<InsertPhotoOutlinedIcon fontSize="inherit" />
@@ -589,6 +594,17 @@ class NoteCard extends React.Component {
 									onRemove={this.handleChecklistRemove}
 								/>
 								<div id="chips">
+									{this.state.combined !== "" ? (
+										<Chip
+											icon={<AccessTimeSharpIcon />}
+											size="small"
+											style={{ margin: "2px 3px" }}
+											label={this.state.combined}
+											onDelete={event => {
+												this.handleDeleteReminder(event);
+											}}
+										/>
+									) : null}
 									{this.state.noteLabels.map((data, index) => (
 										<Fragment key={index}>
 											<Chip
@@ -610,7 +626,11 @@ class NoteCard extends React.Component {
 													<AddAlertOutlinedIcon fontSize="inherit" />
 												</IconButton>
 											</Tooltip> */}
-											<RemindMe styleid={"ibd"} />
+											<RemindMe
+												remindState={this.state}
+												addReminder={this.handleAddReminder}
+												styleid={"ibd"}
+											/>
 
 											<Tooltip title="Collaborator">
 												<IconButton id="ibd" size="small">

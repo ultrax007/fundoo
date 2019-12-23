@@ -1,6 +1,6 @@
 //Default imports for designing
 import React from "react";
-import ReactCrop from "react-image-crop";
+// import ReactCrop from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "../sass/dashboard.sass";
 import { connect } from "react-redux";
@@ -133,6 +133,11 @@ class Dashboard extends React.Component {
 			// },
 			dialogOpen: false
 		};
+	}
+	componentDidMount() {
+		this.setState({
+			base64: "http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl")
+		})
 	}
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
@@ -308,7 +313,8 @@ class Dashboard extends React.Component {
 			.profileImageUpload(formData)
 			.then(response => {
 				console.log("response is", response);
-				this.state.handleClose();
+				this.handleCloseDialog();
+				localStorage.setItem("imageUrl", response.data.status.imageUrl)
 			})
 			.catch(err => {
 				console.log("err", err);

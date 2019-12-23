@@ -37,7 +37,8 @@ const styles = {
 	}
 };
 const picker = {
-	fontSize: "13px"
+	fontSize: "13px",
+	zIndex:"4000"
 };
 const text = {
 	fontSize: "13px"
@@ -210,7 +211,7 @@ class RemindMe extends React.Component {
 			// anchorEl: event.currentTarget
 		});
 	}
-	handleClose = (event) => {
+	handleClose = event => {
 		event.preventDefault();
 		event.stopPropagation();
 		event.nativeEvent.stopImmediatePropagation();
@@ -219,7 +220,7 @@ class RemindMe extends React.Component {
 			anchorEl: null
 		});
 	};
-	handlePickerClose = (event) => {
+	handlePickerClose = event => {
 		event.preventDefault();
 		event.stopPropagation();
 		event.nativeEvent.stopImmediatePropagation();
@@ -245,7 +246,9 @@ class RemindMe extends React.Component {
 				<Popover
 					open={this.state.pop_open}
 					anchorEl={this.state.anchorEl}
-					onClose={event => { this.handleClose(event) }}
+					onClose={event => {
+						this.handleClose(event);
+					}}
 					anchorOrigin={{
 						vertical: "center",
 						horizontal: "center"
@@ -321,7 +324,9 @@ class RemindMe extends React.Component {
 				<Popover
 					open={this.state.picker_open}
 					anchorEl={this.state.panchorEl}
-					onClose={event => { this.handlePickerClose(event) }}
+					onClose={event => {
+						this.handlePickerClose(event);
+					}}
 					anchorOrigin={{
 						vertical: "center",
 						horizontal: "left"
