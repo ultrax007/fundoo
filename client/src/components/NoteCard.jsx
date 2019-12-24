@@ -19,6 +19,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
+import PersonIcon from "@material-ui/icons/Person";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
 import Dialog from "@material-ui/core/Dialog";
@@ -122,7 +123,7 @@ class NoteCard extends React.Component {
 				this.props.dataFromDisplay.reminder[0]
 			).toString(),
 			combined: "",
-			// collaborators: ""
+			collaborators: this.props.dataFromDisplay.collaborators,
 			dialogOpen: false
 		};
 	}
@@ -404,6 +405,18 @@ class NoteCard extends React.Component {
 			});
 	};
 
+	handleAddCollaborator = userData => {
+		this.setState({
+			collaborators: update(this.state.collaborators, { $push: [userData] })
+		});
+	};
+
+	handleRemoveCollaborator = index => {
+		this.setState({
+			collaborators: update(this.state.collaborators, { $splice: [[index, 1]] })
+		});
+	};
+
 	render() {
 		// console.log("render works in card component", this.props);
 
@@ -477,6 +490,21 @@ class NoteCard extends React.Component {
 									/>
 								</Fragment>
 							))}
+							{this.state.collaborators.map(data => (
+								<IconButton
+									key={data.email}
+									size="small"
+									style={{
+										border: "1px solid #494949",
+										margin: "0 3px",
+										backgroundColor: "#00b9ff7a"
+									}}
+								>
+									<Tooltip title={data.email}>
+										<PersonIcon fontSize="inherit" />
+									</Tooltip>
+								</IconButton>
+							))}
 						</div>
 						<MuiThemeProvider theme={cardAction}>
 							{!this.state.isDeleted ? (
@@ -494,6 +522,7 @@ class NoteCard extends React.Component {
 									</Tooltip> */}
 									<Collaborator
 										collabAdd={this.handleAddCollaborator}
+										collabRemove={this.handleRemoveCollaborator}
 										collabState={this.state}
 										styelid={"idb"}
 									/>
@@ -617,6 +646,21 @@ class NoteCard extends React.Component {
 											/>
 										</Fragment>
 									))}
+									{this.state.collaborators.map(data => (
+										<IconButton
+											key={data.email}
+											size="small"
+											style={{
+												border: "1px solid #494949",
+												margin: "0 3px",
+												backgroundColor: "#00b9ff7a"
+											}}
+										>
+											<Tooltip title={data.email}>
+												<PersonIcon fontSize="inherit" />
+											</Tooltip>
+										</IconButton>
+									))}
 								</div>
 								<div id="functions">
 									<div id="iconBar">
@@ -632,11 +676,12 @@ class NoteCard extends React.Component {
 												styleid={"ibd"}
 											/>
 
-											<Tooltip title="Collaborator">
-												<IconButton id="ibd" size="small">
-													<PersonAddOutlinedIcon fontSize="inherit" />
-												</IconButton>
-											</Tooltip>
+											<Collaborator
+												collabAdd={this.handleAddCollaborator}
+												collabRemove={this.handleRemoveCollaborator}
+												collabState={this.state}
+												styelid={"ibd"}
+											/>
 
 											<Tooltip title="Add image">
 												<IconButton id="ibd" size="small">

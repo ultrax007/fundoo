@@ -76,6 +76,17 @@ export default class noteServices {
     console.log("datat in nservices",data);
     return obj.postMethod(data,"/notes/"+data.noteId+"/checklist/"+data.checklistId+"/remove", true);
   }
+
+  searchUserList(data) {
+    console.log("data in nservices", data);
+    return obj.postMethod(data,"/user/searchUserList",true)
+  }
+
+  addCollaborator(data) {
+    console.log("data in nservices", data);
+    return obj.postMethod(data,"/notes/"+data.id+"/AddcollaboratorsNotes", true)
+  }
+  
   
   
   /**
@@ -115,5 +126,9 @@ export default class noteServices {
   deleteNoteLabel(id) {
     return obj.deleteMethod("/noteLabels/" + id + "/deleteNoteLabel");
   }
-  
+
+  deleteCollaborator(data) {
+    console.log("data in nservices", data);
+    return obj.deleteMethod("/notes/"+data.id+"/removeCollaboratorsNotes/"+data.userId, true)
+  }
 }

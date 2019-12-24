@@ -121,6 +121,7 @@ class Dashboard extends React.Component {
 		this.state = {
 			open: false,
 			pop_open: false,
+			anchorEl:null,
 			listView: false,
 			searched: "",
 			selectedFile: null,

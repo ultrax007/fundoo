@@ -3,7 +3,10 @@ import axios from "axios";
 const address = "http://fundoonotes.incubation.bridgelabz.com/api";
 var token = localStorage.getItem("token");
 export default class axiosServices {
-	
+	getToken() {
+		return localStorage.getItem("token");
+	}
+
 	resetMethod(data, target, token) {
 		return axios.post(address + target, data, {
 			headers: {
@@ -14,7 +17,7 @@ export default class axiosServices {
 	}
 
 	formDataPostMethod(data, target, isTokenReq) {
-		 token = localStorage.getItem("token");
+		token = this.getToken();
 
 		return axios.post(address + target, data, isTokenReq && {
 			headers: {
@@ -24,7 +27,7 @@ export default class axiosServices {
 		});
 	}
 	postMethod(data, target, isTokenReq) {
-		 token = localStorage.getItem("token");
+		token = this.getToken();
 
 		return axios.post(address + target, data, isTokenReq && {
 			headers: {
@@ -35,7 +38,7 @@ export default class axiosServices {
 	}
 
 	getMethod(target) {
-		token = localStorage.getItem("token");
+		token = this.getToken();
 
 		return axios.get(address + target, {
 			headers: {
@@ -45,7 +48,7 @@ export default class axiosServices {
 	}
 
 	putMethod(data, target, isTokenReq) {
-		token = localStorage.getItem("token");
+		token = this.getToken();
 		
 		return axios.put(address + target, data, isTokenReq && {
 			headers: {
@@ -56,7 +59,8 @@ export default class axiosServices {
 	}
 	
 	deleteMethod(target,isTokenReq) {
-		token = localStorage.getItem("token");
+		token = this.getToken();
+
 		return axios.delete(address + target, isTokenReq && {
 			headers: {
 				'Content-type': 'application/json; charset=utf-8',
@@ -64,8 +68,9 @@ export default class axiosServices {
 			}
 		});
 	}
+	
 	postImage(data,target,isTokenReq) { 
-		token = localStorage.getItem("token");
+		token = this.getToken();
 
 		return axios.post(address + target, data, isTokenReq && {
 			headers: {
