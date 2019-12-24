@@ -17,8 +17,6 @@ import Typography from "@material-ui/core/Typography";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
-import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import PersonIcon from "@material-ui/icons/Person";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";

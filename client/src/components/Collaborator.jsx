@@ -81,6 +81,8 @@ class Collaborator extends React.Component {
 	}
 	handleSearch = async event => {
 		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
 		console.log("value in handle search", event.currentTarget.value);
 		await this.setState({
 			searchWord: event.currentTarget.value
@@ -122,33 +124,47 @@ class Collaborator extends React.Component {
 			collaborators: update(this.state.collaborators, { $splice: [[index, 1]] })
 		});
 	};
-	handleDeleteCollaborator = (event, userData,index) => {
+	handleDeleteCollaborator = (event, userData, index) => {
 		event.preventDefault();
-		nServe
-			.deleteCollaborator(userData)
-			.then(response => {
-				this.popCollab(index);
-				this.props.collabRemove(index);
-				console.log("successfully deleted collaborator", response);
-			})
-			.catch(err => {
-				console.log("err deleting collaborator", err);
-			});
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		if (this.props.collabState.id === "") {
+			this.popCollab(index);
+			this.props.collabRemove(index);
+		} else {
+			nServe
+				.deleteCollaborator(userData)
+				.then(response => {
+					this.popCollab(index);
+					this.props.collabRemove(index);
+					console.log("successfully deleted collaborator", response);
+				})
+				.catch(err => {
+					console.log("err deleting collaborator", err);
+				});
+		}
 	};
 	handleAddCollaborator = (event, userData) => {
 		event.preventDefault();
-		userData.id = this.props.collabState.id;
-		console.log("value in data", userData);
-		nServe
-			.addCollaborator(userData)
-			.then(response => {
-				this.pushCollab(userData);
-				this.props.collabAdd(userData);
-				console.log("successfully added collaborator", response);
-			})
-			.catch(err => {
-				console.log("err adding collaborator", err);
-			});
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		if (this.props.collabState.id === "") {
+			this.pushCollab(userData)
+			this.props.collabAdd(userData);
+		} else {
+			userData.id = this.props.collabState.id;
+			console.log("value in data", userData);
+			nServe
+				.addCollaborator(userData)
+				.then(response => {
+					this.pushCollab(userData);
+					this.props.collabAdd(userData);
+					console.log("successfully added collaborator", response);
+				})
+				.catch(err => {
+					console.log("err adding collaborator", err);
+				});
+		}
 	};
 
 	render() {
@@ -209,7 +225,12 @@ class Collaborator extends React.Component {
 										</ListItemText>
 										<ListItemIcon>
 											<Tooltip title="delete">
-												<IconButton size="small" onClick={event=>this.handleDeleteCollaborator(event,user,index)}>
+												<IconButton
+													size="small"
+													onClick={event =>
+														this.handleDeleteCollaborator(event, user, index)
+													}
+												>
 													<CloseIcon fontSize="inherit" />
 												</IconButton>
 											</Tooltip>

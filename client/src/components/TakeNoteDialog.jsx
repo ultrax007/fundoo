@@ -10,13 +10,14 @@ import noteServices from "../services/noteServices";
 import CheckList from "./Checklist";
 
 //icons imported from material ui
-import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
+import PersonIcon from "@material-ui/icons/Person";
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import AccessTimeSharpIcon from "@material-ui/icons/AccessTimeSharp";
 import Chip from "@material-ui/core/Chip";
 import pin from "../assets/pin.svg";
 import pined from "../assets/pined.svg";
 import RemindMe from "./RemindMe";
+import Collaborator from "./Collaborator";
 import MoreMenu from "./MoreMenu";
 import ColorPalette from "./ColorPalette";
 import ArchiveIcon from "./ArchiveIcon";
@@ -68,8 +69,8 @@ export default class TakeNote extends React.Component {
 			isArchived: false,
 			color: "",
 			reminder: [],
-			combined: ""
-			// collaborators: ""
+			combined: "",
+			collaborators: [],
 		};
 		this.handleColor = this.handleColor.bind(this);
 	}
@@ -100,7 +101,8 @@ export default class TakeNote extends React.Component {
 			note.checklist = JSON.stringify(this.state.noteCheckLists);
 			note.reminder = this.state.reminder;
 			note.labelIdList = JSON.stringify(this.state.labelIdList);
-			// note.collaborators = "";
+			note.collaberators = JSON.stringify(this.state.collaborators);
+
 			// hit create node api
 			var data = this.getEncodData(note);
 			console.log("data in note", data);
@@ -138,16 +140,19 @@ export default class TakeNote extends React.Component {
 		event.nativeEvent.stopImmediatePropagation();
 		let id = this.state.labelIdList.indexOf(this.state.noteLabels[index].id);
 		console.log("value of id in delete lable", id);
-		this.setState({
-			labelIdList: update(this.state.labelIdList, {
-				$splice: [[id, 1]]
-			}),
-			noteLabels: update(this.state.noteLabels, {
-				$splice: [[index, 1]]
-			})
-		}, () => {
+		this.setState(
+			{
+				labelIdList: update(this.state.labelIdList, {
+					$splice: [[id, 1]]
+				}),
+				noteLabels: update(this.state.noteLabels, {
+					$splice: [[index, 1]]
+				})
+			},
+			() => {
 				console.log("after removal labels are", this.state);
-		});
+			}
+		);
 	};
 
 	handleAddLabel = label => {
@@ -294,6 +299,18 @@ export default class TakeNote extends React.Component {
 			combined: ""
 		});
 	};
+	handleAddCollaborator = userData => {
+		console.log("value in userData in collaborator",userData);
+		this.setState({
+			collaborators: update(this.state.collaborators, { $push: [userData] })
+		});
+	};
+
+	handleRemoveCollaborator = index => {
+		this.setState({
+			collaborators: update(this.state.collaborators, { $splice: [[index, 1]] })
+		});
+	};
 	render() {
 		return (
 			<Paper
@@ -369,6 +386,21 @@ export default class TakeNote extends React.Component {
 							/>
 						</Fragment>
 					))}
+					{this.state.collaborators.map(data => (
+								<IconButton
+									key={data.email}
+									size="small"
+									style={{
+										border: "1px solid #494949",
+										margin: "0 3px",
+										backgroundColor: "#00b9ff7a"
+									}}
+								>
+									<Tooltip title={data.email}>
+										<PersonIcon fontSize="inherit" />
+									</Tooltip>
+								</IconButton>
+							))}
 				</div>
 				<div id="functions">
 					<div id="iconBar">
@@ -379,17 +411,19 @@ export default class TakeNote extends React.Component {
 								styleid={"ib"}
 							/>
 
-							<Tooltip title="Collaborator">
-								<IconButton id="ib" size="small">
-									<PersonAddOutlinedIcon fontSize="inherit" />
-								</IconButton>
-							</Tooltip>
+							<Collaborator
+								collabAdd={this.handleAddCollaborator}
+								collabRemove={this.handleRemoveCollaborator}
+								collabState={this.state}
+								styelid={"idb"}
+							/>
 
 							<Tooltip title="Add image">
 								<IconButton id="ib" size="small">
 									<InsertPhotoOutlinedIcon fontSize="inherit" />
 								</IconButton>
 							</Tooltip>
+
 							<ColorPalette
 								selectColor={this.handleColor}
 								dataOfNote={this.state}
