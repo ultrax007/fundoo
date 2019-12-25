@@ -403,7 +403,7 @@ export default class TakeNote extends React.Component {
 							))}
 				</div>
 				<div id="functions">
-					<div id="iconBar">
+					<div id="iconBart">
 						<MuiThemeProvider theme={iconmod}>
 							<RemindMe
 								remindState={this.state}

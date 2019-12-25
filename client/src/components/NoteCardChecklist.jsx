@@ -172,7 +172,7 @@ export default class NoteCardChecklist extends React.Component {
 		return (
 			<Fragment>
 				<MuiThemeProvider theme={nlist}>
-					<List>
+					<List style={{paddingTop:"0px",paddingBottom:"0px"}}>
 						{/***************************************open status will appear here************************************************* */}
 						{this.state.statusOpen
 							? this.state.statusOpen.map((data, index) => (

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "../sass/TakeNote.sass";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+// import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import TakeNoteDefault from "./TakeNoteDefault";
 import TakeNoteDialog from "./TakeNoteDialog";
 
@@ -26,9 +26,7 @@ export default class TakeNote extends React.Component {
 		return (
 			<Fragment>
 				{this.state.noteClicked ? (
-					<ClickAwayListener onClickAway={this.handleNoteState}>
 						<TakeNoteDialog noteState={this.handleNoteState} takeNoteClose={this.handleTakeNoteClose}/>
-					</ClickAwayListener>
 				) : (
 						<TakeNoteDefault noteState={this.handleNoteState}/>
 				)}
@@ -36,3 +34,5 @@ export default class TakeNote extends React.Component {
 		);
 	}
 }
+					// <ClickAwayListener onClickAway={this.handleNoteState}>
+					// </ClickAwayListener>

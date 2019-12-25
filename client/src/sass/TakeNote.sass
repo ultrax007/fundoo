@@ -31,15 +31,6 @@
   flex-direction: row
   align-content: flex-start
   // justify-content: space-between
-
-  
-#iconBar
-  display: flex
-  flex-direction: row
-  align-items: flex-start
-  width: 86%
-  padding-left: 2%
-
   
 #button
   @extend %disflex
@@ -48,6 +39,23 @@
   width: 10%
   justify-content: center
 
+#iconBart
+  display: flex
+  flex-direction: row
+  align-items: flex-start
+  width: 86%
+  padding-left: 2%
+
+@media only screen and ( max-width:900px)
+  #noteActive
+    display: flex
+    width: 70%
+  #noteInactive
+    display: flex
+    width: 70%
+  #iconBart
+    width: 80%
+
 @media only screen and ( max-width:600px)
   #noteActive
     display: flex
@@ -55,9 +63,11 @@
   #noteInactive
     display: flex
     width: 98%
-  #iconBar
+  #iconBart
     width: 75%
-  
+
+
+ 
 #titleN
   @extend %disflex
   flex-direction: row

@@ -44,8 +44,8 @@ class Notes extends React.Component {
 			default: this.props.viewStatus ? 1 : 3,
 			4440: this.props.viewStatus ? 1 : 4,
 			1500: this.props.viewStatus ? 1 : 3,
-			1100: this.props.viewStatus ? 1 : 2,
-			900: 1,
+			1100: this.props.viewStatus ? 1 : this.props.drawerStatus ? 2 : 3,
+			900: this.props.viewStatus ? 1 : this.props.drawerStatus ? 1 : 2,
 			675: 1
 		};
 		const myStyle = this.props.drawerStatus ? "containerSM" : "container";

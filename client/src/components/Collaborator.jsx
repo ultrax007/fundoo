@@ -76,9 +76,7 @@ class Collaborator extends React.Component {
 				localStorage.getItem("imageUrl")
 		};
 	}
-	componentDidMount() {
-		console.log("value in props", this.props.collabState.collaborators);
-	}
+	
 	handleSearch = async event => {
 		event.preventDefault();
 		event.stopPropagation();
