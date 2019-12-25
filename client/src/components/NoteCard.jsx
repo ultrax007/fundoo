@@ -14,7 +14,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider, Divider } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import PersonIcon from "@material-ui/icons/Person";
@@ -122,6 +122,7 @@ class NoteCard extends React.Component {
 			).toString(),
 			combined: "",
 			collaborators: this.props.dataFromDisplay.collaborators,
+			questionAndAnswerNotes: this.props.dataFromDisplay.questionAndAnswerNotes,
 			dialogOpen: false
 		};
 	}
@@ -496,7 +497,7 @@ class NoteCard extends React.Component {
 										border: "1px solid #494949",
 										margin: "0 3px",
 										backgroundColor: "#00b9ff7a",
-										fontSize:"14px"
+										fontSize: "14px"
 									}}
 								>
 									<Tooltip title={data.email}>
@@ -565,6 +566,19 @@ class NoteCard extends React.Component {
 								</CardActions>
 							)}
 						</MuiThemeProvider>
+						{this.state.questionAndAnswerNotes.length>0 && (
+							<Fragment>
+								<Divider />
+								<Typography
+									variant="subtitle2"
+									style={{ padding: "5px 15px", fontSize: "small" }}
+								>
+									Questions Asked
+								</Typography>
+								<div id="question" dangerouslySetInnerHTML={{ __html: this.state.questionAndAnswerNotes[0].message }}>
+								</div>						
+							</Fragment>
+						)}
 					</Card>
 				) : (
 					<MuiThemeProvider theme={backdrop}>
