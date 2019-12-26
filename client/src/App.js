@@ -1,8 +1,10 @@
 import React from "react";
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_style.min.css';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import "./App.css";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import Dashboard from "./components/Dashboard";
@@ -13,6 +15,8 @@ import EditLable from "./components/Labels";
 import Search from "./components/Search";
 import Labels from "./components/Labels";
 import Reminders from "./components/Reminders";
+import AskedQuestion from "./components/AskedQuestion";
+import "./App.css";
 function App() {
 	return (
 		<div>
@@ -29,6 +33,7 @@ function App() {
 					<Route path="/dashboard/editLable" component={EditLable}></Route>
 					<Route path="/dashboard/search" component={Search}></Route>
 					<Route path="/dashboard/label/:username" component={Labels}></Route>
+					<Route path="/dashboard/AskQuestion/:id" component={AskedQuestion}></Route>
 					{/* <Route path="/dashboard/" component={}></Route> */}
 			</BrowserRouter>
 		</div>

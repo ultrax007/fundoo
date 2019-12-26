@@ -39,6 +39,11 @@ class Notes extends React.Component {
 			});
 	};
 
+	handleQnA = (id) => {
+		console.log("value in id in qna notes", id);
+		this.props.history.push("/dashboard/AskQuestion/" + id);
+	}
+
 	render() {
 		const breakpointColumnsObj = {
 			default: this.props.viewStatus ? 1 : 3,
@@ -73,6 +78,7 @@ class Notes extends React.Component {
 								key={data.id}
 								dataFromDisplay={data}
 								operation={this.getNotesFromDB}
+								qna={this.handleQnA}
 							/>
 						))}
 					</Masonry>

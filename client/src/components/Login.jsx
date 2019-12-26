@@ -225,6 +225,7 @@ export default class Login extends React.Component {
 								</div>
 								<div className="LoginFieldInput">
 									<TextValidator
+										autoComplete="username"
 										id="outlined-basic"
 										type="email"
 										label="Email"

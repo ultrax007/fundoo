@@ -273,7 +273,12 @@ class Dashboard extends React.Component {
 		document.getElementById("searchtext").focus();
 		this.props.history.push("/dashboard/search");
 	};
-
+	handleQnA = event => {
+		event.preventDefault();
+		console.log("in handleAsked Question");
+		let path = "/dashboard/AskQuestion/";
+		this.props.history.push(path);
+	};
 	handleSearch = async event => {
 		event.preventDefault();
 
@@ -572,6 +577,7 @@ const mapStateToProps = state => {
 		drawerStatus: state.open,
 		searchedText: state.searched,
 		viewStatus: state.listView
+		
 	};
 };
 const mapDispatchToProps = {
