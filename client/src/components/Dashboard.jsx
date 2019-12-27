@@ -344,7 +344,7 @@ class Dashboard extends React.Component {
 								>
 									<MenuIcon />
 								</IconButton>
-								<div id="logo">
+								<div id="dlogo">
 									<div className="flogo">
 										<img
 											src={flogo}

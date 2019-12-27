@@ -6,13 +6,19 @@ import compose from "recompose/compose";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 // import Card from "@material-ui/core/Card";
 import Avatar from "@material-ui/core/Avatar";
 import noteServices from "../services/noteServices";
-import { ListItemText, Divider, Button } from "@material-ui/core";
+import {
+	ListItemText,
+	Divider,
+	Button,
+	ListItemSecondaryAction,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import que from "../assets/que2.svg";
 const nServe = new noteServices();
 
 const styles = {
@@ -21,9 +27,9 @@ const styles = {
 		paddingBottom: "0px"
 	},
 	listItemButton: {
+		justifyContent: "flex-end"
 		// paddingTop: "0px",
 		// paddingBottom: "0px",
-		justifyContent: "flex-end"
 	},
 	froala: {
 		padding: "0 25px",
@@ -43,8 +49,10 @@ class AskedQuestion extends Component {
 		super(props);
 		this.state = {
 			noteDetails: "",
+			qExist: false,
 			question: "",
-			date: "",
+			answers: [],
+			date: new Date().toString(),
 			profile:
 				"http://fundoonotes.incubation.bridgelabz.com/" +
 				localStorage.getItem("imageUrl")
@@ -58,7 +66,7 @@ class AskedQuestion extends Component {
 		});
 	};
 
-	componentDidMount() {
+	UNSAFE_componentWillMount() {
 		this.setState({
 			profile:
 				"http://fundoonotes.incubation.bridgelabz.com/" +
@@ -67,9 +75,13 @@ class AskedQuestion extends Component {
 		console.log("value in match params", this.props.match.params.id);
 		this.getNoteDetailsfromDb(this.props.match.params.id);
 	}
+
+	// componentDidMount() {
+	// }
 	componentWillUnmount() {
 		this.setState({ noteDetails: "", question: "", profile: "" });
 	}
+
 	getNoteDetailsfromDb = data => {
 		nServe.getNotesDetails(data).then(response => {
 			console.log("successfully fetched data", response.data.data.data[0]);
@@ -79,7 +91,10 @@ class AskedQuestion extends Component {
 					{
 						date: new Date(
 							response.data.data.data[0].questionAndAnswerNotes[0].createdDate
-						).toString()
+						).toString(),
+						qExist: true,
+						question:
+							response.data.data.data[0].questionAndAnswerNotes[0].message
 					},
 					() => {
 						let d = this.state.date.slice(0, 21);
@@ -88,6 +103,18 @@ class AskedQuestion extends Component {
 						});
 					}
 				);
+				if (response.data.data.data[0].questionAndAnswerNotes.length > 1) {
+					this.setState(
+						{
+							answers: response.data.data.data[0].questionAndAnswerNotes.slice(
+								1
+							)
+						},
+						() => {
+							console.log("in ansers", this.state.answers);
+						}
+					);
+				}
 			}
 		});
 	};
@@ -101,6 +128,7 @@ class AskedQuestion extends Component {
 			nServe
 				.addQuestion(data)
 				.then(response => {
+					this.setState({ qExist: true });
 					console.log("question added successfully", response);
 				})
 				.catch(err => {
@@ -111,9 +139,14 @@ class AskedQuestion extends Component {
 		}
 	};
 
+	handleClose = event => {
+		event.preventDefault();
+		this.props.history.push("/dashboard/notes");
+	};
+
 	render() {
-    const { noteDetails } = this.state;
-    console.log("value in notedetails",noteDetails);
+		const { noteDetails } = this.state;
+		console.log("value in notedetails", noteDetails);
 		const { classes } = this.props;
 		const text = {
 			fontSize: "25px"
@@ -138,6 +171,11 @@ class AskedQuestion extends Component {
 								primaryTypographyProps={{ style: text }}
 								primary={noteDetails.title}
 							/>
+							<ListItemSecondaryAction>
+								<Button onClick={event => this.handleClose(event)}>
+									close
+								</Button>
+							</ListItemSecondaryAction>
 						</ListItem>
 						<ListItem classes={{ root: classes.listItem }}>
 							<ListItemText
@@ -145,59 +183,83 @@ class AskedQuestion extends Component {
 								primary={noteDetails.description}
 							/>
 						</ListItem>
-
 						<Divider />
-						<ListItem classes={{ root: classes.listItem }}>
-							<ListItemText
-								primaryTypographyProps={{ style: text3 }}
-								primary="Ask a Question"
-							/>
-						</ListItem>
-						{noteDetails.questionAndAnswerNotes.length < 0 ?(
-							<ListItem classes={{ root: classes.listItem }}>
-								<ListItemText
-									primaryTypographyProps={{ style: text4 }}
-									primary="Make sure what you’re asking is unique, concise, and phrased like a question."
-								/>
-							</ListItem>
-						):null}
-						<ListItem>
-							<ListItemAvatar>
-								<Avatar
-									style={{ border: "2px solid #ccc" }}
-									alt={localStorage.getItem("name").charAt(0)}
-									src={this.state.profile}
-								/>
-							</ListItemAvatar>
-							<ListItemText>
-								<span>
-									<b>{localStorage.getItem("name")}</b>
-									{"  "}
-									{this.state.date}
-								</span>
-							</ListItemText>
-						</ListItem>
-						<ListItem classes={{ root: classes.listItem }}>
-							<div id="froala">
-								<FroalaEditorComponent
-									tag="textarea"
-									config={this.config}
-									model={this.state.question}
-									onModelChange={this.handleModelChange}
-								/>
-							</div>
-						</ListItem>
-						<ListItem classes={{ root: classes.listItemButton }}>
-							<Button
-								size="small"
-								classes={{ root: classes.button }}
-								onClick={event => {
-									this.handleAddQuestion(event);
-								}}
-							>
-								Submit-Question
-							</Button>
-						</ListItem>
+						{this.state.qExist ? (
+							<>
+								<ListItem>
+									<ListItemAvatar>
+										<Avatar
+											style={{ border: "2px solid #ccc" }}
+											alt={localStorage.getItem("name").charAt(0)}
+											src={this.state.profile}
+										/>
+									</ListItemAvatar>
+									<ListItemText>
+										<span>
+											<b>{localStorage.getItem("name")}</b>
+											{"  "}
+											{this.state.date}
+										</span>
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemIcon size="small" style={{ minWidth: "40px" }}>
+										<img
+											src={que}
+											alt="?"
+											width="28px"
+											height="28px"
+											style={{ boxShadow: "grey 3px 3px 2px 0px" }}
+										/>
+									</ListItemIcon>
+									<div
+										id="questioned"
+										dangerouslySetInnerHTML={{
+											__html: this.state.question
+										}}
+									></div>
+								</ListItem>
+								
+							</>
+						) : (
+							<>
+								<ListItem classes={{ root: classes.listItem }}>
+									<ListItemText
+										primaryTypographyProps={{ style: text3 }}
+										primary="Ask a Question"
+									/>
+								</ListItem>
+
+								<ListItem classes={{ root: classes.listItem }}>
+									<ListItemText
+										primaryTypographyProps={{ style: text4 }}
+										primary="Make sure what you’re asking is unique, concise, and phrased like a question."
+									/>
+								</ListItem>
+
+								<ListItem classes={{ root: classes.listItem }}>
+									<div id="froala">
+										<FroalaEditorComponent
+											tag="textarea"
+											config={this.config}
+											model={this.state.question}
+											onModelChange={this.handleModelChange}
+										/>
+									</div>
+								</ListItem>
+								<ListItem classes={{ root: classes.listItemButton }}>
+									<Button
+										size="small"
+										classes={{ root: classes.button }}
+										onClick={event => {
+											this.handleAddQuestion(event);
+										}}
+									>
+										Submit-Question
+									</Button>
+								</ListItem>
+							</>
+						)}
 					</List>
 				</Paper>
 			</div>
