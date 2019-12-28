@@ -159,3 +159,51 @@ handleText = async (event, index) => {
 			// 	id: "5dea229eaasdfe82001986864c",
 			// 	notesId: "5de8ecd7asdfe82001986861f"
 			// }
+
+
+
+
+
+			{/* <div key={data2.id} id="answer">
+                                        <ListItem
+                                          classes={{ root: classes.listItem }}
+                                        >
+                                          <ListItemAvatar
+                                            style={{ minWidth: "40px" }}
+                                          >
+                                            <Avatar
+                                              classes={{ root: classes.avatar }}
+                                              alt={localStorage
+                                                .getItem("name")
+                                                .charAt(0)}
+                                              src={this.state.profile}
+                                            />
+                                          </ListItemAvatar>
+                                          <ListItemText>
+                                            <span>
+                                              <b>
+                                                {localStorage.getItem("name")}
+                                              </b>
+                                              {"  "}
+                                              {this.getDate(data2.createdDate)}
+                                            </span>
+                                          </ListItemText>
+                                        </ListItem>
+                                        <ListItem
+                                          classes={{ root: classes.listItem }}
+                                        >
+                                          <h3
+                                            style={{
+                                              margin: "0px 0px 0px 8px"
+                                            }}
+                                          >
+                                            >
+                                          </h3>
+                                          <div
+                                            id="answered"
+                                            dangerouslySetInnerHTML={{
+                                              __html: data2.message
+                                            }}
+                                          ></div>
+                                        </ListItem>
+                                      </div> */}

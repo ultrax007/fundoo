@@ -1,16 +1,13 @@
 import axiosServices from "./axiosServices.js";
 const obj = new axiosServices();
 export default class noteServices {
-
-
   /**
    ******************************************** post methods*************************************************************************
    */
 
-
   createNote(data) {
     // console.log("data in nservices",data);
-    return obj.formDataPostMethod(data, "/notes/addNotes", true)
+    return obj.formDataPostMethod(data, "/notes/addNotes", true);
   }
 
   createLabel(data) {
@@ -32,8 +29,8 @@ export default class noteServices {
     // console.log("data in nservices",data);
     return obj.postMethod(data, "/notes/removeReminderNotes", true);
   }
-  
-  updateLable(data,id) {
+
+  updateLable(data, id) {
     // console.log("data in nservices",data);
     return obj.postMethod(data, "/noteLabels/" + id + "/updateNoteLabel", true);
   }
@@ -60,57 +57,94 @@ export default class noteServices {
 
   deleteNoteLabelFromCard(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data, "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/remove", true);
+    return obj.postMethod(
+      data,
+      "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/remove",
+      true
+    );
   }
 
   addLabelToNotes(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data, "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/add", true);
+    return obj.postMethod(
+      data,
+      "/notes/" + data.noteId + "/addLabelToNotes/" + data.labelId + "/add",
+      true
+    );
   }
 
   getNotesFromLabelName(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data,"/notes/getNotesListByLabel/"+data.labelName, true);
+    return obj.postMethod(
+      data,
+      "/notes/getNotesListByLabel/" + data.labelName,
+      true
+    );
   }
 
   addChecklist(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data,"/notes/"+data.notesId+"/checklist/add", true);
+    return obj.postMethod(
+      data,
+      "/notes/" + data.notesId + "/checklist/add",
+      true
+    );
   }
 
   updateChecklist(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data,"/notes/"+data.notesId+"/checklist/"+data.checkListId+"/update", true);
+    return obj.postMethod(
+      data,
+      "/notes/" + data.notesId + "/checklist/" + data.checkListId + "/update",
+      true
+    );
   }
 
   removeChecklist(data) {
     // console.log("data in nservices",data);
-    return obj.postMethod(data,"/notes/"+data.noteId+"/checklist/"+data.checklistId+"/remove", true);
+    return obj.postMethod(
+      data,
+      "/notes/" + data.noteId + "/checklist/" + data.checklistId + "/remove",
+      true
+    );
   }
 
   searchUserList(data) {
     // console.log("data in nservices", data);
-    return obj.postMethod(data,"/user/searchUserList",true)
+    return obj.postMethod(data, "/user/searchUserList", true);
   }
 
   addCollaborator(data) {
     // console.log("data in nservices", data);
-    return obj.postMethod(data,"/notes/"+data.id+"/AddcollaboratorsNotes", true)
+    return obj.postMethod(
+      data,
+      "/notes/" + data.id + "/AddcollaboratorsNotes",
+      true
+    );
   }
 
   addQuestion(data) {
     // console.log("data in nservices", data);
-    return obj.postMethod(data,"/questionAndAnswerNotes/addQuestionAndAnswer", true)
+    return obj.postMethod(
+      data,
+      "/questionAndAnswerNotes/addQuestionAndAnswer",
+      true
+    );
   }
-  
-  
-  
+
+  replyQuestion(data) {
+    // console.log("data in nservices", data);
+    return obj.postMethod(
+      data,
+      "/questionAndAnswerNotes/reply/" + data.id,
+      true
+    );
+  }
+
   /**
    * ****************************************Get methods******************************************************************************
    */
 
-  
-  
   getAllNotes() {
     // console.log("data in nservices");
     return obj.getMethod("/notes/getNotesList", true);
@@ -138,16 +172,12 @@ export default class noteServices {
 
   getNotesDetails(data) {
     // console.log("data in nservices");
-    return obj.getMethod("/notes/getNotesDetail/"+data, true);
+    return obj.getMethod("/notes/getNotesDetail/" + data, true);
   }
-
-
 
   /**
    * **************************************delete methods******************************************************************************
    */
-
-
 
   deleteNoteLabel(id) {
     // console.log("data in nservices",id);
@@ -156,6 +186,9 @@ export default class noteServices {
 
   deleteCollaborator(data) {
     // console.log("data in nservices", data);
-    return obj.deleteMethod("/notes/"+data.id+"/removeCollaboratorsNotes/"+data.userId, true)
+    return obj.deleteMethod(
+      "/notes/" + data.id + "/removeCollaboratorsNotes/" + data.userId,
+      true
+    );
   }
 }
