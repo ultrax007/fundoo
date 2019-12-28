@@ -1,6 +1,7 @@
 const initialState = {
   drawerData: false,
-  typedData:""
+  typedData: "",
+  viewData:false
 };
 function rootReducer(state = initialState, action) {
   switch (action.type) {

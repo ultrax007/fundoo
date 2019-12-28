@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "../sass/playground.sass";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import { connect } from "react-redux";
@@ -15,7 +15,7 @@ import {
 	ListItemText,
 	Divider,
 	Button,
-	ListItemSecondaryAction,
+	ListItemSecondaryAction
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import que from "../assets/que2.svg";
@@ -41,6 +41,11 @@ const styles = {
 		"&:hover": {
 			backgroundColor: "#FF9100"
 		}
+	},
+	avatar: {
+		width: "25px",
+		height: "25px",
+		border: "2px solid #ccc",
 	}
 };
 
@@ -93,8 +98,7 @@ class AskedQuestion extends Component {
 							response.data.data.data[0].questionAndAnswerNotes[0].createdDate
 						).toString(),
 						qExist: true,
-						question:
-							response.data.data.data[0].questionAndAnswerNotes[0].message
+						question: response.data.data.data[0].questionAndAnswerNotes[0]
 					},
 					() => {
 						let d = this.state.date.slice(0, 21);
@@ -144,8 +148,15 @@ class AskedQuestion extends Component {
 		this.props.history.push("/dashboard/notes");
 	};
 
+	getDate = (utc) => {
+		var nDate = new Date(utc).toString().slice(0, 21);
+		console.log("now date is", nDate);
+		return nDate;
+	}
+
 	render() {
 		const { noteDetails } = this.state;
+		const { question } = this.state;
 		console.log("value in notedetails", noteDetails);
 		const { classes } = this.props;
 		const text = {
@@ -185,7 +196,7 @@ class AskedQuestion extends Component {
 						</ListItem>
 						<Divider />
 						{this.state.qExist ? (
-							<>
+							<Fragment>
 								<ListItem>
 									<ListItemAvatar>
 										<Avatar
@@ -203,7 +214,7 @@ class AskedQuestion extends Component {
 									</ListItemText>
 								</ListItem>
 								<ListItem>
-									<ListItemIcon size="small" style={{ minWidth: "40px" }}>
+									<ListItemIcon size="small" style={{ minWidth: "40px",justifyContent:"center" }}>
 										<img
 											src={que}
 											alt="?"
@@ -215,14 +226,76 @@ class AskedQuestion extends Component {
 									<div
 										id="questioned"
 										dangerouslySetInnerHTML={{
-											__html: this.state.question
+											__html: question.message
 										}}
 									></div>
 								</ListItem>
-								
-							</>
+								{this.state.answers &&
+									this.state.answers.map(data => question.id === data.parentId ? (
+										<div key={data.id} id="answer">
+											<ListItem classes={{ root: classes.listItem }}>
+												<ListItemAvatar style={{minWidth:"40px"}}>
+													<Avatar
+														classes={{root: classes.avatar}}
+														alt={localStorage.getItem("name").charAt(0)}
+														src={this.state.profile}
+													/>
+												</ListItemAvatar>
+												<ListItemText>
+													<span>
+														<b>{localStorage.getItem("name")}</b>
+														{"  "}
+														{this.getDate(data.createdDate)}
+													</span>
+												</ListItemText>
+											</ListItem>
+											<ListItem classes={{ root: classes.listItem }}>
+												<h3 style={{margin:"0px 0px 0px 8px"}}>></h3>
+												<div
+													id="answered"
+													dangerouslySetInnerHTML={{
+														__html: data.message
+													}}
+												></div>
+												
+											</ListItem>
+											<List>
+													{this.state.answers.map(data1 => data.id === data1.parentId ?
+														<div key={data.id} id="answer">
+											<ListItem classes={{ root: classes.listItem }}>
+												<ListItemAvatar style={{minWidth:"40px"}}>
+													<Avatar
+														classes={{root: classes.avatar}}
+														alt={localStorage.getItem("name").charAt(0)}
+														src={this.state.profile}
+													/>
+												</ListItemAvatar>
+												<ListItemText>
+													<span>
+														<b>{localStorage.getItem("name")}</b>
+														{"  "}
+														{this.getDate(data1.createdDate)}
+													</span>
+												</ListItemText>
+											</ListItem>
+											<ListItem classes={{ root: classes.listItem }}>
+												<h3 style={{margin:"0px 0px 0px 8px"}}>></h3>
+												<div
+													id="answered"
+													dangerouslySetInnerHTML={{
+														__html: data1.message
+													}}
+												></div>
+												
+											</ListItem>
+										</div>
+													: null)}
+												</List>
+										</div>
+									):null)}
+							</Fragment>
 						) : (
-							<>
+							<Fragment>
 								<ListItem classes={{ root: classes.listItem }}>
 									<ListItemText
 										primaryTypographyProps={{ style: text3 }}
@@ -258,7 +331,7 @@ class AskedQuestion extends Component {
 										Submit-Question
 									</Button>
 								</ListItem>
-							</>
+							</Fragment>
 						)}
 					</List>
 				</Paper>
