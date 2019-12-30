@@ -2,13 +2,12 @@ import React, { Component, Fragment } from "react";
 import "../sass/playground.sass";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemButton from "@material-ui/core/";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 // import noteServices from "../services/noteServices";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
@@ -34,6 +33,9 @@ const styled = {
       backgroundColor: "#FF9100"
     }
   },
+  Rbutton: {
+    fontSize: "12px"
+  },
   avatar: {
     width: "25px",
     height: "25px",
@@ -46,7 +48,8 @@ class Reply extends Component {
     this.state = {
       replyQ: "",
       reply: false,
-      viewReply: false
+      viewReply: false,
+      viewStatus: false
     };
   }
   handleChange = replyQ => {
@@ -63,6 +66,11 @@ class Reply extends Component {
   handleReply = event => {
     event.preventDefault();
     this.setState({ reply: !this.state.reply });
+  };
+  handleViewReply = event => {
+    event.preventDefault();
+    this.setState({ viewStatus: !this.state.viewStatus });
+    this.props.showReplies();
   };
   render() {
     const { classes } = this.props;
@@ -83,9 +91,17 @@ class Reply extends Component {
               {this.getDate(this.props.data.createdDate)}
             </div>
           </ListItemText>
-          <ListItemSecondaryAction>
-            <Button size="small">view reply</Button>
-          </ListItemSecondaryAction>
+          {this.props.replyButton && (
+            <ListItemSecondaryAction>
+              <Button
+                classes={{ sizeSmall: classes.Rbutton }}
+                size="small"
+                onClick={event => this.handleViewReply(event)}
+              >
+                {this.state.viewStatus ? "hide reply" : "view reply"}
+              </Button>
+            </ListItemSecondaryAction>
+          )}
         </ListItem>
         <ListItem classes={{ root: classes.listItem }}>
           <h3
@@ -101,13 +117,15 @@ class Reply extends Component {
               __html: this.props.data.message
             }}
           ></div>
-          <ListItemIcon
-            size="small"
-            style={{ marginLeft: "40px" }}
-            onClick={event => this.handleReply(event)}
-          >
-            <ReplyIcon style={{ color: "#757575" }} />
-          </ListItemIcon>
+          {this.props.replyButton && (
+            <ListItemIcon
+              size="small"
+              style={{ marginLeft: "40px" }}
+              onClick={event => this.handleReply(event)}
+            >
+              <ReplyIcon style={{ color: "#757575" }} />
+            </ListItemIcon>
+          )}
         </ListItem>
 
         {this.state.reply && (

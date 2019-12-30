@@ -46,6 +46,9 @@ const styles = {
       backgroundColor: "#FF9100"
     }
   },
+  Rbutton: {
+    fontSize: "12px"
+  },
   avatar: {
     width: "25px",
     height: "25px",
@@ -63,6 +66,9 @@ class AskedQuestion extends Component {
       replyQ: "",
       answers: [],
       reply: false,
+      main: false,
+      first: false,
+      second: false,
       date: new Date().toString(),
       profile:
         "http://fundoonotes.incubation.bridgelabz.com/" +
@@ -176,6 +182,16 @@ class AskedQuestion extends Component {
     this.setState({ viewReply: !this.state.viewReply });
   };
 
+  handleMainReply = event => {
+    event.preventDefault();
+    this.setState({ main: !this.state.main });
+  };
+  handleFirstReply = event => {
+    this.setState({ first: !this.state.first });
+  };
+  handleSecondReply = () => {
+    this.setState({ second: !this.state.second });
+  };
   render() {
     const { noteDetails } = this.state;
     const { question } = this.state;
@@ -263,7 +279,19 @@ class AskedQuestion extends Component {
                       <ReplyIcon />
                     </IconButton>
                   </ListItemIcon>
+                  {this.state.answers.length > 0 && (
+                    <ListItemSecondaryAction>
+                      <Button
+                        classes={{ sizeSmall: classes.Rbutton }}
+                        size="small"
+                        onClick={event => this.handleMainReply(event)}
+                      >
+                        {this.state.main ? "hide reply" : "view reply"}
+                      </Button>
+                    </ListItemSecondaryAction>
+                  )}
                 </ListItem>
+
                 {this.state.reply && (
                   <Fragment>
                     <ListItem>
@@ -289,38 +317,57 @@ class AskedQuestion extends Component {
                     </ListItem>
                   </Fragment>
                 )}
-                {this.state.answers &&
-                  this.state.answers.map(data =>
-                    question.id === data.parentId ? (
-                      <div key={data.id} id="answer">
-                        <Reply data={data} profile={this.state.profile} />
-                        <List>
-                          {this.state.answers.map(data1 =>
-                            data.id === data1.parentId ? (
-                              <div key={data1.id} id="answer">
-                                <Reply
-                                  data={data1}
-                                  profile={this.state.profile}
-                                />
-                                <List>
-                                  {this.state.answers.map(data2 =>
-                                    data1.id === data2.parentId ? (
-                                      <div key={data2.id} id="answer">
-                                        <Reply
-                                          data={data2}
-                                          profile={this.state.profile}
-                                        />
-                                      </div>
-                                    ) : null
-                                  )}
-                                </List>
-                              </div>
-                            ) : null
-                          )}
-                        </List>
-                      </div>
-                    ) : null
-                  )}
+                {this.state.main && (
+                  <Fragment>
+                    {/* main replies of thread */}
+                    {this.state.answers &&
+                      this.state.answers.map(data =>
+                        question.id === data.parentId ? (
+                          <div key={data.id} id="answer">
+                            <Reply
+                              data={data}
+                              profile={this.state.profile}
+                              showReplies={this.handleFirstReply}
+                              replyButton={true}
+                            />
+                            {/* reply first child */}
+                            {this.state.first && (
+                              <List>
+                                {this.state.answers.map(data1 =>
+                                  data.id === data1.parentId ? (
+                                    <div key={data1.id} id="answer">
+                                      <Reply
+                                        data={data1}
+                                        profile={this.state.profile}
+                                        showReplies={this.handleSecondReply}
+                                        replyButton={true}
+                                      />
+                                      {/* reply second child */}
+                                      {this.state.second && (
+                                        <List>
+                                          {this.state.answers.map(data2 =>
+                                            data1.id === data2.parentId ? (
+                                              <div key={data2.id} id="answer">
+                                                <Reply
+                                                  data={data2}
+                                                  profile={this.state.profile}
+                                                  replyButton={false}
+                                                />
+                                              </div>
+                                            ) : null
+                                          )}
+                                        </List>
+                                      )}
+                                    </div>
+                                  ) : null
+                                )}
+                              </List>
+                            )}
+                          </div>
+                        ) : null
+                      )}
+                  </Fragment>
+                )}
               </Fragment>
             ) : (
               <Fragment>
