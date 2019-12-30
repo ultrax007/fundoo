@@ -63,7 +63,7 @@ export default class DrawerList extends React.Component {
 		};
 	}
 	componentDidMount() {
-		this.handleNotes();
+		// this.handleNotes();
 		this.getAllLabels();
 	}
 

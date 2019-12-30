@@ -206,4 +206,24 @@ handleText = async (event, index) => {
                                             }}
                                           ></div>
                                         </ListItem>
-                                      </div> */}
+																			</div> */}
+																			
+																		
+
+
+
+
+
+
+
+
+																			// handleSubmitReply = event => {
+																			// 	event.preventDefault();
+																			// 	var data = {};
+																			// 	console.log("in question submit");
+																				
+																			// 	data.id = this.state.question.id;
+																			// 	data.message = this.state.replyQ;
+																				
+																			// 	this.hitReplyApi(data);
+																			// };
