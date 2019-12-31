@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "../sass/playground.sass";
+import update from "immutability-helper";
 import Reply from "./Reply";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import { connect } from "react-redux";
@@ -22,8 +23,11 @@ import {
 import ReplyIcon from "@material-ui/icons/Reply";
 import Like from "@material-ui/icons/ThumbUpOutlined";
 import Dislike from "@material-ui/icons/ThumbUpAlt";
+import StarRatings from "react-star-ratings";
 import { withStyles } from "@material-ui/core/styles";
 import que from "../assets/que2.svg";
+var sum = 0,
+	avg;
 const nServe = new noteServices();
 
 const styles = {
@@ -74,6 +78,8 @@ class AskedQuestion extends Component {
 			like: false,
 			likesArray: [],
 			likesCount: 0,
+			ratingAvg: 0,
+			ratingArray: [],
 			date: new Date().toString(),
 			profile:
 				"http://fundoonotes.incubation.bridgelabz.com/" +
@@ -133,11 +139,15 @@ class AskedQuestion extends Component {
 							{
 								likesArray: response.data.data.data[0].questionAndAnswerNotes[0].like.filter(
 									obj => obj.like === true
-								)
+								),
+								ratingArray:
+									response.data.data.data[0].questionAndAnswerNotes[0].rate
 							},
 							() => {
 								this.setState(
-									{ likesCount: this.state.likesArray.length },
+									{
+										likesCount: this.state.likesArray.length
+									},
 									() => {
 										console.log(
 											"reply" +
@@ -159,6 +169,43 @@ class AskedQuestion extends Component {
 										}
 									}
 								);
+								// for (
+								// 	let index = 0;
+								// 	index < this.state.ratingArray.length;
+								// 	index++
+								// ) {
+								// 	if (
+								// 		this.state.ratingArray[index].userId ===
+								// 		localStorage.getItem("userId")
+								// 	) {
+								// 		this.setState({
+								// 			ratingAvg: this.state.ratingArray[index].rate
+								// 		});
+								// 	}
+								// }
+								for (
+									let index = 0;
+									index < this.state.ratingArray.length;
+									index++
+								) {
+									if (this.state.ratingArray[index]) {
+										console.log(
+											"array of rate ",
+											this.state.ratingArray[index].rate
+										);
+										sum = sum + this.state.ratingArray[index].rate;
+										avg = sum / this.state.ratingArray.length;
+										console.log("value of sum", sum, avg);
+									}
+									this.setState(
+										{
+											ratingAvg: avg
+										},
+										() => {
+											console.log("value in state avg", this.state.ratingAvg);
+										}
+									);
+								}
 							}
 						);
 					}
@@ -188,8 +235,14 @@ class AskedQuestion extends Component {
 			nServe
 				.addQuestion(data)
 				.then(response => {
-					this.setState({ qExist: true });
-					console.log("question added successfully", response);
+					this.setState({
+						qExist: true,
+						question: response.data.data.details
+					});
+					console.log(
+						"question added successfully",
+						response.data.data.details
+					);
 				})
 				.catch(err => {
 					console.log("error adding question", err);
@@ -201,7 +254,8 @@ class AskedQuestion extends Component {
 
 	handleClose = event => {
 		event.preventDefault();
-		this.props.history.push("/dashboard/notes");
+		// this.props.history.push("/dashboard/notes");
+		this.props.history.goBack();
 	};
 	getDate = utc => {
 		var nDate = new Date(utc).toString().slice(0, 21);
@@ -244,6 +298,7 @@ class AskedQuestion extends Component {
 	};
 	handleSubmitReply = (event, id, message) => {
 		event.preventDefault();
+		this.setState({ reply: false });
 		var data = {};
 		if (!message) {
 			console.log("in question submit");
@@ -258,37 +313,92 @@ class AskedQuestion extends Component {
 	};
 	handleLike = event => {
 		event.preventDefault();
-		this.setState({
-			like: true,
-			likesCount: this.state.likesCount + 1
-    }, () => {
-      let data = {
-        id: this.state.question.id,
-        like: true
-      }
-      this.hitLikeDislikeApi(data);
-    });
-   
-  };
-  hitLikeDislikeApi = (data) => {
-    nServe.likeDislike(data).then(response => {
-      console.log("question liked/disliked",response);
-    }).catch(err => {
-      console.log("err hitting likedislike api",err);
-    })
-  }
+		this.setState(
+			{
+				like: true,
+				likesCount: this.state.likesCount + 1
+			},
+			() => {
+				let data = {
+					id: this.state.question.id,
+					like: true
+				};
+				this.hitLikeDislikeApi(data);
+			}
+		);
+	};
+	hitLikeDislikeApi = data => {
+		nServe
+			.likeDislike(data)
+			.then(response => {
+				console.log("question liked/disliked", response);
+			})
+			.catch(err => {
+				console.log("err hitting likedislike api", err);
+			});
+	};
 	handleDislike = event => {
 		event.preventDefault();
-		this.setState({
-			like: false,
-			likesCount: this.state.likesCount - 1
-		}, () => {
-      let data = {
-        id: this.state.question.id,
-        like: false
-      }
-      this.hitLikeDislikeApi(data);
-    });
+		this.setState(
+			{
+				like: false,
+				likesCount: this.state.likesCount - 1
+			},
+			() => {
+				let data = {
+					id: this.state.question.id,
+					like: false
+				};
+				this.hitLikeDislikeApi(data);
+			}
+		);
+	};
+	hitRatingApi = data => {
+		console.log("hit rating contains data", data);
+		nServe
+			.ratingChange(data)
+			.then(response => {
+				console.log("rating changed", response);
+			})
+			.catch(err => {
+				console.log("rating change failed", err);
+			});
+	};
+	changeRating = async newRating => {
+		let flag = false,
+			data = {};
+		// have to change rating according to the avg
+		console.log("value in new rating", newRating);
+		for (let index = 0; index < this.state.ratingArray.length; index++) {
+			if (
+				this.state.ratingArray[index].userId === localStorage.getItem("userId")
+			) {
+				await this.setState({
+					ratingArray: update(this.state.ratingArray, {
+						[index]: { rate: { $set: newRating } }
+					})
+				});
+				flag = true;
+				break;
+			}
+		}
+		if (flag === true) {
+			sum = 0;
+			this.state.ratingArray.forEach(element => {
+				sum += element.rate;
+			});
+			avg = await (sum / this.state.ratingArray.length);
+			await this.setState({
+				ratingAvg: avg
+			});
+		} else {
+			await this.setState({
+				ratingAvg: newRating
+			});
+		}
+		data.rate = await this.state.ratingAvg;
+		data.id = await this.state.question.id;
+		this.hitRatingApi(data);
 	};
 	render() {
 		const { noteDetails } = this.state;
@@ -348,7 +458,16 @@ class AskedQuestion extends Component {
 										<div id="textReply">
 											<b>{localStorage.getItem("name")}</b>
 											{"  "}
-											<p style={{fontSize:"12px",margin:"0px 0px 0px 10px",width:"fit-content",alignSelf:"center"}}>{this.state.date}</p>
+											<p
+												style={{
+													fontSize: "12px",
+													margin: "0px 0px 0px 10px",
+													width: "fit-content",
+													alignSelf: "center"
+												}}
+											>
+												{this.state.date}
+											</p>
 										</div>
 									</ListItemText>
 								</ListItem>
@@ -401,8 +520,18 @@ class AskedQuestion extends Component {
 									<ListItemText primaryTypographyProps={{ style: like }}>
 										likes {this.state.likesCount}
 									</ListItemText>
-									{this.state.answers.length > 0 && (
-										<ListItemSecondaryAction>
+									<ListItemSecondaryAction>
+										<div id="stars">
+											<StarRatings
+												rating={this.state.ratingAvg}
+												starRatedColor="#0098f7"
+												changeRating={this.changeRating}
+												numberOfStars={5}
+												starDimension="15px"
+												starSpacing="4px"
+											/>
+										</div>
+										{this.state.answers.length > 0 && (
 											<Button
 												classes={{ sizeSmall: classes.Rbutton }}
 												size="small"
@@ -410,8 +539,8 @@ class AskedQuestion extends Component {
 											>
 												{this.state.main ? "hide reply" : "view reply"}
 											</Button>
-										</ListItemSecondaryAction>
-									)}
+										)}
+									</ListItemSecondaryAction>
 								</ListItem>
 
 								{this.state.reply && (
@@ -446,8 +575,8 @@ class AskedQuestion extends Component {
 											this.state.answers.map(data =>
 												question.id === data.parentId &&
 												data.isApproved === true ? (
-														<div key={data.id} id="answer">
-															<Divider/>
+													<div key={data.id} id="answer">
+														<Divider />
 														<Reply
 															data={data}
 															profile={this.state.profile}

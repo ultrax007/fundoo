@@ -9,7 +9,7 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 
-let path = "/dashboard";
+let path = "/dashboard/notes";
 let snackStyle;
 
 const userve = new userServices();

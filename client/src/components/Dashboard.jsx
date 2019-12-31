@@ -121,24 +121,19 @@ class Dashboard extends React.Component {
 		this.state = {
 			open: false,
 			pop_open: false,
-			anchorEl:null,
+			anchorEl: null,
 			listView: false,
 			searched: "",
 			selectedFile: null,
-			base64: "http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl"),
-			// src: null,
-			// crop: {
-			// 	unit: "%",
-			// 	width: 50,
-			// 	aspect: 1 / 1
-			// },
+			base64: "http://fundoonotes.incubation.bridgelabz.com/" + localStorage.getItem("imageUrl"),
 			dialogOpen: false
 		};
 	}
 	componentDidMount() {
+		// this.getNotes();
 		this.setState({
-			base64: "http://fundoonotes.incubation.bridgelabz.com/"+localStorage.getItem("imageUrl")
-		})
+			base64: "http://fundoonotes.incubation.bridgelabz.com/" + localStorage.getItem("imageUrl")
+		});
 	}
 	handleClick = () => {
 		this.setState({ dialogOpen: !this.state.dialogOpen });
@@ -146,78 +141,6 @@ class Dashboard extends React.Component {
 	handleCloseDialog = () => {
 		this.setState({ dialogOpen: false });
 	};
-	// onSelectFile = e => {
-	// 	e.nativeEvent.stopImmediatePropagation();
-	// 	if (e.target.files && e.target.files.length > 0) {
-	// 		const reader = new FileReader();
-	// 		reader.addEventListener("load", () =>
-	// 			this.setState({ src: reader.result })
-	// 		);
-	// 		reader.readAsDataURL(e.target.files[0]);
-	// 	}
-	// };
-
-	// // If you setState the crop in here you should return false.
-	// onImageLoaded = image => {
-	// 	this.handleClick();
-	// 	this.imageRef = image;
-	// };
-
-	// onCropComplete = crop => {
-	// 	this.makeClientCrop(crop);
-	// };
-
-	// onCropChange = (crop, percentCrop) => {
-	// 	// You could also use percentCrop:
-	// 	// this.setState({ crop: percentCrop });
-	// 	this.setState({ crop });
-	// };
-
-	// async makeClientCrop(crop) {
-	// 	if (this.imageRef && crop.width && crop.height) {
-	// 		const croppedImageUrl = await this.getCroppedImg(
-	// 			this.imageRef,
-	// 			crop,
-	// 			"newFile.jpeg"
-	// 		);
-	// 		this.setState({ croppedImageUrl });
-	// 	}
-	// }
-
-	// getCroppedImg(image, crop, fileName) {
-	// 	const canvas = document.createElement("canvas");
-	// 	const scaleX = image.naturalWidth / image.width;
-	// 	const scaleY = image.naturalHeight / image.height;
-	// 	canvas.width = crop.width;
-	// 	canvas.height = crop.height;
-	// 	const ctx = canvas.getContext("2d");
-
-	// 	ctx.drawImage(
-	// 		image,
-	// 		crop.x * scaleX,
-	// 		crop.y * scaleY,
-	// 		crop.width * scaleX,
-	// 		crop.height * scaleY,
-	// 		0,
-	// 		0,
-	// 		crop.width,
-	// 		crop.height
-	// 	);
-
-	// 	return new Promise((resolve, reject) => {
-	// 		canvas.toBlob(blob => {
-	// 			if (!blob) {
-	// 				//reject(new Error('Canvas is empty'));
-	// 				console.error("Canvas is empty");
-	// 				return;
-	// 			}
-	// 			blob.name = fileName;
-	// 			window.URL.revokeObjectURL(this.fileUrl);
-	// 			this.fileUrl = window.URL.createObjectURL(blob);
-	// 			resolve(this.fileUrl);
-	// 		}, "image/jpeg");
-	// 	});
-	// }
 	handleProfileDropDown(e) {
 		e.preventDefault();
 		e.nativeEvent.stopImmediatePropagation();
@@ -320,7 +243,7 @@ class Dashboard extends React.Component {
 			.then(response => {
 				console.log("response is", response);
 				this.handleCloseDialog();
-				localStorage.setItem("imageUrl", response.data.status.imageUrl)
+				localStorage.setItem("imageUrl", response.data.status.imageUrl);
 			})
 			.catch(err => {
 				console.log("err", err);
@@ -328,7 +251,6 @@ class Dashboard extends React.Component {
 	};
 	render() {
 		const { classes } = this.props;
-		// const { crop, croppedImageUrl, src } = this.state;
 
 		return (
 			<div className="main">
@@ -549,17 +471,6 @@ class Dashboard extends React.Component {
 					style={{ zIndex: "4001" }}
 				>
 					<div style={{ maxHeight: "500px", maxWidth: "800px" }}>
-						{/* {src && (
-							<ReactCrop
-								src={src}
-								crop={crop}
-								ruleOfThirds
-								onImageLoaded={this.onImageLoaded}
-								onComplete={this.onCropComplete}
-								onChange={this.onCropChange}
-							/>
-						)}
-						{croppedImageUrl && ()} */}
 						<img
 							alt="Crop"
 							style={{ maxWidth: "100%" }}
@@ -577,7 +488,6 @@ const mapStateToProps = state => {
 		drawerStatus: state.open,
 		searchedText: state.searched,
 		viewStatus: state.listView
-		
 	};
 };
 const mapDispatchToProps = {

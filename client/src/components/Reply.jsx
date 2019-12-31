@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "../sass/playground.sass";
+import update from "immutability-helper";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -54,8 +55,8 @@ class Reply extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			rating: 0,
 			ratingAvg: 0,
+			ratingArray: [],
 			replyQ: "",
 			reply: false,
 			viewReply: false,
@@ -82,14 +83,14 @@ class Reply extends Component {
 							this.setState({ like: true });
 						}
 					}
-					for (let index = 0; index < this.state.ratingArray.length; index++) {
-						if (
-							this.state.ratingArray[index].userId ===
-							localStorage.getItem("userId")
-						) {
-							this.setState({ rating: this.state.ratingArray[index].rate });
-						}
-					}
+					// for (let index = 0; index < this.state.ratingArray.length; index++) {
+					// 	if (
+					// 		this.state.ratingArray[index].userId ===
+					// 		localStorage.getItem("userId")
+					// 	) {
+					// 		this.setState({ ratingAvg: this.state.ratingArray[index].rate });
+					// 	}
+					// }
 					for (let index = 0; index < this.state.ratingArray.length; index++) {
 						if (this.state.ratingArray[index]) {
 							console.log("array of rate ", this.state.ratingArray[index].rate);
@@ -97,11 +98,14 @@ class Reply extends Component {
 							avg = sum / this.state.ratingArray.length;
 							console.log("value of sum", sum, avg);
 						}
-							this.setState({
+						this.setState(
+							{
 								ratingAvg: avg
-              }, () => {
-                  console.log("value in state avg",this.state.ratingAvg);
-              });
+							},
+							() => {
+								console.log("value in state avg", this.state.ratingAvg);
+							}
+						);
 					}
 				});
 			}
@@ -173,12 +177,52 @@ class Reply extends Component {
 			}
 		);
 	};
-  changeRating = newRating => {
-    // have to change rating according to the avg
+	hitRatingApi = data => {
+		console.log("hit rating contains data", data);
+		nServe
+			.ratingChange(data)
+			.then(response => {
+				console.log("rating changed", response);
+			})
+			.catch(err => {
+				console.log("rating change failed", err);
+			});
+	};
+	changeRating = async newRating => {
+		let flag = false,
+			data = {};
+		// have to change rating according to the avg
 		console.log("value in new rating", newRating);
-		this.setState({
-			rating: newRating
-		});
+		for (let index = 0; index < this.state.ratingArray.length; index++) {
+			if (
+				this.state.ratingArray[index].userId === localStorage.getItem("userId")
+			) {
+				await this.setState({
+					ratingArray: update(this.state.ratingArray, {
+						[index]: { rate: { $set: newRating } }
+					})
+				});
+				flag = true;
+				break;
+			}
+		}
+		if (flag === true) {
+			sum = 0;
+			this.state.ratingArray.forEach(element => {
+				sum += element.rate;
+			});
+			avg = await (sum / this.state.ratingArray.length);
+			await this.setState({
+				ratingAvg: avg
+			});
+		} else {
+			await this.setState({
+				ratingAvg: newRating
+			});
+		}
+		data.rate = await this.state.ratingAvg;
+		data.id = await this.props.data.id;
+		this.hitRatingApi(data);
 	};
 	render() {
 		const { classes } = this.props;

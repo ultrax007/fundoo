@@ -140,11 +140,21 @@ export default class noteServices {
 			true
 		);
 	}
+	
 	likeDislike(data) {
 		// console.log("data in nservices", data);
 		return obj.postMethod(
 			data,
 			"/questionAndAnswerNotes/like/" + data.id,
+			true
+		);
+	}
+
+	ratingChange(data) {
+		// console.log("data in nservices", data);
+		return obj.postMethod(
+			data,
+			"/questionAndAnswerNotes/rate/" + data.id,
 			true
 		);
 	}
