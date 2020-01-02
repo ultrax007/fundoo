@@ -45,7 +45,7 @@ export default class DrawerList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			notes: false,
+			notes: true,
 			reminder: false,
 			editL: false,
 			archive: false,

@@ -677,9 +677,11 @@ class NoteCard extends React.Component {
 											key={data.email}
 											size="small"
 											style={{
-												border: "1px solid #494949",
+												border: "2px solid #fff",
 												margin: "0 3px",
-												backgroundColor: "#00b9ff7a"
+												backgroundColor: "#00b9ff7a",
+												fontSize: "14px",
+												boxShadow: "0px 1px 10px 0px rgba(0, 0, 0, 0.2), 1px 1px 3px 0 rgba(0, 0, 0, 0.19)"
 											}}
 										>
 											<Tooltip title={data.email}>

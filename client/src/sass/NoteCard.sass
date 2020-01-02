@@ -151,13 +151,24 @@
   width: 10%
   justify-content: center
 
+@media only screen and ( max-width:900px)
+  #noteDialog
+    width: 600px
+
+
 @media only screen and ( max-width:600px)
   #noteActive
     display: flex
     width: 98%
   #iconBar
     width: 80%
+  #noteDialog
+    width: 600px
   
+@media only screen and ( max-width:900px)
+  #noteDialog
+    width: 300px
+    
 #titleN
   @extend %disflex
   flex-direction: row
