@@ -291,6 +291,7 @@ class AskedQuestion extends Component {
 			.replyQuestion(data)
 			.then(response => {
 				console.log("successfully submitted reply", response.data.data);
+				this.setState({ replyQ: "" });
 			})
 			.catch(err => {
 				console.log("error occured", err);
