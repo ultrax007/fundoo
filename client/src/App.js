@@ -16,12 +16,14 @@ import Search from "./components/Search";
 import Labels from "./components/Labels";
 import Reminders from "./components/Reminders";
 import AskedQuestion from "./components/AskedQuestion";
+import ChooseService from "./components/ChooseService";
 import "./App.css";
 function App() {
 	return (
 		<div>
 			<BrowserRouter>
-					<Route path="/" exact component={Login}></Route>
+					<Route path="/" exact component={ChooseService}></Route>
+					<Route path="/login" component={Login}></Route>
 					<Route path="/register" component={Register}></Route>
 					<Route path="/forgotPassword" component={ForgotPassword}></Route>
 					<Route path="/resetPassword" component={ResetPassword}></Route>

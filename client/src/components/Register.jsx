@@ -92,7 +92,7 @@ export default class Register extends React.Component {
 		this.props.history.push(path);
 	};
 	handleLogin = () => {
-		const path = "/";
+		const path = "/login";
 		this.props.history.push(path);
 	};
 

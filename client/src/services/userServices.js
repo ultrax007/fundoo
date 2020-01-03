@@ -10,9 +10,12 @@ export default class userServices {
     return obj.postMethod(data, "/user/reset", false);
   }
 
-  
   register(data) {
     return obj.postMethod(data,"/user/userSignUp", false);
+  }
+
+  services() {
+    return obj.getMethod("/user/service", true);
   }
   
   reset(data) {
