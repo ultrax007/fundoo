@@ -34,8 +34,6 @@ class Register extends React.Component {
 			email: "",
 			password: "",
 			repeatPassword: "",
-			service: "",
-			flag: false,
 			message: ""
 		};
 	}
@@ -64,7 +62,7 @@ class Register extends React.Component {
 			let userData = {};
 			userData.firstName = this.state.firstName;
 			userData.lastName = this.state.lastName;
-			userData.service = this.state.service;
+			userData.service = this.props.dataSelectedCard.name;
 			userData.email = this.state.email;
 			userData.password = this.state.password;
 			// let target = ;
@@ -119,51 +117,51 @@ class Register extends React.Component {
 		this.setState({ repeatPassword: event.currentTarget.value });
 	};
 
-	handleBasic = () => {
-		console.log("-------------basic package-------------");
-		this.setState({ service: "basic" });
-		this.setState({ flag: true });
-		console.log("value of service", this.state.service);
-		console.log("value of flag", this.state.flag);
-		err = {
-			error: {
-				display: "none"
-			}
-		};
-	};
-	handleAdvance = () => {
-		console.log("----------advance package----------");
-		this.setState({ service: "advance" });
-		this.setState({ flag: true });
-		console.log("value of service", this.state.service);
-		console.log("value of flag", this.state.flag);
-		err = {
-			error: {
-				display: "none"
-			}
-		};
-	};
-	checkFlag = () => {
-		console.log("---------------in check service---------");
-		if (this.state.flag === false) {
-			this.setState({ message: "please choose a Package" });
-			err = {
-				error: {
-					display: "block",
-					color: "red",
-					fontSize: "12px",
-					textAlign: "center"
-				}
-			};
-		} else {
-			this.setState({ message: "" });
-			err = {
-				error: {
-					display: "none"
-				}
-			};
-		}
-	};
+	// handleBasic = () => {
+	// 	console.log("-------------basic package-------------");
+	// 	this.setState({ service: "basic" });
+	// 	this.setState({ flag: true });
+	// 	console.log("value of service", this.state.service);
+	// 	console.log("value of flag", this.state.flag);
+	// 	err = {
+	// 		error: {
+	// 			display: "none"
+	// 		}
+	// 	};
+	// };
+	// handleAdvance = () => {
+	// 	console.log("----------advance package----------");
+	// 	this.setState({ service: "advance" });
+	// 	this.setState({ flag: true });
+	// 	console.log("value of service", this.state.service);
+	// 	console.log("value of flag", this.state.flag);
+	// 	err = {
+	// 		error: {
+	// 			display: "none"
+	// 		}
+	// 	};
+	// };
+	// checkFlag = () => {
+	// 	console.log("---------------in check service---------");
+	// 	if (this.state.flag === false) {
+	// 		this.setState({ message: "please choose a Package" });
+	// 		err = {
+	// 			error: {
+	// 				display: "block",
+	// 				color: "red",
+	// 				fontSize: "12px",
+	// 				textAlign: "center"
+	// 			}
+	// 		};
+	// 	} else {
+	// 		this.setState({ message: "" });
+	// 		err = {
+	// 			error: {
+	// 				display: "none"
+	// 			}
+	// 		};
+	// 	}
+	// };
 
 	render() {
 		const classes = {
@@ -399,7 +397,7 @@ class Register extends React.Component {
 										<img
 											src={require("../assets/account.svg")}
 											width="100%"
-											height="70%"
+											height="33%"
 											alt="flowers are blue too"
 										></img>
 										<div className="regFieldText">

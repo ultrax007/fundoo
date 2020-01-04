@@ -39,7 +39,7 @@ export default class ServiceCards extends Component {
 	render() {
 		return (
 			<Fragment>
-				<div id="cards" style={this.props.myStyle?{ transform:" scale(0.6)"}:null}>
+				<div id="cards" style={this.props.myStyle?{ transform:" scale(0.7)"}:null}>
 					{this.props.sData.map(data => (
 						<div id="mCard" key={data.id}>
 							<Card
@@ -63,7 +63,7 @@ export default class ServiceCards extends Component {
 							<Card id="bCard" variant="outlined">
 								<CardContent>
 									<Typography variant="body1" component="h6">
-										ADD TO CART
+										{this.props.sData === data ? "SELECTED" : "ADD TO CART"}
 									</Typography>
 								</CardContent>
 							</Card>
