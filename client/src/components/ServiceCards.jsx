@@ -39,7 +39,7 @@ export default class ServiceCards extends Component {
 	render() {
 		return (
 			<Fragment>
-				<div id="cards">
+				<div id="cards" style={this.props.myStyle?{ transform:" scale(0.6)"}:null}>
 					{this.props.sData.map(data => (
 						<div id="mCard" key={data.id}>
 							<Card

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "../sass/ChooseService.sass";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 // import Card from "@material-ui/core/Card";
@@ -19,6 +20,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Button } from "@material-ui/core";
+import { cardArray, selected } from "./redux/Actions";
 import ServiceCards from "./ServiceCards";
 const uServe = new userServices();
 
@@ -78,10 +80,15 @@ class ChooseService extends Component {
 	};
 	handleClick = (event, data) => {
 		event.preventDefault();
-		this.setState({
-			selected: data,
-			dialogOpen: true
-		});
+		this.setState(
+			{
+				selected: data,
+				dialogOpen: true
+			},
+			() => {
+				this.props.selected(this.state.selected);
+			}
+		);
 	};
 	handleCloseDialog = () => {
 		this.setState({ dialogOpen: false });
@@ -93,11 +100,20 @@ class ChooseService extends Component {
 				console.log("response of services received", res.data.data.data);
 				this.setState({ sData: res.data.data.data }, () => {
 					console.log("stat has data ", this.state.sData);
+					this.props.cardArray(this.state.sData);
 				});
 			})
 			.catch(err => {
 				console.log("error in receiving services", err);
 			});
+	};
+	signInInstead = event => {
+		event.preventDefault();
+		this.props.history.push("/login");
+	};
+	handleProceed = event => {
+		event.preventDefault();
+		this.props.history.push("/register");
 	};
 	render() {
 		const { selected } = this.state;
@@ -120,8 +136,17 @@ class ChooseService extends Component {
 						sData={this.state.sData}
 						dOpen={this.handleClick}
 						dClose={this.handleCloseDialog}
-          />
-          <div id="headtext"><Button variant="text" color="primary">Sign in Instead</Button></div>
+						myStyle={false}
+					/>
+					<div id="headtext">
+						<Button
+							variant="text"
+							color="primary"
+							onClick={event => this.signInInstead(event)}
+						>
+							Sign in Instead
+						</Button>
+					</div>
 					<Dialog
 						open={this.state.dialogOpen}
 						TransitionComponent={Grow}
@@ -185,7 +210,12 @@ class ChooseService extends Component {
 							>
 								Cancel
 							</Button>
-							<Button size="small" variant="contained" color="primary">
+							<Button
+								size="small"
+								variant="contained"
+								color="primary"
+								onClick={event => this.handleProceed(event)}
+							>
 								Proceed to Checkout
 							</Button>
 						</DialogActions>
@@ -203,4 +233,14 @@ ElevationScroll.propTypes = {
 TabContainer.propTypes = {
 	children: PropTypes.node.isRequired
 };
-export default ChooseService;
+const mapStateToProps = state => {
+	return {
+		dataCardArray: state.sData,
+		dataSelectedCard: state.selected
+	};
+};
+const mapDispatchToProps = {
+	cardArray,
+	selected
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseService);

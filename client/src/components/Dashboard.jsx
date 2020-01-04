@@ -476,7 +476,7 @@ class Dashboard extends React.Component {
 							style={{ maxWidth: "100%" }}
 							src={this.state.base64}
 						/>
-						<Button onClick={this.uploadHandler}>Upload!</Button>
+						<Button onClick={this.uploadHandler}>Upload</Button>
 					</div>
 				</Dialog>
 			</div>

@@ -18,3 +18,15 @@ export function view(payload) {
     value: payload
   }
 }
+export function cardArray(payload) {
+  return {
+    type: "CARD_ARRAY",
+    value: payload
+  }
+}
+export function selected(payload) {
+  return {
+    type: "SELECTED_CARD",
+    value: payload
+  }
+}

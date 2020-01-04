@@ -1,11 +1,13 @@
 import React from "react";
 import userServices from "../services/userServices";
 import "../sass/styles.sass";
+import { connect } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import ServiceCards from "./ServiceCards";
 const userve = new userServices();
 let path = "/";
 let err = {
@@ -23,7 +25,7 @@ const theme = createMuiTheme({
 	}
 });
 
-export default class Register extends React.Component {
+class Register extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -149,7 +151,7 @@ export default class Register extends React.Component {
 				error: {
 					display: "block",
 					color: "red",
-					fontSize: "12px",	
+					fontSize: "12px",
 					textAlign: "center"
 				}
 			};
@@ -230,7 +232,6 @@ export default class Register extends React.Component {
 				color: "#1a73e8",
 				textTransform: "none"
 			}
-			
 		};
 		return (
 			<div className="MainApp">
@@ -243,122 +244,123 @@ export default class Register extends React.Component {
 								onSubmit={this.handleSubmit}
 								onError={errors => console.log(errors)}
 							>
-								<div className="regPaper">
-									<div className="regFieldLogo">
-										<Typography
-											variant="h5"
-											component="h5"
-											style={classes.titleField}
-										>
-											<label id="bl">F</label>
-											<label id="rd">u</label>
-											<label id="yl">n</label>
-											<label id="bl">d</label>
-											<label id="gn">o</label>
-											<label id="rd">o</label>
-										</Typography>
-									</div>
-									<div className="regFieldText">
-										<Typography
-											variant="h5"
-											component="h5"
-											style={classes.textField}
-										>
-											Create your Fundoo Account
-										</Typography>
-									</div>
-									<div className="regFieldInputfn">
-										<div className="fncl">
-											<TextValidator
-												id="texsdftF"
-												type="text"
-												label="First name"
-												margin="dense"
-												variant="outlined"
-												style={classes.nameField}
-												value={this.state.firstName}
-												onChange={event => this.handleFirstName(event)}
-												validators={["required"]}
-												errorMessages={["this field is required"]}
-											/>
+								<div id="row1">
+									<div className="regPaper">
+										<div className="regFieldLogo">
+											<Typography
+												variant="h5"
+												component="h5"
+												style={classes.titleField}
+											>
+												<label id="bl">F</label>
+												<label id="rd">u</label>
+												<label id="yl">n</label>
+												<label id="bl">d</label>
+												<label id="gn">o</label>
+												<label id="rd">o</label>
+											</Typography>
 										</div>
-										<div className="fnc">
-											<TextValidator
-												id="teasdfxtF"
-												type="text"
-												label="Last name"
-												margin="dense"
-												variant="outlined"
-												style={classes.nameField}
-												value={this.state.lastName}
-												onChange={event => this.handleLastName(event)}
-												validators={["required"]}
-												errorMessages={["this field is required"]}
-											/>
+										<div className="regFieldText">
+											<Typography
+												variant="h5"
+												component="h5"
+												style={classes.textField}
+											>
+												Create your Fundoo Account
+											</Typography>
 										</div>
-									</div>
-									<div className="regFieldInputfn">
-										<TextValidator
-											helperText="You can use letter, numbers and periods"
-											id="teasdxtasdF"
-											type="email"
-											label="Username"
-											margin="dense"
-											variant="outlined"
-											style={classes.emailField}
-											value={this.state.email}
-											onChange={event => this.handleEmail(event)}
-											validators={["required", "isEmail"]}
-											errorMessages={[
-												"this field is required",
-												"email is not valid"
-											]}
-										/>
-									</div>
-									<div className="regFieldInputfn">
-										<div className="fncl">
-											<TextValidator
-												// id="textF"
-												label="Password"
-												style={classes.nameField}
-												type="password"
-												// autoComplete="current-password"
-												margin="dense"
-												variant="outlined"
-												onChange={event => this.handlePassword(event)}
-												value={this.state.password}
-												validators={["required"]}
-												errorMessages={["this field is required"]}
-											/>
+										<div className="regFieldInputfn">
+											<div className="fncl">
+												<TextValidator
+													id="texsdftF"
+													type="text"
+													label="First name"
+													margin="dense"
+													variant="outlined"
+													style={classes.nameField}
+													value={this.state.firstName}
+													onChange={event => this.handleFirstName(event)}
+													validators={["required"]}
+													errorMessages={["this field is required"]}
+												/>
+											</div>
+											<div className="fnc">
+												<TextValidator
+													id="teasdfxtF"
+													type="text"
+													label="Last name"
+													margin="dense"
+													variant="outlined"
+													style={classes.nameField}
+													value={this.state.lastName}
+													onChange={event => this.handleLastName(event)}
+													validators={["required"]}
+													errorMessages={["this field is required"]}
+												/>
+											</div>
 										</div>
-										<div className="fnc">
+										<div className="regFieldInputfn">
 											<TextValidator
-												// id="textF"
-												label="Confirm"
-												style={classes.nameField}
-												type="password"
-												// autoComplete="current-password"
+												helperText="You can use letter, numbers and periods"
+												id="teasdxtasdF"
+												type="email"
+												label="Username"
 												margin="dense"
 												variant="outlined"
-												onChange={event => this.handleRPassword(event)}
-												value={this.state.repeatPassword}
-												validators={["isPasswordMatch", "required"]}
+												style={classes.emailField}
+												value={this.state.email}
+												onChange={event => this.handleEmail(event)}
+												validators={["required", "isEmail"]}
 												errorMessages={[
-													"password mismatch",
-													"this field is required"
+													"this field is required",
+													"email is not valid"
 												]}
 											/>
 										</div>
-									</div>
-									<div className="regFieldText">
-										<Typography component="p" style={classes.textFieldetc}>
-											Use 8 or more characters with a mix of letters, numbers &
-											symbols
-										</Typography>
-									</div>
-									<div></div>
-									<div style={err}>{this.state.message}</div>
-									<div className="regFieldInputfn">
+										<div className="regFieldInputfn">
+											<div className="fncl">
+												<TextValidator
+													// id="textF"
+													label="Password"
+													style={classes.nameField}
+													type="password"
+													// autoComplete="current-password"
+													margin="dense"
+													variant="outlined"
+													onChange={event => this.handlePassword(event)}
+													value={this.state.password}
+													validators={["required"]}
+													errorMessages={["this field is required"]}
+												/>
+											</div>
+											<div className="fnc">
+												<TextValidator
+													// id="textF"
+													label="Confirm"
+													style={classes.nameField}
+													type="password"
+													// autoComplete="current-password"
+													margin="dense"
+													variant="outlined"
+													onChange={event => this.handleRPassword(event)}
+													value={this.state.repeatPassword}
+													validators={["isPasswordMatch", "required"]}
+													errorMessages={[
+														"password mismatch",
+														"this field is required"
+													]}
+												/>
+											</div>
+										</div>
+										<div className="regFieldText">
+											<Typography component="p" style={classes.textFieldetc}>
+												Use 8 or more characters with a mix of letters, numbers
+												& symbols
+											</Typography>
+										</div>
+										<div></div>
+										<div style={err}>{this.state.message}</div>
+										{/* <div className="regFieldInputfn">
 										<Button
 											variant="contained"
 											style={classes.buttonsale}
@@ -373,35 +375,40 @@ export default class Register extends React.Component {
 										>
 											Basic
 										</Button>
+									</div> */}
+										<ServiceCards
+											sData={this.props.dataCardArray}
+											sCard={this.props.dataSelectedCard}
+											myStyle={true}
+										/>
+										<div className="regFieldLast">
+											<Button style={classes.button} onClick={this.handleLogin}>
+												Sign in instead
+											</Button>
+											<Button
+												variant="contained"
+												style={classes.buttonS}
+												type="submit"
+												onClick={this.checkFlag}
+											>
+												Next
+											</Button>
+										</div>
 									</div>
-									<div className="regFieldLast">
-										<Button style={classes.button} onClick={this.handleLogin}>
-											Sign in instead
-										</Button>
-										<Button
-											variant="contained"
-											style={classes.buttonS}
-											type="submit"
-											onClick={this.checkFlag}
-										>
-											Next
-										</Button>
-										
-									</div>
-								</div>
-								<div id="imgs" className="logo">
-									<img
-										src={require("../assets/account.svg")}
-										width="100%"
-										height="70%"
-										alt="flowers are blue too"
-									></img>
-									<div className="regFieldText">
-										<Typography
-											style={{ color: "#424242", textAlign: "center" }}
-										>
-											One account. All of Bridgelabz working for you.
-										</Typography>
+									<div id="imgs" className="logo">
+										<img
+											src={require("../assets/account.svg")}
+											width="100%"
+											height="70%"
+											alt="flowers are blue too"
+										></img>
+										<div className="regFieldText">
+											<Typography
+												style={{ color: "#424242", textAlign: "center" }}
+											>
+												One account. All of Bridgelabz working for you.
+											</Typography>
+										</div>
 									</div>
 								</div>
 							</ValidatorForm>
@@ -412,3 +419,10 @@ export default class Register extends React.Component {
 		);
 	}
 }
+const mapStateToProps = state => {
+	return {
+		dataCardArray: state.cardArrayData,
+		dataSelectedCard: state.sCardData
+	};
+};
+export default connect(mapStateToProps)(Register);

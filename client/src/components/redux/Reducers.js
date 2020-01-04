@@ -26,6 +26,20 @@ function rootReducer(state = initialState, action) {
         viewData:action.value
       }
     }
+    case "CARD_ARRAY": {
+      console.log("in reducer card_array", action.value);
+      return {
+        ...state,
+        cardArrayData:action.value
+      }
+    }
+    case "SELECTED_CARD": {
+      console.log("in reducer selected_card", action.value);
+      return {
+        ...state,
+        sCardData:action.value
+      }
+    }
       default:return state
   }
 }
