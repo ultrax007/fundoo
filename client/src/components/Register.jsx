@@ -9,12 +9,8 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import ServiceCards from "./ServiceCards";
 const userve = new userServices();
-let path = "/";
-let err = {
-	error: {
-		display: "none"
-	}
-};
+let path = "/login";
+
 const theme = createMuiTheme({
 	overrides: {
 		MuiPaper: {
@@ -58,33 +54,31 @@ class Register extends React.Component {
 	}
 
 	handleSubmit = () => {
-		if (this.state.flag === true) {
-			let userData = {};
-			userData.firstName = this.state.firstName;
-			userData.lastName = this.state.lastName;
-			userData.service = this.props.dataSelectedCard.name;
-			userData.email = this.state.email;
-			userData.password = this.state.password;
-			// let target = ;
-			userve
-				.register(userData)
-				.then(response => {
-					console.log("data in req", response);
-					console.log("registered successfully", response.status);
+		let userData = {};
+		userData.firstName = this.state.firstName;
+		userData.lastName = this.state.lastName;
+		userData.service = this.props.dataSelectedCard.name;
+		userData.email = this.state.email;
+		userData.password = this.state.password;
+		console.log("value in data object", userData);
+		userve
+			.register(userData)
+			.then(response => {
+				console.log("data in req", response);
+				console.log("registered successfully", response.status);
 
-					if (response.status) {
-						alert("registration successful");
-						this.props.history.push(path);
-					} else {
-						alert("pls try again");
-						path = "/register";
-						this.props.history.push(path);
-					}
-				})
-				.catch(err => {
-					console.log("unsuccessful", err);
-				});
-		}
+				if (response.status) {
+					alert("registration successful");
+					this.props.history.push(path);
+				} else {
+					alert("pls try again");
+					path = "/";
+					this.props.history.push(path);
+				}
+			})
+			.catch(err => {
+				console.log("unsuccessful", err);
+			});
 	};
 
 	handleForgot = () => {
@@ -116,52 +110,6 @@ class Register extends React.Component {
 		console.log("value of password", event.currentTarget.value);
 		this.setState({ repeatPassword: event.currentTarget.value });
 	};
-
-	// handleBasic = () => {
-	// 	console.log("-------------basic package-------------");
-	// 	this.setState({ service: "basic" });
-	// 	this.setState({ flag: true });
-	// 	console.log("value of service", this.state.service);
-	// 	console.log("value of flag", this.state.flag);
-	// 	err = {
-	// 		error: {
-	// 			display: "none"
-	// 		}
-	// 	};
-	// };
-	// handleAdvance = () => {
-	// 	console.log("----------advance package----------");
-	// 	this.setState({ service: "advance" });
-	// 	this.setState({ flag: true });
-	// 	console.log("value of service", this.state.service);
-	// 	console.log("value of flag", this.state.flag);
-	// 	err = {
-	// 		error: {
-	// 			display: "none"
-	// 		}
-	// 	};
-	// };
-	// checkFlag = () => {
-	// 	console.log("---------------in check service---------");
-	// 	if (this.state.flag === false) {
-	// 		this.setState({ message: "please choose a Package" });
-	// 		err = {
-	// 			error: {
-	// 				display: "block",
-	// 				color: "red",
-	// 				fontSize: "12px",
-	// 				textAlign: "center"
-	// 			}
-	// 		};
-	// 	} else {
-	// 		this.setState({ message: "" });
-	// 		err = {
-	// 			error: {
-	// 				display: "none"
-	// 			}
-	// 		};
-	// 	}
-	// };
 
 	render() {
 		const classes = {
@@ -198,9 +146,8 @@ class Register extends React.Component {
 			},
 			emailField: {
 				alignSelf: "left",
-				marginLeft: "5.5%",
-				marginRight: "2.2%",
-				width: "100%",
+				marginLeft:"2.5%",
+				width: "92%",
 				textAlign: "center"
 			},
 			nameField: {
@@ -297,10 +244,10 @@ class Register extends React.Component {
 												/>
 											</div>
 										</div>
-										<div className="regFieldInputfn">
+										<div className="regFieldInputfnE">
 											<TextValidator
 												helperText="You can use letter, numbers and periods"
-												id="teasdxtasdF"
+												id="emailr"
 												type="email"
 												label="Username"
 												margin="dense"
@@ -356,24 +303,6 @@ class Register extends React.Component {
 												& symbols
 											</Typography>
 										</div>
-										<div></div>
-										<div style={err}>{this.state.message}</div>
-										{/* <div className="regFieldInputfn">
-										<Button
-											variant="contained"
-											style={classes.buttonsale}
-											onClick={this.handleAdvance}
-										>
-											Advance
-										</Button>
-										<Button
-											variant="contained"
-											style={classes.buttonsale}
-											onClick={this.handleBasic}
-										>
-											Basic
-										</Button>
-									</div> */}
 										<ServiceCards
 											sData={this.props.dataCardArray}
 											sCard={this.props.dataSelectedCard}

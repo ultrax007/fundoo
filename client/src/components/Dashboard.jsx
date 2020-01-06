@@ -249,6 +249,10 @@ class Dashboard extends React.Component {
 				console.log("err", err);
 			});
 	};
+	handleShoppingCart = (event) => {
+		event.preventDefault();
+		this.props.history.push("/dashboard/cart");
+	}
 	render() {
 		const { classes } = this.props;
 
@@ -322,8 +326,9 @@ class Dashboard extends React.Component {
 											<ViewAgendaOutlinedIcon />
 										)}
 									</IconButton>
-									<IconButton id="logos">
-										<ShoppingCartOutlinedIcon />
+									<IconButton id="logos" onClick={event => this.handleShoppingCart(event)}>
+										
+										<ShoppingCartOutlinedIcon  />
 									</IconButton>
 								</div>
 								<div id="avatar">

@@ -17,6 +17,7 @@ import Labels from "./components/Labels";
 import Reminders from "./components/Reminders";
 import AskedQuestion from "./components/AskedQuestion";
 import ChooseService from "./components/ChooseService";
+import Cart from "./components/Cart";
 import "./App.css";
 function App() {
 	return (
@@ -36,6 +37,7 @@ function App() {
 					<Route path="/dashboard/search" component={Search}></Route>
 					<Route path="/dashboard/label/:username" component={Labels}></Route>
 					<Route path="/dashboard/AskQuestion/:id" component={AskedQuestion}></Route>
+					<Route path="/dashboard/cart" component={Cart}></Route>
 					{/* <Route path="/dashboard/" component={}></Route> */}
 			</BrowserRouter>
 		</div>

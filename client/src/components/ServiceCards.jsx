@@ -14,6 +14,7 @@ export default class ServiceCards extends Component {
 		};
 	}
 	componentDidMount() {
+		console.log("props.sData has value ****",this.props.sData);
 		this.hitServicesApi();
 	}
   handleClick = (event, data) => {
@@ -60,10 +61,10 @@ export default class ServiceCards extends Component {
 									</Typography>
 								</CardContent>
 							</Card>
-							<Card id="bCard" variant="outlined">
+							<Card id={this.props.sCard===data ?"bselCard": "bCard"} variant="outlined">
 								<CardContent>
 									<Typography variant="body1" component="h6">
-										{this.props.sData === data ? "SELECTED" : "ADD TO CART"}
+										{this.props.sCard === data ? "SELECTED" : "ADD TO CART"}
 									</Typography>
 								</CardContent>
 							</Card>

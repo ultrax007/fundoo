@@ -123,25 +123,14 @@
   // padding: 10% 0%
   // background-color: #019687
 
-@media only screen and (max-width: 768px) 
-  #imgs
-    display: none
-  .regPaper
-    width: 100%
 
-@media only screen and (max-width: 600px) 
-  #imgs
-    display: none
-  .regPaper
-    width: 100%
 
 .regContainer 
   display: flex
   flex-direction: column
   width: 100%
-  @media only screen and (min-width: 600px)
+  @media only screen and (min-width: 768px)
     width: 56.5%
-  // height: 90%
   align-self: center
   align-items: center		
 
@@ -152,11 +141,7 @@
   padding-left: 11%
   align-items: flex-start
   padding-top:6%
-  // padding-bottom: 2%
-  // padding-left: 2%  
-  // background-color: #5ed4cb
-
-
+  
 .regFieldText
   @extend %Login-Field
   font-family:'Open Sans', sans-serif
@@ -170,10 +155,11 @@
 .regFieldInput
   @extend %Login-Field
 
-.regFieldInputfn
+.regFieldInputfn,.regFieldInputfnE
   @extend %Login-Field
   padding-top: 3%
   flex-direction: row
+  justify-content: center
 
 .fnc
   @extend %Login-Field
@@ -207,3 +193,26 @@
   flex-direction: row
   width: 100%
 
+#emailr
+  width: 92%
+  margin-left: 5.5%
+
+@media only screen and (max-width: 768px) and (min-width: 340px)
+  #imgs
+    display: none
+  .regPaper
+    width: 100%
+  .regFieldInputfn
+    flex-direction: column
+    align-items: center
+  .regFieldInputfnE
+    flex-direction: column
+    align-items: center
+  .regFieldInputfnE .MuiFormControl-root
+    margin: 0px !important
+    width: 90% !important
+  .fncl
+    padding: 0px
+    width: 100%
+  .fnc
+    width: 100%
