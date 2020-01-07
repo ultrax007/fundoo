@@ -33,9 +33,7 @@
 .LoginCard
   display: flex
   flex-direction: column
-  width: 100%
-  @media only screen and (min-width: 600px)
-    width: 33%
+  width: 443px
   // height: 90%
   align-self: center
   align-items: center
@@ -123,14 +121,10 @@
   // padding: 10% 0%
   // background-color: #019687
 
-
-
 .regContainer 
   display: flex
   flex-direction: column
-  width: 100%
-  @media only screen and (min-width: 768px)
-    width: 56.5%
+  width: 56.6%
   align-self: center
   align-items: center		
 
@@ -197,9 +191,17 @@
   width: 92%
   margin-left: 5.5%
 
-@media only screen and (max-width: 768px) and (min-width: 340px)
+@media only screen and (max-width: 935px)
+  #imgs,.logo
+    display: none
+  .regPaper
+    width: 96%
+
+@media only screen and (max-width: 768px) and (min-width: 240px)
   #imgs
     display: none
+  .regContainer
+    width: 100%
   .regPaper
     width: 100%
   .regFieldInputfn

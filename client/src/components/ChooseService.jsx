@@ -20,7 +20,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { Button } from "@material-ui/core";
-import { cardArray, selected } from "./redux/Actions";
+import { cardArray } from "./redux/Actions";
 import ServiceCards from "./ServiceCards";
 const uServe = new userServices();
 
@@ -86,7 +86,7 @@ class ChooseService extends Component {
 				dialogOpen: true
 			},
 			() => {
-				this.props.selected(this.state.selected);
+				// this.props.selected(this.state.selected);
 			}
 		);
 	};
@@ -113,7 +113,16 @@ class ChooseService extends Component {
 	};
 	handleProceed = event => {
 		event.preventDefault();
-		this.props.history.push("/register");
+		let data = {
+			productId: this.state.selected.id
+		};
+		uServe.addToCart(data).then(res => {
+			console.log("added item to cart successfully", res.data.data.details);
+			localStorage.setItem("cartId", res.data.data.details.id);
+			this.props.history.push("/register");
+		}).catch(err => {
+			console.log("error adding item to cart",err);
+		})
 	};
 	render() {
 		const { selected } = this.state;
@@ -134,6 +143,7 @@ class ChooseService extends Component {
 					</div>
 					<ServiceCards
 						sData={this.state.sData}
+						sCard={"abc"}
 						dOpen={this.handleClick}
 						dClose={this.handleCloseDialog}
 						myStyle={false}
@@ -236,11 +246,11 @@ TabContainer.propTypes = {
 const mapStateToProps = state => {
 	return {
 		dataCardArray: state.sData,
-		dataSelectedCard: state.selected
+		// dataSelectedCard: state.selected
 	};
 };
 const mapDispatchToProps = {
 	cardArray,
-	selected
+	// selected
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseService);

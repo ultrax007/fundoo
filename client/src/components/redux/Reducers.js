@@ -33,13 +33,13 @@ function rootReducer(state = initialState, action) {
         cardArrayData:action.value
       }
     }
-    case "SELECTED_CARD": {
-      console.log("in reducer selected_card", action.value);
-      return {
-        ...state,
-        sCardData:action.value
-      }
-    }
+    // case "SELECTED_CARD": {
+    //   console.log("in reducer selected_card", action.value);
+    //   return {
+    //     ...state,
+    //     sCardData:action.value
+    //   }
+    // }
       default:return state
   }
 }

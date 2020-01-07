@@ -24,9 +24,9 @@ export function cardArray(payload) {
     value: payload
   }
 }
-export function selected(payload) {
-  return {
-    type: "SELECTED_CARD",
-    value: payload
-  }
-}
+// export function selected(payload) {
+//   return {
+//     type: "SELECTED_CARD",
+//     value: payload
+//   }
+// }

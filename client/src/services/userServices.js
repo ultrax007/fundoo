@@ -15,7 +15,15 @@ export default class userServices {
   }
 
   services() {
-    return obj.getMethod("/user/service", true);
+    return obj.getMethod("/user/service", false);
+  }
+
+  getCartDetails(data) {
+    return obj.getMethod("/productcarts/getCartDetails/"+data, false);
+  }
+
+  addToCart(data) {
+    return obj.postMethod(data,"/productcarts/addToCart", false);
   }
   
   reset(data) {

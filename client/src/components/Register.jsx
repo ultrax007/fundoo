@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import ServiceCards from "./ServiceCards";
-const userve = new userServices();
+const uServe = new userServices();
 let path = "/login";
 
 const theme = createMuiTheme({
@@ -30,11 +30,22 @@ class Register extends React.Component {
 			email: "",
 			password: "",
 			repeatPassword: "",
-			message: ""
+			message: "",
+			selectedCard:""
 		};
 	}
-
+	getCartDetails = () => {
+		uServe.getCartDetails(localStorage.getItem("cartId")).then(res => {
+			console.log("successfully fetched details", res.data.data.product);
+			this.setState({
+				selectedCard:res.data.data.product
+			})
+		}).catch(err => {
+			console.log("unable to fetch data",err);
+		})
+	}
 	componentDidMount() {
+		this.getCartDetails();
 		// custom rule will have name 'isPasswordMatch'
 		ValidatorForm.addValidationRule("isPasswordMatch", value => {
 			if (value !== this.state.password) {
@@ -61,7 +72,7 @@ class Register extends React.Component {
 		userData.email = this.state.email;
 		userData.password = this.state.password;
 		console.log("value in data object", userData);
-		userve
+		uServe
 			.register(userData)
 			.then(response => {
 				console.log("data in req", response);
@@ -305,7 +316,7 @@ class Register extends React.Component {
 										</div>
 										<ServiceCards
 											sData={this.props.dataCardArray}
-											sCard={this.props.dataSelectedCard}
+											sCard={this.state.selectedCard}
 											myStyle={true}
 										/>
 										<div className="regFieldLast">
