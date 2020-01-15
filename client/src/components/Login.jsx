@@ -1,6 +1,8 @@
 import React from "react";
 import userServices from "../services/userServices";
 import "../sass/styles.sass";
+import { connect } from "react-redux";
+import ServiceCards from "./ServiceCards";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -12,7 +14,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 let path = "/dashboard/notes";
 let snackStyle;
 
-const userve = new userServices();
+const uServe = new userServices();
 const themeS = createMuiTheme({
 	overrides: {
 		MuiSnackbarContent: {
@@ -45,7 +47,7 @@ const themeE = createMuiTheme({
 	}
 });
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -54,12 +56,30 @@ export default class Login extends React.Component {
 			progress: false,
 			sOpen: false,
 			eOpen: false,
-			message: ""
+			message: "",
+			selectedCard: ""
 		};
 	}
-
+	componentDidMount() {
+		if (localStorage.getItem("cartId")) {
+			this.getCartDetails();
+		}
+	}
+	getCartDetails = () => {
+		uServe
+			.getCartDetails(localStorage.getItem("cartId"))
+			.then(res => {
+				console.log("successfully fetched details", res.data.data.product);
+				this.setState({
+					selectedCard: res.data.data.product
+				});
+			})
+			.catch(err => {
+				console.log("unable to fetch data", err);
+			});
+	};
 	changeProgress = () => {
-		this.setState({ proress: false });
+		this.setState({ progress: false });
 	};
 	capitalizeFirstLetter(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -69,7 +89,7 @@ export default class Login extends React.Component {
 		loginData.email = this.state.email;
 		loginData.password = this.state.password;
 
-		userve
+		uServe
 			.login(loginData)
 			.then(response => {
 				if (response.status === 200) {
@@ -80,11 +100,14 @@ export default class Login extends React.Component {
 					localStorage.removeItem("token");
 					localStorage.setItem("token", response.data.id);
 					localStorage.setItem("userId", response.data.userId);
-					let name = this.capitalizeFirstLetter(response.data.firstName) + " " + this.capitalizeFirstLetter(response.data.lastName);
+					let name =
+						this.capitalizeFirstLetter(response.data.firstName) +
+						" " +
+						this.capitalizeFirstLetter(response.data.lastName);
 					localStorage.setItem("name", name);
 					localStorage.setItem("email", response.data.email);
 					localStorage.setItem("imageUrl", response.data.imageUrl);
-					console.log("name is",name);
+					console.log("name is", name);
 					snackStyle = {
 						color: "white",
 						height: "fitContent",
@@ -184,132 +207,151 @@ export default class Login extends React.Component {
 		};
 		return (
 			<div className="MainApp">
-				<div className="LoginCard">
-					<Paper style={classes.container}>
-						<ValidatorForm
-							className="form"
-							ref="form"
-							onSubmit={this.handleSubmit}
-							onError={errors =>
-								console.log("errors in form submission", errors)
-							}
-						>
-							<div className="Paper">
-								<div className="LoginFieldLogo">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										<label id="bl">F</label>
-										<label id="rd">u</label>
-										<label id="yl">n</label>
-										<label id="bl">d</label>
-										<label id="gn">o</label>
-										<label id="rd">o</label>
-									</Typography>
-								</div>
-								<div className="LoginFieldText">
-									<Typography
-										variant="h5"
-										component="h5"
-										style={classes.textField}
-									>
-										Sign In
-									</Typography>
-								</div>
-								<div className="LoginFieldText">
-									<Typography component="p" style={classes.textField}>
-										Use your Fundoo Account
-									</Typography>
-								</div>
-								<div className="LoginFieldInput">
-									<TextValidator
-										autoComplete="username"
-										id="outlined-basic"
-										type="email"
-										label="Email"
-										margin="normal"
-										variant="outlined"
-										style={classes.emailField}
-										value={this.state.email}
-										onChange={event => this.handleEmail(event)}
-										validators={["required", "isEmail"]}
-										errorMessages={[
-											"this field is required",
-											"email is not valid"
-										]}
-									/>
-								</div>
+				<div id="dContainer">
+					<div className="LoginCard">
+						<Paper style={classes.container}>
+							<ValidatorForm
+								className="form"
+								ref="form"
+								onSubmit={this.handleSubmit}
+								onError={errors =>
+									console.log("errors in form submission", errors)
+								}
+							>
+								<div className="Paper">
+									<div className="LoginFieldLogo">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.textField}
+										>
+											<label id="bl">F</label>
+											<label id="rd">u</label>
+											<label id="yl">n</label>
+											<label id="bl">d</label>
+											<label id="gn">o</label>
+											<label id="rd">o</label>
+										</Typography>
+									</div>
+									<div className="LoginFieldText">
+										<Typography
+											variant="h5"
+											component="h5"
+											style={classes.textField}
+										>
+											Sign In
+										</Typography>
+									</div>
+									<div className="LoginFieldText">
+										<Typography component="p" style={classes.textField}>
+											Use your Fundoo Account
+										</Typography>
+									</div>
+									<div className="LoginFieldInput">
+										<TextValidator
+											autoComplete="username"
+											id="outlined-basic"
+											type="email"
+											label="Email"
+											margin="normal"
+											variant="outlined"
+											style={classes.emailField}
+											value={this.state.email}
+											onChange={event => this.handleEmail(event)}
+											validators={["required", "isEmail"]}
+											errorMessages={[
+												"this field is required",
+												"email is not valid"
+											]}
+										/>
+									</div>
 
-								<div className="LoginFieldInput">
-									<TextValidator
-										id="outlined-password-input"
-										label="Password"
-										style={classes.emailField}
-										type="password"
-										autoComplete="current-password"
-										margin="normal"
-										variant="outlined"
-										onChange={event => this.handlePassword(event)}
-										validators={["required"]}
-										errorMessages={["this field is required"]}
-										value={this.state.password}
-									/>
+									<div className="LoginFieldInput">
+										<TextValidator
+											id="outlined-password-input"
+											label="Password"
+											style={classes.emailField}
+											type="password"
+											autoComplete="current-password"
+											margin="normal"
+											variant="outlined"
+											onChange={event => this.handlePassword(event)}
+											validators={["required"]}
+											errorMessages={["this field is required"]}
+											value={this.state.password}
+										/>
+									</div>
+									<div className="LoginFieldForgot">
+										<Button style={classes.button} onClick={this.handleForgot}>
+											Forgot Password
+										</Button>
+									</div>
+									<div className="LoginFieldLast">
+										<Button
+											style={classes.button}
+											onClick={this.handleRegister}
+										>
+											Register
+										</Button>
+										{this.state.progress ? (
+											<CircularProgress id="loading" />
+										) : null}
+										<Button
+											variant="contained"
+											style={classes.buttonS}
+											type="submit"
+										>
+											Login
+										</Button>
+									</div>
 								</div>
-								<div className="LoginFieldForgot">
-									<Button style={classes.button} onClick={this.handleForgot}>
-										Forgot Password
-									</Button>
-								</div>
-								<div className="LoginFieldLast">
-									<Button style={classes.button} onClick={this.handleRegister}>
-										Register
-									</Button>
-									{this.state.progress ? (
-										<CircularProgress id="loading" />
-									) : null}
-									<Button
-										variant="contained"
-										style={classes.buttonS}
-										type="submit"
-									>
-										Login
-									</Button>
-								</div>
-							</div>
-						</ValidatorForm>
-					</Paper>
-					<div>
-						<MuiThemeProvider theme={themeE}>
-							<Snackbar
-								anchorOrigin={{
-									vertical: "bottom",
-									horizontal: "center"
-								}}
-								style={snackStyle}
-								open={this.state.eOpen}
-								onClose={this.handleClose}
-								autoHideDuration={3000}
-								message={<label id="notify">{this.state.message}</label>}
-							/>
-						</MuiThemeProvider>
-						<MuiThemeProvider theme={themeS}>
-							<Snackbar
-								anchorOrigin={{
-									vertical: "bottom",
-									horizontal: "center"
-								}}
-								style={snackStyle}
-								open={this.state.eOpen}
-								onClose={this.handleClose}
-								autoHideDuration={3000}
-								message={<label id="notify">{this.state.message}</label>}
-							/>
-						</MuiThemeProvider>
+							</ValidatorForm>
+						</Paper>
+						<div>
+							<MuiThemeProvider theme={themeE}>
+								<Snackbar
+									anchorOrigin={{
+										vertical: "bottom",
+										horizontal: "center"
+									}}
+									style={snackStyle}
+									open={this.state.eOpen}
+									onClose={this.handleClose}
+									autoHideDuration={3000}
+									message={<label id="notify">{this.state.message}</label>}
+								/>
+							</MuiThemeProvider>
+							<MuiThemeProvider theme={themeS}>
+								<Snackbar
+									anchorOrigin={{
+										vertical: "bottom",
+										horizontal: "center"
+									}}
+									style={snackStyle}
+									open={this.state.eOpen}
+									onClose={this.handleClose}
+									autoHideDuration={3000}
+									message={<label id="notify">{this.state.message}</label>}
+								/>
+							</MuiThemeProvider>
+						</div>
 					</div>
+					{this.state.selectedCard?
+						<div id="serCard">
+							<ServiceCards
+								sData={this.props.dataCardArray}
+								sCard={this.state.selectedCard}
+								myStyle={true}
+							/>
+						</div>:null}
 				</div>
 			</div>
 		);
 	}
 }
+const mapStateToProps = state => {
+	return {
+		dataCardArray: state.cardArrayData
+	};
+};
+export default connect(mapStateToProps)(Login);

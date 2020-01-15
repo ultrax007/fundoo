@@ -66,7 +66,9 @@
 
 #headerBar
   @extend %disflex
-  margin: 30px
+  margin: 30px 30px 0 30px
+#headerBar > p
+  margin: 0px
 
 #hText
   padding: 5px
@@ -84,32 +86,79 @@
   // background-color: #42cf2f
   margin-left: 10px
   height: 45px
-  width: 50%
+  width: calc(100% - 10px)
   min-width: 360px
 
 #upper
   display: flex
   flex-direction: row
   position: relative
-  width: 100%
+  width: 97%
   z-index: 10
   
 #lower
   position: absolute
   display: flex
   flex-direction: row
-  width: 45%
+  width: 35%
   // z-index: -1
 
-#row1,#row2
+#row1,#row2,#sc
   display: flex
   flex-direction: row
 
+#half
+  display: flex
+  flex-direction: column
+  width: 50%
+
 #row2
   margin-top: -30px
-  width: 56%
+  width: calc(100% - 70px)
   margin-left: 70px
   justify-content: space-between
+
+#row2 > p
+  text-align: center
+
+#sc
+  width: 100%
+  color: #494949
+  align-items: flex-start
+
+#sc h3
+  margin: 5px 0px
+
+#detailC
+  @extend %disflexR
+  justify-content: space-around
+
+#detailC table
+  width: 74%
+
+#detailC th
+  font-size: 0.8em
+  font-weight: 200
+  text-align: end
+  border-bottom: 1px solid #494949
+
+#disp
+  width: 24%
+  padding: 5px 0px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  background-color: #c2c2c2
+  border-radius: 8px
+  
+
+#disp > p
+  font-size: 12px
+  font-weight: 200
+
+#disp :nth-child(2)
+  color: red
 
 @media only screen and (max-width: 4440px)
   #container
@@ -199,8 +248,11 @@
     padding: 0% 24%  
     margin-left: 0%
     width: 325px
-  #qnaPaper
+  #qnaPaper,#half
     width: 100%  
+  #lower
+    width: 70%
+  
 
 @media only screen and (max-width: 675px)
   #container
@@ -219,6 +271,12 @@
     width: 100%
   #qnaPaper
     width: 100%
+  #lower
+    width: 65%
+  
+@media only screen and (max-width: 375px)
+  #lower
+    width: 50%
 
 #lMenu
   display: block

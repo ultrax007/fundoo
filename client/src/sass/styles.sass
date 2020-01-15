@@ -30,13 +30,33 @@
   padding: 0
   overflow: scroll
 
+#dContainer
+  display: flex
+  flex-direction: row
+  justify-content: center
+  width: 886px
+  align-self: center
+  align-items: center
+
 .LoginCard
   display: flex
   flex-direction: column
   width: 443px
-  // height: 90%
+  @media screen and ( max-width: 443px )
+    width: 100%
   align-self: center
   align-items: center
+
+#serCard
+  display: flex
+  flex-direction: column
+  width: 443px
+  height: 500px
+  align-self: center
+  align-items: center
+  justify-content: center
+  border-radius: 8px
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2), 6px 6px 20px 0 rgba(0, 0, 0, 0.19)
 
 .Paper
   display: flex
@@ -196,11 +216,13 @@
     display: none
   .regPaper
     width: 96%
+  #dContainer
+    flex-direction: column
 
 @media only screen and (max-width: 768px) and (min-width: 240px)
   #imgs
     display: none
-  .regContainer
+  .regContainer,#dContainer
     width: 100%
   .regPaper
     width: 100%

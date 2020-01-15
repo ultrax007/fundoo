@@ -68,9 +68,10 @@ class Register extends React.Component {
 		let userData = {};
 		userData.firstName = this.state.firstName;
 		userData.lastName = this.state.lastName;
-		userData.service = this.props.dataSelectedCard.name;
+		userData.service = this.state.selectedCard.name;
 		userData.email = this.state.email;
 		userData.password = this.state.password;
+		userData.cartId = localStorage.getItem("cartId");
 		console.log("value in data object", userData);
 		uServe
 			.register(userData)
@@ -359,8 +360,7 @@ class Register extends React.Component {
 }
 const mapStateToProps = state => {
 	return {
-		dataCardArray: state.cardArrayData,
-		dataSelectedCard: state.sCardData
+		dataCardArray: state.cardArrayData
 	};
 };
 export default connect(mapStateToProps)(Register);

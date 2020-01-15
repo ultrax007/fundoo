@@ -5,6 +5,7 @@ import "../sass/playground.sass";
 import { connect } from "react-redux";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Icon from "@material-ui/core/Icon";
+import { Button } from "@material-ui/core";
 const BorderLinearProgress = withStyles({
 	root: {
 		// width: "100%",
@@ -53,24 +54,50 @@ class Cart extends Component {
 			<Fragment>
 				<div id={myStyle}>
 					<div id="headerBar">
-						<div id="row1">
-							<div id="hText">status</div>
-							<div id="pbContainer">
-								<div id="upper">
-									<Icon style={{ padding: "0 10px" }}>
-										<ShoppingCartIcon />
-									</Icon>
-								</div>
-								<div id="lower">
-									<ProgressBar progress={5} />
+						<div id="half">
+							<div id="row1">
+								<div id="hText">status</div>
+								<div id="pbContainer">
+									<div id="upper">
+										<Icon style={{ padding: "0 10px" }}>
+											<ShoppingCartIcon />
+										</Icon>
+									</div>
+									<div id="lower">
+										<ProgressBar progress={50} />
+									</div>
 								</div>
 							</div>
-            </div>
-            <div id="row2">
-              <p>sign in</p>
-              <p>place order</p>
-              <p>complete payments</p>
-            </div>
+							<div id="row2">
+								<p>sign in</p>
+								<p>place order</p>
+								<p>complete payments</p>
+							</div>
+						</div>
+					</div>
+					<div id="sc">
+						<h3>Shopping Cart</h3>
+					</div>
+					<div id="detailC">
+						<table>
+							<tr>
+								<th>Product</th>
+								<th>Price</th>
+								<th>Validity</th>
+							</tr>
+						</table>
+						<div id="disp">
+							<span><p>subtotal (1 item): &nbsp;</p>
+							<p>$ 6.99</p></span>
+							<Button
+								variant="contained"
+								size="small"
+								color="primary"
+								style={{ fontSize: 10 }}
+							>
+								proceed to checkout
+							</Button>
+						</div>
 					</div>
 				</div>
 			</Fragment>
