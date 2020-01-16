@@ -122,7 +122,10 @@ class Register extends React.Component {
 		console.log("value of password", event.currentTarget.value);
 		this.setState({ repeatPassword: event.currentTarget.value });
 	};
-
+	handleGoToCart = e => {
+		e.preventDefault();
+		this.props.history.goBack();
+	}
 	render() {
 		const classes = {
 			container: {
@@ -193,6 +196,9 @@ class Register extends React.Component {
 		return (
 			<div className="MainApp">
 				<div className="regContainer">
+					<div id="goback">
+						<Button size="small" variant="contained" color="default" style={{fontSize:"12px"}} onClick={(e)=>this.handleGoToCart(e)}>Go to Cart</Button>
+					</div>
 					<MuiThemeProvider theme={theme}>
 						<Paper style={classes.container}>
 							<ValidatorForm

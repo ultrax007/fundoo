@@ -73,6 +73,7 @@ class ChooseService extends Component {
 		};
 	}
 	componentDidMount() {
+		localStorage.removeItem("cartId");
 		this.hitServicesApi();
 	}
 	handleChange = (event, value) => {
@@ -133,9 +134,9 @@ class ChooseService extends Component {
 			minWidth: "350px"
 		};
 		return (
-			<Fragment>
+			<Fragment >
 				<ElevateAppBar />
-				<Container>
+				<Container style={{overflowY:"auto"}}>
 					<div id="headtext">
 						<Typography variant="h6">
 							Which Fundoo Notes service package do you want?
