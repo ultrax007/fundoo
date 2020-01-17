@@ -14,7 +14,7 @@
   box-sizing: border-box
   border-radius: 8px
   box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-  width: 77%
+  // width: 77%
   margin: 8px 11.5%
   transition: width 300ms ease-in-out 0s
 
@@ -155,6 +155,10 @@
   #noteDialog
     width: 600px
 
+@media only screen and ( max-width:675px)
+  #noteDialog
+    width: 530px
+
 
 @media only screen and ( max-width:600px)
   #noteActive
@@ -163,12 +167,20 @@
   #iconBar
     width: 80%
   #noteDialog
-    width: 600px
-  
-@media only screen and ( max-width:900px)
+    width: 425px
+
+@media only screen and ( max-width:530px)
   #noteDialog
-    width: 300px
-    
+    width: 400px
+
+@media only screen and ( max-width:465px)
+  #noteDialog
+    width: 320px
+
+@media only screen and ( max-width:465px)
+  #noteDialog
+    min-width: 320px
+      
 #titleN
   @extend %disflex
   flex-direction: row

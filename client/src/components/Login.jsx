@@ -137,7 +137,7 @@ class Login extends React.Component {
 		this.props.history.push(path);
 	};
 	handleRegister = () => {
-		const path = "/register";
+		const path = "/";
 		this.props.history.push(path);
 	};
 

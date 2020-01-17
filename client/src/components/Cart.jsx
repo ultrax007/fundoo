@@ -56,24 +56,78 @@ class Cart extends Component {
 			ol: false,
 			address: "",
 			position: "upper",
-			progress: 5
+			progress: 5,
+			isOrderPlaced: false,
+			status: "nothing"
 		};
 	}
 	componentDidMount() {
+		// this.callMyCart();
 		this.getCartDetails();
 	}
-	getCartDetails = () => {
+	callMyCart = () => {
 		uServe
-			.getCartDetails(localStorage.getItem("cartId"))
+			.myCart()
 			.then(res => {
-				console.log("successfully fetched details", res.data.data.product);
-				this.setState({
-					selectedCard: res.data.data.product
-				});
+				console.log("successfully fetched details", res.data.data[0]);
 			})
 			.catch(err => {
 				console.log("unable to fetch data", err);
 			});
+	};
+	getCartDetails = () => {
+		uServe
+		.myCart()
+			.then(res => {
+				console.log("successfully fetched details", res.data.data[0]);
+				this.setState(
+					{
+						selectedCard: res.data.data[0].product,
+						isOrderPlaced: res.data.data[0].isOrderPlaced
+					},
+					() => {
+						if (this.state.isOrderPlaced) {
+							console.log("in get cart details");
+							this.setState({
+								status: res.data.data[0].status,
+								sc: false,
+								ro: false,
+								ol: true,
+								position: "upperend",
+								progress: 100
+							});
+						}
+					}
+				);
+			})
+			.catch(err => {
+				console.log("unable to fetch data", err);
+			});
+	};
+	placeOrder = e => {
+		e.preventDefault();
+		if (this.state.address.length < 10) {
+			alert(
+				"please enter an address to continue address should be greator than 10chars"
+			);
+		} else {
+			let data = {};
+			data.cartId = localStorage.getItem("cartId");
+			data.address = this.state.address;
+
+			uServe
+				.placeCartOrder(data)
+				.then(res => {
+					if (res.status === 200) {
+						console.log("successfully placed order", res);
+						this.setState({status:"pending"})
+						this.handleProgress(e);
+					}
+				})
+				.catch(err => {
+					console.log("unable to place order", err);
+				});
+		}
 	};
 	handleAddress = event => {
 		this.setState({ address: event.currentTarget.value });
@@ -84,12 +138,12 @@ class Cart extends Component {
 		if (this.state.sc) {
 			this.setState({
 				position: "uppermiddle",
-				progress: 50,
+				progress: 55,
 				sc: false,
 				ro: true,
 				ol: false
 			});
-			return Number(5);
+			// return Number(5);
 		} else if (this.state.ro) {
 			this.setState({
 				position: "upperend",
@@ -98,7 +152,7 @@ class Cart extends Component {
 				ro: false,
 				ol: true
 			});
-			return Number(50);
+			// return Number(50);
 		}
 	};
 	render() {
@@ -176,7 +230,7 @@ class Cart extends Component {
 							{this.state.ol && (
 								<div id="subt">
 									<span>
-										<p style={{ color: "blue" }}>pending</p>
+										<p style={{ color: "blue" }}>{this.state.status}</p>
 									</span>
 								</div>
 							)}
@@ -220,7 +274,7 @@ class Cart extends Component {
 									size="small"
 									color="primary"
 									style={{ fontSize: 10 }}
-									onClick={e => this.handleProgress(e)}
+									onClick={e => this.placeOrder(e)}
 								>
 									place order
 								</Button>
