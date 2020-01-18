@@ -26,7 +26,7 @@ export default class ArchiveIcon extends React.Component {
 		this.props.archiveAction();
 	};
 	handleUpdation = () => {
-		this.props.onUpdate();
+		this.props.onUpdate(this.props.archiveState.id);
 	};
 	render() {
 		return (

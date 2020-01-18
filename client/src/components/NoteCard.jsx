@@ -171,15 +171,15 @@ class NoteCard extends React.Component {
 		this.setState({ description: event.currentTarget.value });
 	};
 
-	handleDeleteRestore = async () => {
-		await this.setState({ isDeleted: !this.state.isDeleted });
-		console.log("value of isDeleted", this.state.isDeleted);
-	};
+	// handleDeleteRestore = async () => {
+	// 	await this.setState({ isDeleted: !this.state.isDeleted });
+	// 	console.log("value of isDeleted", this.state.isDeleted);
+	// };
 
-	handleUpdation = async () => {
-		console.log("updation clicked");
+	handleUpdation = async (data) => {
+		console.log("updation clicked",data);
 		// event.preventDefault();
-		await this.props.operation();
+		await this.props.operation(data);
 	};
 
 	handleClose = () => {
@@ -549,7 +549,7 @@ class NoteCard extends React.Component {
 										styleid={"idb"}
 									/>
 									<MoreMenu
-										deleteAction={this.handleDeleteRestore}
+										// deleteAction={this.handleDeleteRestore}
 										moreState={this.state}
 										onUpdate={this.handleUpdation}
 										styleid={"idb"}

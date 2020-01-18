@@ -66,6 +66,8 @@ class MoreMenu extends React.Component {
 	}
 
 	componentDidMount() {
+		// console.log("value of state in moreState",this.props.moreState);
+		
 		this.getAllLabels();
 	}
 	componentWillUnmount() {
@@ -137,8 +139,8 @@ class MoreMenu extends React.Component {
 				});
 		}
 		this.handleClose();
-		this.props.deleteAction();
-		this.props.onUpdate();
+		// this.props.deleteAction();
+		this.props.onUpdate(this.props.moreState.id);
 	};
 
 	handleMenu = async event => {

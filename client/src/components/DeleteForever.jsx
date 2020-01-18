@@ -15,12 +15,12 @@ export default class DeleteForever extends React.Component {
 				.deleteForeverNote(updatedState)
 				.then(response => {
 					console.log("information in deletenote forever response", response.data);
+					this.props.onUpdate(this.props.deleteState.id);
 				})
 				.catch(err => {
 					console.log("error occured while fetching data", err);
 				});
 		}
-		this.props.onUpdate();
 	};
 	render() {
 		return (

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import "../sass/playground.sass";
 import TakeNote from "./TakeNote";
 import { connect } from "react-redux";
+import update from "immutability-helper";
 import Typography from "@material-ui/core/Typography";
 import Masonry from "react-masonry-css";
 import NoteCard from "./NoteCard";
@@ -26,7 +27,10 @@ class Reminders extends React.Component {
       .getReminderNotes()
       .then(async response => {
         console.log("information in response", response.data.data.data);
-        await this.setState({ allNotes: response.data.data.data.reverse() });
+        await this.setState({ allNotes: response.data.data.data.filter(
+          noteArray => noteArray.isDeleted !== true
+        )
+        .reverse() });
         console.log("value of allnotes in archived", this.state.allNotes);
       })
       .catch(err => {
@@ -37,6 +41,25 @@ class Reminders extends React.Component {
     console.log("value in id in qna notes", id);
     this.props.history.push("/dashboard/AskQuestion/" + id);
   };
+  handleOperation = async id => {
+		console.log("note has value", id);
+		let index;
+		for (let i = 0; i < this.state.allNotes.length; i++) {
+			console.log("allnotes of i", this.state.allNotes[i].id, id);
+
+			if (this.state.allNotes[i].id === id) {
+				index = await i;
+				console.log("found id at post", i);
+				this.setState({
+					allNotes: update(this.state.allNotes, {
+						$splice: [[index, 1]]
+					})
+				});
+				break;
+			}
+		}
+		console.log("value of index after operation is ", index);
+	};
   render() {
     const breakpointColumnsObj = {
       default: this.props.viewStatus ? 1 : 3,
@@ -72,7 +95,7 @@ class Reminders extends React.Component {
                   <NoteCard
                     key={data.id}
                     dataFromDisplay={data}
-                    operation={this.getNotesFromDB}
+                    operation={this.handleOperation}
                     qna={this.handleQnA}
                   />
                 ))}
