@@ -3,8 +3,6 @@ import "../sass/ChooseService.sass";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
-// import Card from "@material-ui/core/Card";
-// import CardContent from "@material-ui/core/CardContent";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -85,9 +83,6 @@ class ChooseService extends Component {
 			{
 				selected: data,
 				dialogOpen: true
-			},
-			() => {
-				// this.props.selected(this.state.selected);
 			}
 		);
 	};
@@ -247,11 +242,9 @@ TabContainer.propTypes = {
 const mapStateToProps = state => {
 	return {
 		dataCardArray: state.sData,
-		// dataSelectedCard: state.selected
 	};
 };
 const mapDispatchToProps = {
 	cardArray,
-	// selected
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseService);
