@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
-// import "../sass/TakeNote.sass";
 import update from "immutability-helper";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -9,7 +8,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
-// import ListItemText from "@material-ui/core/ListItemText";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 
 const lined = {
@@ -156,9 +154,6 @@ export default class NoteCardChecklist extends React.Component {
 	};
 
 	render() {
-		// console.log("in checklist");
-		// console.log("value in statusopen", this.state.statusOpen);
-		// console.log("value in statusclose", this.state.statusClose);
 		var listStyle = {
 			width: "16px",
 			height: "16px",
@@ -194,7 +189,6 @@ export default class NoteCardChecklist extends React.Component {
 													disableRipple={true}
 													color="default"
 													fontSize="small"
-													// onCheck={event=>this.handleCheck(event,index)}
 													checked={false}
 												/>
 											</ListItemIcon>
@@ -211,7 +205,6 @@ export default class NoteCardChecklist extends React.Component {
 						{this.state.statusClose
 							? this.state.statusClose.map((data, index) => (
 									<div key={index}>
-										{/* <MuiThemeProvider theme={list}> */}
 										<ListItem dense>
 											<ListItemIcon
 												id="List"
@@ -229,7 +222,6 @@ export default class NoteCardChecklist extends React.Component {
 													disableRipple={true}
 													color="default"
 													fontSize="inherit"
-													// onCheck={event=>this.handleCheck(event,index)}
 													checked={true}
 												/>
 											</ListItemIcon>
@@ -237,7 +229,6 @@ export default class NoteCardChecklist extends React.Component {
 											<ListItemText style={lined} primary={data.itemName} />
 											
 										</ListItem>
-										{/* </MuiThemeProvider> */}
 									</div>
 							  ))
 							: null}

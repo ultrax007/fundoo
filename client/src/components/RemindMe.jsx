@@ -208,7 +208,6 @@ class RemindMe extends React.Component {
 		this.setState({
 			pop_open: false,
 			picker_open: true
-			// anchorEl: event.currentTarget
 		});
 	}
 	handleClose = event => {

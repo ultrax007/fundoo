@@ -1,6 +1,5 @@
 //Default imports for designing
 import React from "react";
-// import ReactCrop from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import "../sass/dashboard.sass";
 import { connect } from "react-redux";
@@ -22,7 +21,6 @@ import {
 	ListItemText,
 	Chip
 } from "@material-ui/core";
-// import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
 import Badge from "@material-ui/core/Badge";
 import CameraAltOutlinedIcon from "@material-ui/icons/CameraAltOutlined";
@@ -111,7 +109,6 @@ const styles = {
 		color: "#fff",
 		marginLeft: "10px",
 		textAlign: "left"
-		// textShadow:"1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;"
 	}
 };
 

@@ -128,11 +128,9 @@ class NoteCard extends React.Component {
 	}
 
 	componentDidMount() {
-		// console.log("date is", this.state.reminderString);
 		if (this.state.reminderString !== "Invalid Date") {
 			date = this.state.reminderString.slice(4, 10);
 			time = this.state.reminderString.slice(16, 21);
-			// console.log("value in reminder", this.state.reminderString, date, time);
 			this.setState({
 				combined: date + "," + time
 			});
@@ -149,7 +147,6 @@ class NoteCard extends React.Component {
 	};
 
 	handleIsArchived = async () => {
-		// event.preventDefault();
 		await this.setState({ isArchived: !this.state.isArchived });
 		console.log("isArchived:=>", this.state.isArchived);
 	};
@@ -171,14 +168,8 @@ class NoteCard extends React.Component {
 		this.setState({ description: event.currentTarget.value });
 	};
 
-	// handleDeleteRestore = async () => {
-	// 	await this.setState({ isDeleted: !this.state.isDeleted });
-	// 	console.log("value of isDeleted", this.state.isDeleted);
-	// };
-
 	handleUpdation = async (data) => {
 		console.log("updation clicked",data);
-		// event.preventDefault();
 		await this.props.operation(data);
 	};
 
@@ -193,13 +184,7 @@ class NoteCard extends React.Component {
 			note.noteId = this.state.id;
 			note.title = this.state.title;
 			note.description = this.state.description;
-			// note.isPined = this.state.isPined;
-			// note.color = this.state.color;
 			note.isArchived = this.state.isArchived;
-			// note.noteLabels = this.state.noteLabels;
-			// note.checklist = "";
-			// note.reminder = "";
-			// note.collaborators = "";
 			console.log("data in note", note);
 			nServe
 				.updateNote(note)
@@ -421,7 +406,6 @@ class NoteCard extends React.Component {
 	};
 
 	render() {
-		// console.log("render works in card component", this.props);
 
 		return (
 			<Fragment>
@@ -520,12 +504,6 @@ class NoteCard extends React.Component {
 										addReminder={this.handleAddReminder}
 										styleid={"idb"}
 									/>
-
-									{/* <Tooltip title="Collaborator">
-										<IconButton id="idb" size="small">
-											<PersonAddOutlinedIcon fontSize="inherit" />
-										</IconButton>
-									</Tooltip> */}
 									<Collaborator
 										collabAdd={this.handleAddCollaborator}
 										collabRemove={this.handleRemoveCollaborator}
@@ -549,7 +527,6 @@ class NoteCard extends React.Component {
 										styleid={"idb"}
 									/>
 									<MoreMenu
-										// deleteAction={this.handleDeleteRestore}
 										moreState={this.state}
 										onUpdate={this.handleUpdation}
 										styleid={"idb"}
@@ -693,11 +670,6 @@ class NoteCard extends React.Component {
 								<div id="functions">
 									<div id="iconBar">
 										<MuiThemeProvider theme={iconmod}>
-											{/* <Tooltip title="Remind me">
-												<IconButton id="ibd" size="small">
-													<AddAlertOutlinedIcon fontSize="inherit" />
-												</IconButton>
-											</Tooltip> */}
 											<RemindMe
 												remindState={this.state}
 												addReminder={this.handleAddReminder}

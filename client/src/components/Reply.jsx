@@ -8,7 +8,6 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
-// import IconButton from "@material-ui/core/IconButton";
 import noteServices from "../services/noteServices";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
@@ -83,14 +82,7 @@ class Reply extends Component {
 							this.setState({ like: true });
 						}
 					}
-					// for (let index = 0; index < this.state.ratingArray.length; index++) {
-					// 	if (
-					// 		this.state.ratingArray[index].userId ===
-					// 		localStorage.getItem("userId")
-					// 	) {
-					// 		this.setState({ ratingAvg: this.state.ratingArray[index].rate });
-					// 	}
-					// }
+					
 					for (let index = 0; index < this.state.ratingArray.length; index++) {
 						if (this.state.ratingArray[index]) {
 							console.log("array of rate ", this.state.ratingArray[index].rate);
@@ -119,7 +111,6 @@ class Reply extends Component {
 	};
 	getDate = utc => {
 		var nDate = new Date(utc).toString().slice(0, 21);
-		// console.log("now date is", nDate);
 		return nDate;
 	};
 	handleReply = event => {
@@ -191,7 +182,6 @@ class Reply extends Component {
 	changeRating = async newRating => {
 		let flag = false,
 			data = {};
-		// have to change rating according to the avg
 		console.log("value in new rating", newRating);
 		for (let index = 0; index < this.state.ratingArray.length; index++) {
 			if (

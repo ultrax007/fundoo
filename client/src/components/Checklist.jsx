@@ -292,9 +292,7 @@ export default class Checklist extends React.Component {
 	};
 
 	render() {
-		// console.log("in checklist");
-		// console.log("value in statusopen", this.state.statusOpen);
-		// console.log("value in statusclose", this.state.statusClose);
+
 		var listStyle = {
 			width: "16px",
 			height: "16px",

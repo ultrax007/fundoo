@@ -5,10 +5,8 @@ import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import MoreVertOutlinedIcon from "@material-ui/icons/MoreVertOutlined";
-// import update from "immutability-helper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Popper from "@material-ui/core/Popper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -66,8 +64,6 @@ class MoreMenu extends React.Component {
 	}
 
 	componentDidMount() {
-		// console.log("value of state in moreState",this.props.moreState);
-		
 		this.getAllLabels();
 	}
 	componentWillUnmount() {
@@ -85,11 +81,9 @@ class MoreMenu extends React.Component {
 		nServe
 			.getAllLabels()
 			.then(response => {
-				// console.log("labels are", response.data);
 				this.setState({
 					labels: response.data.data.details
 				});
-				// console.log("labels in state",this.state.labels);
 			})
 			.catch(err => {
 				console.log("error fetching", err);
@@ -103,7 +97,6 @@ class MoreMenu extends React.Component {
 		if (this.props.moreState.id !== "") {
 			let data = {};
 			data.noteId = this.props.moreState.id;
-			// console.log("value in data.noteId", data.noteId, index);
 			data.labelId = this.state.labels[index].id;
 			console.log("value of data", data);
 			await nServe
@@ -152,7 +145,6 @@ class MoreMenu extends React.Component {
 			anchorEl: event.currentTarget,
 			lanchorEl: event.currentTarget
 		});
-		// console.log("value of anchorEl",this.state.anchorEl);
 	};
 
 	handleLMenu = async event => {
@@ -165,13 +157,10 @@ class MoreMenu extends React.Component {
 			anchorEl: null,
 			lMenu: true
 		});
-		// console.log("lmenu hit open", this.state.lMenu);
 	};
 
 	handleLMenuClose = async event => {
 		event.preventDefault();
-		// event.stopPropagation();
-		// event.nativeEvent.stopImmediatePropagation();
 		await this.setState({
 			lMenu: false,
 			lanchorEl: null
@@ -229,7 +218,6 @@ class MoreMenu extends React.Component {
 						<MenuItem onClick={event => this.handleQnA(event)}>
 							Ask Question
 						</MenuItem>
-						{/* <MenuItem>Show Checklist</MenuItem> */}
 					</Menu>
 					<Popper
 						open={this.state.lMenu}

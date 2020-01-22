@@ -5,8 +5,6 @@ import InputBase from "@material-ui/core/InputBase";
 import { createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
-//icons imported from material ui
 import InsertPhotoOutlinedIcon from "@material-ui/icons/InsertPhotoOutlined";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import BrushOutlinedIcon from "@material-ui/icons/BrushOutlined";

@@ -404,7 +404,6 @@ class AskedQuestion extends Component {
 	render() {
 		const { noteDetails } = this.state;
 		const { question } = this.state;
-		// console.log("value in notedetails", noteDetails);
 		const { classes } = this.props;
 		const text = {
 			fontSize: "25px"

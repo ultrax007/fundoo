@@ -8,7 +8,6 @@ import noteServices from "../services/noteServices";
 const nServe = new noteServices();
 export default class ArchiveIcon extends React.Component {
 	refreshArchive = () => {
-		// event.preventDefault();
 		if (this.props.archiveState.id !== "") {
 			let updatedArchive = {};
 			updatedArchive.noteIdList = [this.props.archiveState.id];

@@ -36,7 +36,6 @@ export default class ForgotPassword extends React.Component {
 				console.log("data in req", response.data);
 				if (response.status) {
 					alert("mail sent please click the link in mail")
-					// this.props.history.push(path);
 				} else {
 					alert("error while verifying email")
 					path = "/forgotPassword";
@@ -61,7 +60,6 @@ export default class ForgotPassword extends React.Component {
 				textTransform: "none"
 			},
 			buttonS: {
-				// marginRight: "10%",
 				padding: "1.7% 7%",
 				backgroundColor: "#1a73e8",
 				color: "#ffffff",
@@ -141,7 +139,6 @@ export default class ForgotPassword extends React.Component {
 									</div>
 									<div className="LoginFieldInput">
 										<TextValidator
-											// id="outlined-basic"
 											type="email"
 											label="Email"
 											margin="normal"

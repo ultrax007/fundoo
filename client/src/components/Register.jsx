@@ -46,7 +46,6 @@ class Register extends React.Component {
 	}
 	componentDidMount() {
 		this.getCartDetails();
-		// custom rule will have name 'isPasswordMatch'
 		ValidatorForm.addValidationRule("isPasswordMatch", value => {
 			if (value !== this.state.password) {
 				console.log("passwords not matched");
@@ -60,7 +59,6 @@ class Register extends React.Component {
 	}
 
 	componentWillUnmount() {
-		// remove rule when it is not needed
 		ValidatorForm.removeValidationRule("isPasswordMatch");
 	}
 
@@ -174,12 +172,10 @@ class Register extends React.Component {
 			},
 			button: {
 				marginLeft: "4%",
-				// marginRight: "4%",
 				color: "#1a73e8",
 				textTransform: "none"
 			},
 			buttonS: {
-				// marginLeft: "17%",
 				marginRight: "2%",
 				padding: "0% 7%",
 				backgroundColor: "#1a73e8",
@@ -188,7 +184,6 @@ class Register extends React.Component {
 			},
 			buttonsale: {
 				marginLeft: "5%",
-				// marginRight: "4%",
 				color: "#1a73e8",
 				textTransform: "none"
 			}
@@ -283,11 +278,9 @@ class Register extends React.Component {
 										<div className="regFieldInputfn">
 											<div className="fncl">
 												<TextValidator
-													// id="textF"
 													label="Password"
 													style={classes.nameField}
 													type="password"
-													// autoComplete="current-password"
 													margin="dense"
 													variant="outlined"
 													onChange={event => this.handlePassword(event)}
@@ -298,11 +291,9 @@ class Register extends React.Component {
 											</div>
 											<div className="fnc">
 												<TextValidator
-													// id="textF"
 													label="Confirm"
 													style={classes.nameField}
 													type="password"
-													// autoComplete="current-password"
 													margin="dense"
 													variant="outlined"
 													onChange={event => this.handleRPassword(event)}

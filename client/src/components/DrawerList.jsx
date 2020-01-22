@@ -1,13 +1,11 @@
 import React, { Fragment } from "react";
 import "../sass/drawer.sass";
-// import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import update from "immutability-helper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-// import EmojiObjectsOutlinedIcon from "@material-ui/icons/EmojiObjectsOutlined";
 import PostAddOutlinedIcon from '@material-ui/icons/PostAddOutlined';
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
@@ -63,7 +61,6 @@ export default class DrawerList extends React.Component {
 		};
 	}
 	componentDidMount() {
-		// this.handleNotes();
 		this.getAllLabels();
 	}
 
@@ -71,11 +68,9 @@ export default class DrawerList extends React.Component {
 		nServe
 			.getAllLabels()
 			.then(response => {
-				// console.log("labels are", response.data);
 				this.setState({
 					labels: response.data.data.details
 				});
-				// console.log("labels in state",this.state.labels);
 			})
 			.catch(err => {
 				console.log("error fetching", err);
